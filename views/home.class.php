@@ -14,7 +14,7 @@ class HomeController extends BaseController {
     }
 
     protected function index() {
-        $this->topics = Topic::findBySql(DB::getConnection(), "select * from topic order by id desc");
+        $this->topics = Topic::findBySql(DB::getConnection(), "select * from topic where editorsPick=1 order by id desc");
     }
     
     

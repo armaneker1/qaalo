@@ -26,7 +26,7 @@
                 -->
                 <div id="search">
                     <form method="post" action="<?php echo $this->getControllerAction("topic", "search"); ?>">
-                        <input class="default" autocomplete="off" autofocus="on" type="text" placeholder="Search anything..." id="searchBox" name="searchKeyword">
+                        <input class="default" spellcheck="false" autocomplete="off" autofocus="on" type="text" placeholder="Search anything..." id="searchBox" name="searchKeyword">
                     </form>
                 </div>
                 <div class="profile">
@@ -34,8 +34,8 @@
                         <a class="profileLink" >Hello, <?= $_SESSION["firstname"] ?> ▾</a>
                         <div id="profileMenu" class="popup profileMenu">
                             <ul class="menu">
-                                <li><a href="base.settings">Settings</a></li>
-                                <li><a href="base.logout">Logout</a></li>
+                                <li><a href="/base.settings">Settings</a></li>
+                                <li><a href="/base.logout">Logout</a></li>
                             </ul>
                         </div>
                     <?php } else { ?> 

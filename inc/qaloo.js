@@ -13,13 +13,16 @@ $(document).ready(function(){
     });
     
     $('.profileLink').mouseup(function (){
-        $('#profileMenu').removeClass("transparan");
-        $('#profileMenu').addClass("opaque");
+        $('#profileMenu').attr("style","display:block;");
+        $('#profileMenu').fadeTo(50, 1);
     });
     
     $(document).mousedown(function () {
-        $('#profileMenu').removeClass("opaque");
-        $('#profileMenu').addClass("transparan");
+        if ($('#profileMenu').css("display") == "block") {
+            $('#profileMenu').fadeTo(150, 0, function() {
+                $(this).attr("style","display:none;")
+            });
+        }
     });
     
 });
@@ -44,18 +47,23 @@ $itemIndis = 0;
 function onItemInputKeyPress(e) {
     if(e.which == 13) {
         e.preventDefault();
-        console.log($('#item'+ ($itemIndis+1) ));
         if ($('#item'+ ($itemIndis+1) ).length == 0) {
             $itemIndis = $itemIndis +1;
             $('#itemInputList').append(
-                $('<li>').attr('class','itemInputLI').append(
-                    $('<input>').attr('maxlength','120').attr('autocomplete','off').attr('placeholder','Yes, what\'s next?').attr('class','itemInput default').attr('name','itemText[]').attr('id','item'+ $itemIndis)
-                    ));
+                
+                $('<li>').append(
+                    $("<div>").attr("class","circle").append("&#9679;<div>"+ ($itemIndis+1) +"</div>")
+                    ).append(
+                    $("<div>").attr("class","itemContainer").append(
+                        $('<textarea>').attr('id','itemInput'+$itemIndis).attr('maxlength','120').attr('autocomplete','off').attr("rows","1").attr('placeholder','Yes, what\'s next?').attr('class','itemInput default autogrow').attr('name','itemText[]')
+                        )
+                    ).attr('id','item'+ $itemIndis));
+               
         }
-            
-        $('#item'+ $itemIndis).keypress(onItemInputKeyPress);
-        $('#item'+ $itemIndis).each(onEachDefault);
-        $('#item'+ $itemIndis).focus();
+        $('#itemInput'+ $itemIndis).keypress(onItemInputKeyPress);
+        $('#itemInput'+ $itemIndis).each(onEachDefault);
+        $('#itemInput'+ $itemIndis).focus();
+        $('#itemInput'+ $itemIndis).autosize();
     }
 }
 

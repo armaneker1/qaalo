@@ -29,7 +29,7 @@ body, input, textarea {
     outline: none;
 }
 
-input, textarea, li.itemInputLI {
+input, textarea {
     padding:10px 5px 10px 5px;
     border:solid 1px gray;
     font-size: 16px;
@@ -193,6 +193,7 @@ button {
     -moz-box-shadow: 0px 2px 4px #ededed;
     -webkit-box-shadow: 0px 2px 4px #ededed;
     box-shadow: 0px 2px 4px #ededed;
+    font-size:14px;
 
 }
 
@@ -232,56 +233,19 @@ textarea.autogrow
 }
 
 
-
-ul.itemInputList {
-    margin:0;
-    padding:0;
-    width:427px;
-    list-style-type: none;
-}
-
-ul.itemInputList li {
-    padding:0;
-    margin:0;
-    margin-bottom:7px;
-    min-width:0px;
-    white-space: nowrap;
-    position: relative;
-    font-size: 15px;
-    line-height: 1.4em;
-    list-style-position: inside;
-    vertical-align: middle;
-}
-
-ul li {color:#666; vertical-align: top; }
-
-.itemInput {
-    outline: none;
-    border-width: 0px;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    -ms-box-shadow: none;
-    -o-box-shadow: none;
-    box-shadow: none;
-    min-width:425px;
-    padding:0;
-    margin:10px 8px 10px;
-    vertical-align: bottom;
-}
-
 .hidden {
     display: none;
 }
 
 .list h2 {
     margin:0;padding-bottom:5px;
-    font-size:35px;
+    font-size:32px;
     color:#354b62;
     text-shadow: 1px 1px 0px rgba(255, 255, 255, 1);
 }
 
-.list ol {
-    margin:10px 0px 0px 5px;
+.list ul {
+    margin:0;
     padding:0;
 }
 
@@ -378,9 +342,12 @@ ul li {color:#666; vertical-align: top; }
 .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
 
 .description {
+    position:relative;
+    display:block;
     font-size:12px;
-    color:gray;
-    top:-2px;
+    color:#999;
+    top:-10px;
+    margin-left:32px;
 }
 
 .popup {
@@ -402,6 +369,7 @@ ul li {color:#666; vertical-align: top; }
 }
 
 .profileMenu {
+    display:none;
     opacity: 0;
     width:100px;
     padding:10px;
@@ -412,30 +380,13 @@ ul li {color:#666; vertical-align: top; }
     margin-bottom: 5px;
 }
 
-.opaque {
-    opacity: 1; 
-    -moz-transition: all 0.2s ease-out;  /* FF4+ */
-    -o-transition: all 0.2s ease-out;  /* Opera 10.5+ */
-    -webkit-transition: all 0.2s ease-out;  /* Saf3.2+, Chrome */
-    -ms-transition: all 0.2s ease-out;  /* IE10? */
-    transition: all 0.2s ease-out;  
-}
-
-.transparan {
-    opacity: 0; 
-    -moz-transition: all 0.2s ease-out;  /* FF4+ */
-    -o-transition: all 0.2s ease-out;  /* Opera 10.5+ */
-    -webkit-transition: all 0.2s ease-out;  /* Saf3.2+, Chrome */
-    -ms-transition: all 0.2s ease-out;  /* IE10? */
-    transition: all 0.2s ease-out;  
-}
-
 
 .discussions {
     height:300px;
 }
 
 .discussionInput {
+    
     border-top: solid 1px silver;
     background-color:#f5f5f5;
     padding:8px;
@@ -444,6 +395,7 @@ ul li {color:#666; vertical-align: top; }
 .discussionInput textarea {
     width:270px;
     font-size:13px;
+    top:-5px;
 }
 
 hr {
@@ -482,16 +434,17 @@ ul.items {
 }
 
 ul.items li {
-    margin-bottom:10px;
+    margin:0 0 15px 0;
+    padding:0;
 }
 
 .circle {
     position:relative;
+    top:0px;
     left:-24px;
     width:40px;
     font-size:90px;
-    float:left;
-    vertical-align: central;
+    height:0px;
     line-height: 20px;
     color: #d16f70;
 }
@@ -504,12 +457,19 @@ ul.items li {
     position: relative;
     width:20px;
     text-align: center;
+    padding:0;
+    margin:0;
 }
 
 .itemContainer {
     font-size:21px;
-    margin-top:7px;
     width:627px;
+    margin:5px 0px 0px 30px;
+}
+
+.itemContainer textarea {
+    position:relative;
+    top:-6px;
 }
 
 .itemsHeader {
@@ -524,3 +484,24 @@ ul.items li {
 }
 
 
+.stats {
+    border-bottom: solid 1px silver;
+}
+
+.stats ul {
+    list-style-type: none;
+    margin:0;
+    padding:0;
+}
+
+.stats ul li {
+    float:left;
+    border-right: solid 1px silver;
+    font-size:10px;
+    width:80px;
+    text-align: center;
+}
+
+.stats ul li div {
+    font-size:16px;
+}

@@ -97,7 +97,7 @@ class TopicController extends BaseController {
                 }
             }
 
-
+            
 
 
             usort($this->items, function($a, $b) {
@@ -136,7 +136,9 @@ class TopicController extends BaseController {
                     $this->isInvited = true;
                 }
             }
-
+            
+            $this->topic->setViewCount($this->topic->getViewCount()+1);
+            $this->topic->updateToDatabase($db);
 
             $this->user = User::findById($db, $this->topic->getUserID());
             $this->setPageTitle($this->topic->getTitle());

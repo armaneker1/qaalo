@@ -16,8 +16,8 @@
                         foreach ($this->items as $item) {
                             ?>
                             <li id="existingItem<?= $a ?>">
-                                <div class="circle">&#9679;<div><?=$a+1?></div></div>
-                                
+                                <div class="circle">&#9679;<div><?= $a + 1 ?></div></div>
+
                                 <div class="itemContainer">
                                     <?php echo $item->getText(); ?>
                                     <?php if ($this->isLoggedIn()) { ?>
@@ -60,18 +60,27 @@
         </div>
     </div>
     <div class="right">
-
-        by <?php
-                    $a = count($this->writers);
-                    foreach ($this->writers as $writer) {
-                        $a--;
-                        echo $writer . ( $a > 0 ? ", " : "" );
-                    }
-                    ?>
-        <br/>
+        
+        <?php
+        $a = count($this->writers);
+        foreach ($this->writers as $writer) {
+            $a--;
+            
+            if ($a == count($this->writers)-1) {
+                if (count($this->writers) > 1) {
+                    echo "<b>" .$writer . "</b> is listing with ";
+                } else {
+                    echo "<b>" .$writer . "</b> is listing";
+                }
+            } else {
+                echo $writer . ( $a > 0 ? ", " : "" );
+            }
+        }
+        ?>
+        <hr/>
         <?= $this->totalVotes ?> ratings<br/>
 
-        <hr>
+        <hr/>
 
         <?php if ($this->isWriter) { ?>
             Use <a style="font-weight: bold;" href="/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>">this link</a> to ask people add items to this list

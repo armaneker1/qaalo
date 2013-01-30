@@ -1,13 +1,6 @@
 <?php
 require_once __ROOT__ . 'vendors/Tool.php';
 
-/*
- * Project: Nathan MVC
- * File: /classes/basecontroller.php
- * Purpose: abstract class from which controllers extend
- * Author: Nathan Davison
- */
-
 abstract class BaseController {
 
     protected $urlValues;
