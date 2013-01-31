@@ -1,4 +1,0 @@
-qaalo
-=====
-
-Qaalo project
