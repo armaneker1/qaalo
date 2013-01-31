@@ -97,7 +97,7 @@ class TopicController extends BaseController {
                 }
             }
 
-            
+
 
 
             usort($this->items, function($a, $b) {
@@ -121,29 +121,44 @@ class TopicController extends BaseController {
                 }
             }
 
+
             if (!$this->isWriter && isset($this->urlValues["inviteCode"])) {
-                if ($this->isLoggedIn()) {
-                    
-                    $writer = new Writer();
-                    $writer->setTopicID($this->topic->getId());
-                    $writer->setUserID($this->_userID);
-                    $writer->setCreatedOn(time());
-                    $writer->insertIntoDatabase($db);
-                    
-                    $this->isWriter = true;
-                } else {
-                    $this->inviteCode = $this->urlValues["inviteCode"];
-                    $this->isInvited = true;
+                if ($this->inviteIsValid($this->urlValues["inviteCode"])) {
+                    if ($this->isLoggedIn()) {
+
+                        $writer = new Writer();
+                        $writer->setTopicID($this->topic->getId());
+                        $writer->setUserID($this->_userID);
+                        $writer->setCreatedOn(time());
+                        $writer->insertIntoDatabase($db);
+
+                        $this->isWriter = true;
+                    } else {
+                        $this->inviteCode = $this->urlValues["inviteCode"];
+                        $this->isInvited = true;
+                    }
                 }
             }
-            
-            $this->topic->setViewCount($this->topic->getViewCount()+1);
+
+            $this->topic->setViewCount($this->topic->getViewCount() + 1);
             $this->topic->updateToDatabase($db);
 
             $this->user = User::findById($db, $this->topic->getUserID());
             $this->setPageTitle($this->topic->getTitle());
         } else {
             $this->redirect("404");
+        }
+    }
+
+    public function inviteIsValid($inviteCode) {
+        if (trim($inviteCode) == "")
+            return false;
+        $db = DB::getConnection();
+        $tickets = Topic::findByExample($db, Topic::create()->setInviteCode($inviteCode));
+        if (count($tickets) > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 

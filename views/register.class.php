@@ -93,6 +93,9 @@ class RegisterController extends BaseController {
             } else {
                 Tool::forgetMe();
             }
+            
+            $params=array(array('name',$user->getFirstname()),array('email_address',$user->getEmail()));
+            Tool::sendEmail("welcome", $params, $user->getEmail(), "Welcome to Qaalo");
 
             $this->redirect("base.login/index/" . $this->inviteCode);
         }

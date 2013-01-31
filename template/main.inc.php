@@ -14,6 +14,7 @@
         -->
     </head>
     <body>
+        
         <div class="bar">
             <div class="menu clearfix">
                 <a class="logo" href="/"></a>
@@ -34,12 +35,13 @@
                         <a class="profileLink" >Hello, <?= $_SESSION["firstname"] ?> ▾</a>
                         <div id="profileMenu" class="popup profileMenu">
                             <ul class="menu">
-                                <li><a href="/base.settings">Settings</a></li>
                                 <li><a href="/base.logout">Logout</a></li>
                             </ul>
                         </div>
                     <?php } else { ?> 
-                        <a href='/base.login'>login</a> | <a href='/base.register'>register</a>
+                        <div class="anonymous">
+                            <a href='/base.login'>login</a> | <a href='/base.register'>register</a>
+                        </div>
                     <?php } ?> 
                 </div>
             </div>
@@ -51,7 +53,7 @@
         </div>
         <script src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' type='text/javascript'></script>
         <script type="text/javascript" charset="utf-8">
-            BAROMETER.load('RTCN9DZSyYXF51RO69QsN');
+        BAROMETER.load('RTCN9DZSyYXF51RO69QsN');
         </script>
     </body>
 </html>

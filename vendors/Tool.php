@@ -26,7 +26,7 @@ class Tool {
     }
 
     public static function sendEmail($fileName, $params, $to, $subject) {
-        $file = __ROOT__ . "inc/emailTemplates/". $fileName;
+        $file = __ROOT__ . "inc/emailTemplates/". $fileName.".html";
         if (file_exists($file)) {
             $template = file_get_contents($file);
             if (!empty($params) && sizeof($params) > 0) {

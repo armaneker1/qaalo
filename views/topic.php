@@ -15,9 +15,8 @@
                         $a = 0;
                         foreach ($this->items as $item) {
                             ?>
-                            <li id="existingItem<?= $a ?>">
-                                <div class="circle">&#9679;<div><?= $a + 1 ?></div></div>
-
+                            <li id="existingItem<?= $a ?>" <?php echo (!$this->isWriter && $a>=10 ? "class=\"hiddenItem\"" :"");?>>
+                                <div class="circle<?php echo ($a>=10 ? " low" :"");?>">&#9679;<div><?= $a + 1 ?></div></div>
                                 <div class="itemContainer">
                                     <?php echo $item->getText(); ?>
                                     <?php if ($this->isLoggedIn()) { ?>
@@ -34,43 +33,50 @@
                             </li>
                             <?php
                             $a++;
+                            if ($a >= 10) {
+                                //break;
+                            }
                         }
                         ?>
                     </ul>
+
                     <?php if ($this->isWriter) { ?>
                         <form action="<?php echo $this->getAction("add"); ?>" method="post">
                             <input type="hidden" name="topicID" value="<?php echo $this->topic->getID() ?>"/>
-                            <ul start="<?= $a + 1 ?>" id="itemInputList" class="itemInputList">
-                                <li id="item0" name="itemText" class="itemInputLI">
-                                    <textarea type="text" onfocus="$('#addForm').show('fast')" placeholder="You have something to add?" name="itemText[]" class="itemInput default autogrow" rows="1"></textarea>
+                            <ul start="<?= $a + 1 ?>" id="itemInputList" class="items itemsInput">
+                                <li id="item0" name="itemText">
+                                    <div class="circle">&#9679;<div><?= $a + 1; ?></div></div>
+                                    <div class="itemContainer">
+                                        <textarea type="text" onfocus="$('#addForm').show('fast')" placeholder="You have something to add?" name="itemText[]" class="itemInput default autogrow" rows="1"></textarea>
+                                    </div>
                                 </li>
                             </ul>
                             <div id="addForm" style="display: none;">
                                 <span class="description">Press <b>Enter</b> to add new items</span>
-                                <p><button type="submit">Add ➜</button></p>
+                                <button style="margin-left: 20px;" type="submit">Add ➜</button>
                             </div>
                         </form>
+                        <script type="text/javascript">$itemIndis = <?= $a; ?></script>
                     <?php } ?>
                 </div>
             </div>
-
-
-
-
+            <?php if (!$this->isWriter && count($this->items) > 10) { ?>
+                <div class="showAll"><a href="javascript:showAll();">⬇ show all ⬇</a></div>
+            <?php } ?>
         </div>
     </div>
     <div class="right">
-        
+
         <?php
         $a = count($this->writers);
         foreach ($this->writers as $writer) {
             $a--;
-            
-            if ($a == count($this->writers)-1) {
+
+            if ($a == count($this->writers) - 1) {
                 if (count($this->writers) > 1) {
-                    echo "<b>" .$writer . "</b> is listing with ";
+                    echo "<b>" . $writer . "</b> is listing with ";
                 } else {
-                    echo "<b>" .$writer . "</b> is listing";
+                    echo "<b>" . $writer . "</b> is listing";
                 }
             } else {
                 echo $writer . ( $a > 0 ? ", " : "" );

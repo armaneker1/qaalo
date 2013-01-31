@@ -1,5 +1,16 @@
 <div class="mainSub">
     <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autosize-min.js" ></script>
+    <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tokeninput.js" ></script>
+    
+     <div>
+        <input type="text" id="demo-input" name="blah" />
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $("#demo-input").tokenInput("http://shell.loopj.com/tokeninput/tvshows.php");
+        });
+        </script>
+    </div>
+    
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function()
         {
@@ -14,7 +25,7 @@
         <div class="list">
             <div class="itemBar">
                 <div class="itemsHeader">
-                    <ul id="itemInputList" class="items">
+                    <ul id="itemInputList" class="items itemsInput">
                         <li id="item0">
                             <div class="circle">&#9679;<div>1</div></div>
                             <div class="itemContainer">
@@ -22,7 +33,7 @@
                             </div>
                         </li>
                     </ul>
-                    <span class="description">Press <b>Enter</b> to add new items</span>
+                    <div class="description" style="margin-top: 8px;">Press <b>Enter</b> to add new items</div>
                 </div>
                 
             </div>

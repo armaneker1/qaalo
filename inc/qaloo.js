@@ -1,7 +1,9 @@
+$itemIndis = 0;
+
 $(document).ready(function(){
     $('.default').each(onEachDefault);
     
-    $itemIndis = 0;
+    
     $('.itemInput').keypress(onItemInputKeyPress);
 
     $('#searchBox').autocomplete({
@@ -27,6 +29,11 @@ $(document).ready(function(){
     
 });
 
+function showAll() {
+    $(".hiddenItem").show("fast");
+    $(".showAll").hide("fast");
+}
+
 function onEachDefault(){
     $(this).focus(function() {
         var input = $(this);
@@ -47,19 +54,16 @@ $itemIndis = 0;
 function onItemInputKeyPress(e) {
     if(e.which == 13) {
         e.preventDefault();
-        if ($('#item'+ ($itemIndis+1) ).length == 0) {
-            $itemIndis = $itemIndis +1;
-            $('#itemInputList').append(
-                
-                $('<li>').append(
-                    $("<div>").attr("class","circle").append("&#9679;<div>"+ ($itemIndis+1) +"</div>")
-                    ).append(
-                    $("<div>").attr("class","itemContainer").append(
-                        $('<textarea>').attr('id','itemInput'+$itemIndis).attr('maxlength','120').attr('autocomplete','off').attr("rows","1").attr('placeholder','Yes, what\'s next?').attr('class','itemInput default autogrow').attr('name','itemText[]')
-                        )
-                    ).attr('id','item'+ $itemIndis));
-               
-        }
+        $itemIndis = $itemIndis +1;
+        $('#itemInputList').append(
+            $('<li>').append(
+                $("<div>").attr("class","circle").append("&#9679;<div>"+ ($itemIndis+1) +"</div>")
+                ).append(
+                $("<div>").attr("class","itemContainer").append(
+                    $('<textarea>').attr('id','itemInput'+$itemIndis).attr('maxlength','120').attr('autocomplete','off').attr("rows","1").attr('placeholder','Yes, what\'s next?').attr('class','itemInput default autogrow').attr('name','itemText[]')
+                    )
+                ).attr('id','item'+ $itemIndis)
+            );
         $('#itemInput'+ $itemIndis).keypress(onItemInputKeyPress);
         $('#itemInput'+ $itemIndis).each(onEachDefault);
         $('#itemInput'+ $itemIndis).focus();

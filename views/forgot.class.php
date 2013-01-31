@@ -7,6 +7,7 @@ require_once __ROOT__ . 'vendors/Tool.php';
 class ForgotController extends BaseController {
 
     public $email;
+    public $sent = false;
 
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
@@ -28,8 +29,10 @@ class ForgotController extends BaseController {
             if (count($users)>0) {
                 $user = $users[0];
                 
-                $params=array(array('name','Hasan'),array('link','www.google.com'),array('email_address','keklikhasan@gmail.com'));
-                Tool::sendEmail("confirm_mail.html", $params, $this->email, "Here is your password");
+                $params=array(array('name',$user->getFirstname()),array('password',$user->getPassword()),array('email_address',$this->email));
+                Tool::sendEmail("remember", $params, $this->email, "Here is your password");
+                
+                $this->redirect("/");
                 
             } else {
                 $this->addError("We don't have a user with that email!");

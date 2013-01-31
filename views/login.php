@@ -3,26 +3,28 @@
         <input type="hidden" name="inviteCode" value="<?= $this->inviteCode ?>">
         <table>
             <tbody><tr>
-                    <td class="mw-label"><label for="wpName1">Email:</label></td>
+                    <td class="mw-label"><label>Email:</label></td>
                     <td class="mw-input">
-                        <input class="loginText" id="wpName1" type="text" tabindex="1" size="20" autofocus="" name="email">
+                        <input class="loginText" type="text" tabindex="1" autofocus="" size="20" autofocus="" name="email">
                     </td>
                 </tr>
                 <tr>
-                    <td class="mw-label"><label for="wpPassword1">Password:</label></td>
+                    <td class="mw-label"><label>Password:</label></td>
                     <td class="mw-input">
-                        <input class="loginPassword" id="wpPassword1" tabindex="2" size="20" type="password" name="password">
+                        <input class="loginPassword" tabindex="2" size="20" type="password" name="password">
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td class="mw-input">
-                        <input name="rememberPassword" type="checkbox" checked="1" id="wpRemember" tabindex="8">&nbsp;<label for="wpRemember">Remember me</label>			</td>
+                        <input name="rememberPassword" type="checkbox" checked="1" tabindex="4">&nbsp;<label>Remember me</label>			
+                        | <a href="/base.forgot">Forgot?</a>
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td class="mw-submit">
-                        <button id="wpLoginAttempt" tabindex="9" type="submit" name="wpLoginAttempt">Login</button>
+                        <button id="wpLoginAttempt" tabindex="3" type="submit">Login</button>
                     </td>
                 </tr>
             </tbody></table>
