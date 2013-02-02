@@ -1,94 +1,121 @@
 <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.ajaxupload.js" ></script>
-<style>
-    .profileContainer {
-        
-    }
-    
-    .profileContainer button {
-        float:right;
-    }
-    
-    .profileEdit {
-        float:left;
-        display:none;
-    }
-    .userPic {
-        float:left;
-        margin-right: 15px;
-        width:60px;
-        height:60px;
-        background-color:white;
-        padding:10px;
-        margin-bottom:15px;
-    }
-    
-    ul {
-        margin:0;
-        padding:0;
-        list-style-type: none;
-    }
-    li {
-        padding:0 0 7px 0;
-        margin:0;
-    }
-    
-    h2,h3 {
-        margin-bottom:10px;
-    }
-    
-</style>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#userPic").ajaxUploadPrompt({
-		url: '/views/upload.php',
-		success: function (data, status, xhr) {
-                    console.log(data);
-		},
-                error: function (e) {
-                    console.log(e);
+            url: '/views/upload.php',
+            success: function (data, status, xhr) {
+                var response = jQuery.parseJSON( data );
+                if (response.error) {
+                    $.ambiance({message: "invalid picture, try again!", type: "error"}); 
+                } else {
+                    $("#userPic").empty();
+                    $("#userPic").append($("<img>").attr("src", "<?php echo __WEBROOT__ ?>inc/img/user/t" + response.filename));
+                    $.ambiance({message: "voow, you look good :)", type: "success"}); 
                 }
-                
-	});
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
     });
-    
 </script>
-<div class="mainSub form">
-    
-        <div class="profileContainer clearfix">
+
+<div class="settings">
+
+    <div class="right">
+        <div class="clearfix">
             <div id="userPic" class="userPic">
-                
+                <img src="<?= $this->user->getThumbPhotoUrl(); ?>">
             </div>
-            <div class="profileView" id="profileView">
-            <h3><?=$this->user->getFirstname() ." ". $this->user->getLastname(); ?></h3>
-            Lives in Istanbul. A tech geek!<br/>            
-            (<?=$this->user->getEmail();?>)<br/>
-                <button onclick="javascript:$('#profileView').hide();$('#profileEdit').show();" >Edit My Profile</button>
-            </div>
-            <div id="profileEdit" class="profileEdit">
-                <form action="<?php echo $this->getAction("update") ?>" method="post">
-                <input type="text" placeholder="Your name" value="<?=$this->user->getFirstname()?>" name="firstname"/><br/>
-                <input type="text" maxlength="120" placeholder="Something about yourself" value="" name="bio"/><br/>
-                <input type="text" placeholder="Your website" value="" name="url"/><br/>
-                <input type="text" placeholder="Your email" value="<?=$this->user->getEmail()?>" name="email"/>
-                </form>
-                <button>Update now</button>
-            </div>
-            
+            <h3><?= $this->user->getFullname(); ?></h3>
+            <?= $this->user->getBio() ?><br/>
+            <?= Tool::getLink($this->user->getUrl()) ?>
         </div>
         <hr/>
-        <div>
-            
-                <h2>Notification Settings</h2>
-                <ul>
-                    <li>
-                <input type="checkbox" name="listUpdateMail" value="<?=weeklyMail;?>" id="listUpdateMail">
-                <label for="listUpdateMail">Send me a mail when my lists updated</label>
-                    </li>
-                    <li>
-                <input type="checkbox" name="weeklyMail" value="<?=weeklyMail;?>" id="weeklyMail">
-                <label for="weeklyMail">Send me a weekly mail about the topics i watch</label>
-                    </li>
-                </ul>
-            
+        <ul style="padding-left: 10px;font-size:16px;">
+            <li>
+                <a href="/base.settings">Check your categories</a>
+            </li>
+            <hr/>
+            <li>
+                <a href="/base.settings/mail">Update notifications</a>
+            </li>
+            <li>
+                <a href="/base.settings/profile">Update your profile</a>
+            </li>
+            <li>
+                <a href="/base.settings/password">Update your password</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="left">
+        <?php if ($this->getCurrentAction() == "profile" || $this->getCurrentAction() == "update") { ?>
+            <form action="<?php echo $this->getAction("update") ?>" method="post">
+                <div class="fields"> 
+                    <input type="text" maxlength="100" size="20" placeholder="Your name" value="<?= $this->user->getFullname() ?>" name="fullname"/><br/>
+                    <div class="fieldDescription">Please enter your real name and surname</div>
+                    <input type="text" maxlength="255" size="40" placeholder="Something about yourself" value="<?= $this->user->getBio() ?>" name="bio"/><br/>
+                    <input type="text" maxlength="255" size="40" placeholder="Your website" value="<?= $this->user->getUrl() ?>" name="url"/><br/>
+                    <div class="fieldDescription">Your short bio and website is displayed next to your name on lists</div>
+                    <input type="text" maxlength="255" size="40" placeholder="Your email" value="<?= $this->user->getEmail() ?>" name="email"/><br>
+                    <div class="fieldDescription">Please enter a valid mail</div>
+                    <button style="float:left !important;">Update now</button>
+                </div>
+            </form>
+        <?php } ?>
+
+        <?php if ($this->getCurrentAction() == "password" || $this->getCurrentAction() == "updatePassword") { ?>
+            <form action="<?php echo $this->getAction("updatePassword") ?>" method="post">
+                <div class="fields"> 
+                    <label>New Password:</label>
+                    <input class="loginPassword" value="" tabindex="1" size="20" type="password" name="password"><br/>
+                    <label>New password again</label>
+                    <input class="loginPassword" value="" tabindex="2" size="20" type="password" name="passwordConfirm"><br/>
+                    <button style="float:left !important;">Update now</button>
+                </div>
+            </form>
+        <?php } ?>
+
+        <?php if ($this->getCurrentAction() == "index") { ?>
+            <h2>Categories</h2>
+            You can watch categories and can track the lists about that category on your timeline.
+            <ul class="categoryList">
+                <li>
+                    <div class="clearfix">
+                        <div class="categoryText">
+                            <h3>Math</h3>
+                            What is your love to numbers
+                        </div>
+                        <button class="small">remove</button>
+                    </div>
+                </li>
+                <li>
+                    <div class="clearfix">
+                        <div class="categoryText">
+                            <h3>Math</h3>
+                            What is your love to numbers
+                        </div>
+                        <button class="small">remove</button>
+                    </div>
+                </li>
+            </ul>
+        <?php } ?>
+
+
+        <?php if ($this->getCurrentAction() == "mail") { ?>
+            <h2>Notification Settings</h2>
+            <ul>
+                <li>
+                    <input type="checkbox" name="listUpdateMail" value="<?= $this->listUpdateMail; ?>" id="listUpdateMail">
+                    <label for="listUpdateMail">Send me a mail when my lists updated</label>
+                </li>
+                <li>
+                    <input type="checkbox" name="weeklyMail" value="<?= $this->weeklyMail; ?>" id="weeklyMail">
+                    <label for="weeklyMail">Send me a weekly mail about the topics i watch</label>
+                </li>
+            </ul>
         </div>
+    <?php } ?>
+</div>
 </div>

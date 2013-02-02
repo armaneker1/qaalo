@@ -93,7 +93,7 @@ class TopicController extends BaseController {
 
                 $user = User::findById($db, $userID);
                 if (isset($user)) {
-                    $this->writers[] = $user->getFirstname() . " " . $user->getLastname();
+                    $this->writers[] = $user->getFullname();
                 }
             }
 

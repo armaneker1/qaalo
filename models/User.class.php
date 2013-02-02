@@ -13,22 +13,53 @@ require_once __ROOT__ . 'vendors/db2php/DSC.class.php';
  * @package entity
  */
 class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking {
+    
+    public function getThumbPhotoUrl() {
+        if ($this->photo == "") {
+            return __WEBROOT__ . "inc/thumb.jpg";
+        } else {
+            return __WEBROOT__ . "inc/img/user/t". $this->photo .".jpg";
+        }
+    }
+    
+    public function getPhotoUrl() {
+        if ($this->photo == "") {
+            return __WEBROOT__ . "inc/profile.jpg";
+        } else {
+            return __WEBROOT__ . "inc/img/user/". $this->photo .".jpg";
+        }
+    }
+    
+    public static function create() {
+        return new User();
+    }
+
+    public function getFirstname() {
+        $arr = explode(' ', trim($this->fullname));
+        return $arr[0];
+    }
 
     private static $CLASS_NAME = 'User';
 
     const SQL_IDENTIFIER_QUOTE = '';
     const SQL_TABLE_NAME = 'user';
-    const SQL_INSERT = 'INSERT INTO user (id,email,password,lastLogin,firstname,lastname) VALUES (?,?,?,?,?,?)';
-    const SQL_INSERT_AUTOINCREMENT = 'INSERT INTO user (email,password,lastLogin,firstname,lastname) VALUES (?,?,?,?,?)';
-    const SQL_UPDATE = 'UPDATE user SET id=?,email=?,password=?,lastLogin=?,firstname=?,lastname=? WHERE id=?';
+    const SQL_INSERT = 'INSERT INTO user (id,email,password,lastLogin,fullname,bio,url,profession,mailSettings,loginCount,validationCode,photo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+    const SQL_INSERT_AUTOINCREMENT = 'INSERT INTO user (email,password,lastLogin,fullname,bio,url,profession,mailSettings,loginCount,validationCode,photo) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+    const SQL_UPDATE = 'UPDATE user SET id=?,email=?,password=?,lastLogin=?,fullname=?,bio=?,url=?,profession=?,mailSettings=?,loginCount=?,validationCode=?,photo=? WHERE id=?';
     const SQL_SELECT_PK = 'SELECT * FROM user WHERE id=?';
     const SQL_DELETE_PK = 'DELETE FROM user WHERE id=?';
     const FIELD_ID = -147180002;
     const FIELD_EMAIL = 518840249;
     const FIELD_PASSWORD = -361507490;
     const FIELD_LASTLOGIN = 306960400;
-    const FIELD_FIRSTNAME = -1554861352;
-    const FIELD_LASTNAME = 1257827556;
+    const FIELD_FULLNAME = -246687651;
+    const FIELD_BIO = -267619227;
+    const FIELD_URL = -267600692;
+    const FIELD_PROFESSION = -2018814209;
+    const FIELD_MAILSETTINGS = -542146499;
+    const FIELD_LOGINCOUNT = 1712791849;
+    const FIELD_VALIDATIONCODE = -1491451255;
+    const FIELD_PHOTO = 528863823;
 
     private static $PRIMARY_KEYS = array(self::FIELD_ID);
     private static $AUTOINCREMENT_FIELDS = array(self::FIELD_ID);
@@ -37,42 +68,78 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
         self::FIELD_EMAIL => 'email',
         self::FIELD_PASSWORD => 'password',
         self::FIELD_LASTLOGIN => 'lastLogin',
-        self::FIELD_FIRSTNAME => 'firstname',
-        self::FIELD_LASTNAME => 'lastname');
+        self::FIELD_FULLNAME => 'fullname',
+        self::FIELD_BIO => 'bio',
+        self::FIELD_URL => 'url',
+        self::FIELD_PROFESSION => 'profession',
+        self::FIELD_MAILSETTINGS => 'mailSettings',
+        self::FIELD_LOGINCOUNT => 'loginCount',
+        self::FIELD_VALIDATIONCODE => 'validationCode',
+        self::FIELD_PHOTO => 'photo');
     private static $PROPERTY_NAMES = array(
         self::FIELD_ID => 'id',
         self::FIELD_EMAIL => 'email',
         self::FIELD_PASSWORD => 'password',
         self::FIELD_LASTLOGIN => 'lastLogin',
-        self::FIELD_FIRSTNAME => 'firstname',
-        self::FIELD_LASTNAME => 'lastname');
+        self::FIELD_FULLNAME => 'fullname',
+        self::FIELD_BIO => 'bio',
+        self::FIELD_URL => 'url',
+        self::FIELD_PROFESSION => 'profession',
+        self::FIELD_MAILSETTINGS => 'mailSettings',
+        self::FIELD_LOGINCOUNT => 'loginCount',
+        self::FIELD_VALIDATIONCODE => 'validationCode',
+        self::FIELD_PHOTO => 'photo');
     private static $PROPERTY_TYPES = array(
         self::FIELD_ID => Db2PhpEntity::PHP_TYPE_INT,
         self::FIELD_EMAIL => Db2PhpEntity::PHP_TYPE_STRING,
         self::FIELD_PASSWORD => Db2PhpEntity::PHP_TYPE_STRING,
         self::FIELD_LASTLOGIN => Db2PhpEntity::PHP_TYPE_INT,
-        self::FIELD_FIRSTNAME => Db2PhpEntity::PHP_TYPE_STRING,
-        self::FIELD_LASTNAME => Db2PhpEntity::PHP_TYPE_STRING);
+        self::FIELD_FULLNAME => Db2PhpEntity::PHP_TYPE_STRING,
+        self::FIELD_BIO => Db2PhpEntity::PHP_TYPE_STRING,
+        self::FIELD_URL => Db2PhpEntity::PHP_TYPE_STRING,
+        self::FIELD_PROFESSION => Db2PhpEntity::PHP_TYPE_INT,
+        self::FIELD_MAILSETTINGS => Db2PhpEntity::PHP_TYPE_STRING,
+        self::FIELD_LOGINCOUNT => Db2PhpEntity::PHP_TYPE_INT,
+        self::FIELD_VALIDATIONCODE => Db2PhpEntity::PHP_TYPE_STRING,
+        self::FIELD_PHOTO => Db2PhpEntity::PHP_TYPE_STRING);
     private static $FIELD_TYPES = array(
         self::FIELD_ID => array(Db2PhpEntity::JDBC_TYPE_INTEGER, 10, 0, false),
         self::FIELD_EMAIL => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 255, 0, false),
         self::FIELD_PASSWORD => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 18, 0, false),
         self::FIELD_LASTLOGIN => array(Db2PhpEntity::JDBC_TYPE_INTEGER, 10, 0, false),
-        self::FIELD_FIRSTNAME => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 100, 0, false),
-        self::FIELD_LASTNAME => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 100, 0, false));
+        self::FIELD_FULLNAME => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 100, 0, false),
+        self::FIELD_BIO => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 255, 0, true),
+        self::FIELD_URL => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 255, 0, true),
+        self::FIELD_PROFESSION => array(Db2PhpEntity::JDBC_TYPE_TINYINT, 3, 0, true),
+        self::FIELD_MAILSETTINGS => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 45, 0, true),
+        self::FIELD_LOGINCOUNT => array(Db2PhpEntity::JDBC_TYPE_INTEGER, 10, 0, true),
+        self::FIELD_VALIDATIONCODE => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 16, 0, false),
+        self::FIELD_PHOTO => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 45, 0, true));
     private static $DEFAULT_VALUES = array(
         self::FIELD_ID => null,
         self::FIELD_EMAIL => '',
         self::FIELD_PASSWORD => '',
         self::FIELD_LASTLOGIN => 0,
-        self::FIELD_FIRSTNAME => '',
-        self::FIELD_LASTNAME => '');
+        self::FIELD_FULLNAME => '',
+        self::FIELD_BIO => null,
+        self::FIELD_URL => null,
+        self::FIELD_PROFESSION => null,
+        self::FIELD_MAILSETTINGS => null,
+        self::FIELD_LOGINCOUNT => 0,
+        self::FIELD_VALIDATIONCODE => '',
+        self::FIELD_PHOTO => null);
     private $id;
     private $email;
     private $password;
     private $lastLogin;
-    private $firstname;
-    private $lastname;
+    private $fullname;
+    private $bio;
+    private $url;
+    private $profession;
+    private $mailSettings;
+    private $loginCount;
+    private $validationCode;
+    private $photo;
 
     /**
      * set value for id 
@@ -175,53 +242,203 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
     }
 
     /**
-     * set value for firstname 
+     * set value for fullname 
      *
      * type:VARCHAR,size:100,default:null
      *
-     * @param mixed $firstname
+     * @param mixed $fullname
      * @return User
      */
-    public function &setFirstname($firstname) {
-        $this->notifyChanged(self::FIELD_FIRSTNAME, $this->firstname, $firstname);
-        $this->firstname = $firstname;
+    public function &setFullname($fullname) {
+        $this->notifyChanged(self::FIELD_FULLNAME, $this->fullname, $fullname);
+        $this->fullname = $fullname;
         return $this;
     }
 
     /**
-     * get value for firstname 
+     * get value for fullname 
      *
      * type:VARCHAR,size:100,default:null
      *
      * @return mixed
      */
-    public function getFirstname() {
-        return $this->firstname;
+    public function getFullname() {
+        return $this->fullname;
     }
 
     /**
-     * set value for lastname 
+     * set value for bio 
      *
-     * type:VARCHAR,size:100,default:null
+     * type:VARCHAR,size:255,default:null,nullable
      *
-     * @param mixed $lastname
+     * @param mixed $bio
      * @return User
      */
-    public function &setLastname($lastname) {
-        $this->notifyChanged(self::FIELD_LASTNAME, $this->lastname, $lastname);
-        $this->lastname = $lastname;
+    public function &setBio($bio) {
+        $this->notifyChanged(self::FIELD_BIO, $this->bio, $bio);
+        $this->bio = $bio;
         return $this;
     }
 
     /**
-     * get value for lastname 
+     * get value for bio 
      *
-     * type:VARCHAR,size:100,default:null
+     * type:VARCHAR,size:255,default:null,nullable
      *
      * @return mixed
      */
-    public function getLastname() {
-        return $this->lastname;
+    public function getBio() {
+        return $this->bio;
+    }
+
+    /**
+     * set value for url 
+     *
+     * type:VARCHAR,size:255,default:null,nullable
+     *
+     * @param mixed $url
+     * @return User
+     */
+    public function &setUrl($url) {
+        $this->notifyChanged(self::FIELD_URL, $this->url, $url);
+        $this->url = $url;
+        return $this;
+    }
+
+    /**
+     * get value for url 
+     *
+     * type:VARCHAR,size:255,default:null,nullable
+     *
+     * @return mixed
+     */
+    public function getUrl() {
+        return $this->url;
+    }
+
+    /**
+     * set value for profession 
+     *
+     * type:TINYINT UNSIGNED,size:3,default:null,nullable
+     *
+     * @param mixed $profession
+     * @return User
+     */
+    public function &setProfession($profession) {
+        $this->notifyChanged(self::FIELD_PROFESSION, $this->profession, $profession);
+        $this->profession = $profession;
+        return $this;
+    }
+
+    /**
+     * get value for profession 
+     *
+     * type:TINYINT UNSIGNED,size:3,default:null,nullable
+     *
+     * @return mixed
+     */
+    public function getProfession() {
+        return $this->profession;
+    }
+
+    /**
+     * set value for mailSettings 
+     *
+     * type:VARCHAR,size:45,default:null,nullable
+     *
+     * @param mixed $mailSettings
+     * @return User
+     */
+    public function &setMailSettings($mailSettings) {
+        $this->notifyChanged(self::FIELD_MAILSETTINGS, $this->mailSettings, $mailSettings);
+        $this->mailSettings = $mailSettings;
+        return $this;
+    }
+
+    /**
+     * get value for mailSettings 
+     *
+     * type:VARCHAR,size:45,default:null,nullable
+     *
+     * @return mixed
+     */
+    public function getMailSettings() {
+        return $this->mailSettings;
+    }
+
+    /**
+     * set value for loginCount 
+     *
+     * type:INT UNSIGNED,size:10,default:0,nullable
+     *
+     * @param mixed $loginCount
+     * @return User
+     */
+    public function &setLoginCount($loginCount) {
+        $this->notifyChanged(self::FIELD_LOGINCOUNT, $this->loginCount, $loginCount);
+        $this->loginCount = $loginCount;
+        return $this;
+    }
+
+    /**
+     * get value for loginCount 
+     *
+     * type:INT UNSIGNED,size:10,default:0,nullable
+     *
+     * @return mixed
+     */
+    public function getLoginCount() {
+        return $this->loginCount;
+    }
+
+    /**
+     * set value for validationCode 
+     *
+     * type:VARCHAR,size:16,default:null
+     *
+     * @param mixed $validationCode
+     * @return User
+     */
+    public function &setValidationCode($validationCode) {
+        $this->notifyChanged(self::FIELD_VALIDATIONCODE, $this->validationCode, $validationCode);
+        $this->validationCode = $validationCode;
+        return $this;
+    }
+
+    /**
+     * get value for validationCode 
+     *
+     * type:VARCHAR,size:16,default:null
+     *
+     * @return mixed
+     */
+    public function getValidationCode() {
+        return $this->validationCode;
+    }
+
+    /**
+     * set value for photo 
+     *
+     * type:VARCHAR,size:45,default:null,nullable
+     *
+     * @param mixed $photo
+     * @return User
+     */
+    public function &setPhoto($photo) {
+        $this->notifyChanged(self::FIELD_PHOTO, $this->photo, $photo);
+        $this->photo = $photo;
+        return $this;
+    }
+
+    /**
+     * get value for photo 
+     *
+     * type:VARCHAR,size:45,default:null,nullable
+     *
+     * @return mixed
+     */
+    public function getPhoto() {
+        return $this->photo;
     }
 
     /**
@@ -338,8 +555,14 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
             self::FIELD_EMAIL => $this->getEmail(),
             self::FIELD_PASSWORD => $this->getPassword(),
             self::FIELD_LASTLOGIN => $this->getLastLogin(),
-            self::FIELD_FIRSTNAME => $this->getFirstname(),
-            self::FIELD_LASTNAME => $this->getLastname());
+            self::FIELD_FULLNAME => $this->getFullname(),
+            self::FIELD_BIO => $this->getBio(),
+            self::FIELD_URL => $this->getUrl(),
+            self::FIELD_PROFESSION => $this->getProfession(),
+            self::FIELD_MAILSETTINGS => $this->getMailSettings(),
+            self::FIELD_LOGINCOUNT => $this->getLoginCount(),
+            self::FIELD_VALIDATIONCODE => $this->getValidationCode(),
+            self::FIELD_PHOTO => $this->getPhoto());
     }
 
     /**
@@ -612,8 +835,14 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
         $this->setEmail($result['email']);
         $this->setPassword($result['password']);
         $this->setLastLogin($result['lastLogin']);
-        $this->setFirstname($result['firstname']);
-        $this->setLastname($result['lastname']);
+        $this->setFullname($result['fullname']);
+        $this->setBio($result['bio']);
+        $this->setUrl($result['url']);
+        $this->setProfession($result['profession']);
+        $this->setMailSettings($result['mailSettings']);
+        $this->setLoginCount($result['loginCount']);
+        $this->setValidationCode($result['validationCode']);
+        $this->setPhoto($result['photo']);
     }
 
     /**
@@ -652,8 +881,14 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
         $stmt->bindValue(2, $this->getEmail());
         $stmt->bindValue(3, $this->getPassword());
         $stmt->bindValue(4, $this->getLastLogin());
-        $stmt->bindValue(5, $this->getFirstname());
-        $stmt->bindValue(6, $this->getLastname());
+        $stmt->bindValue(5, $this->getFullname());
+        $stmt->bindValue(6, $this->getBio());
+        $stmt->bindValue(7, $this->getUrl());
+        $stmt->bindValue(8, $this->getProfession());
+        $stmt->bindValue(9, $this->getMailSettings());
+        $stmt->bindValue(10, $this->getLoginCount());
+        $stmt->bindValue(11, $this->getValidationCode());
+        $stmt->bindValue(12, $this->getPhoto());
     }
 
     /**
@@ -668,8 +903,14 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
             $stmt->bindValue(1, $this->getEmail());
             $stmt->bindValue(2, $this->getPassword());
             $stmt->bindValue(3, $this->getLastLogin());
-            $stmt->bindValue(4, $this->getFirstname());
-            $stmt->bindValue(5, $this->getLastname());
+            $stmt->bindValue(4, $this->getFullname());
+            $stmt->bindValue(5, $this->getBio());
+            $stmt->bindValue(6, $this->getUrl());
+            $stmt->bindValue(7, $this->getProfession());
+            $stmt->bindValue(8, $this->getMailSettings());
+            $stmt->bindValue(9, $this->getLoginCount());
+            $stmt->bindValue(10, $this->getValidationCode());
+            $stmt->bindValue(11, $this->getPhoto());
         } else {
             $stmt = self::prepareStatement($db, self::SQL_INSERT);
             $this->bindValues($stmt);
@@ -697,7 +938,7 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
     public function updateToDatabase(PDO $db) {
         $stmt = self::prepareStatement($db, self::SQL_UPDATE);
         $this->bindValues($stmt);
-        $stmt->bindValue(7, $this->getId());
+        $stmt->bindValue(13, $this->getId());
         $affected = $stmt->execute();
         if (false === $affected) {
             $stmt->closeCursor();
@@ -760,10 +1001,6 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
             $instances[] = self::fromDOMElement($node);
         }
         return $instances;
-    }
-
-    public static function create() {
-        return new User();
     }
 
 }

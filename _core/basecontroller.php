@@ -1,4 +1,5 @@
 <?php
+
 require_once __ROOT__ . 'vendors/Tool.php';
 
 abstract class BaseController {
@@ -26,7 +27,15 @@ abstract class BaseController {
             $this->redirect("/");
         }
     }
-    
+
+    public function getCurrentAction() {
+        return $this->action;
+    }
+
+    public function getUserID() {
+        return $this->_userID;
+    }
+
     public function isLoggedIn() {
         return isset($this->_userID);
     }
@@ -39,7 +48,7 @@ abstract class BaseController {
                 $this->$key = $value;
             }
         }
-        
+
         $this->{$this->action}();
 
         if (!$this->_standalone) {
@@ -48,12 +57,17 @@ abstract class BaseController {
     }
 
     public function setPageTitle($title) {
-        $this->_title = $title ." - Qaalo";
+        $this->_title = $title . " - Qaalo";
     }
 
     public function addError($errorMsg) {
         $this->errors[] = $errorMsg;
         $this->hasError = true;
+    }
+
+    public function addInfo($str) {
+        session_start();
+        $_SESSION["messages"][] = $str;
     }
 
     public function hasError() {
@@ -73,6 +87,7 @@ abstract class BaseController {
 
     public function redirect($controller, $action = '') {
         header('Location: ' . __WEBROOT__ . $controller . ($action != "" ? "/" . $action : ""));
+        die();
     }
 
     public function getAction($action) {

@@ -15,7 +15,7 @@ class ItemController extends BaseController {
     public $dir;
 
     public function __construct($action, $urlValues) {
-        parent::__construct("main", $action, $urlValues, true);
+        parent::__construct("main", $action, $urlValues, true,true);
     }
 
     public function vote() {

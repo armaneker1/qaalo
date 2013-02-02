@@ -5,45 +5,39 @@
         <table>
             <tbody>
                 <tr>
-                    <td class="mw-label"><label>First Name</label></td>
+                    <td class="mw-label"><label>Full Name</label></td>
                     <td class="mw-input">
-                        <input class="loginText capitalize" tabindex="1" value="<?php echo $this->firstname; ?>" type="text" size="20" autofocus="" name="firstname">			
-                    </td>
-                </tr>
-                <tr>
-                    <td class="mw-label"><label >Last Name</label></td>
-                    <td class="mw-input">
-                        <input class="loginText capitalize" tabindex="2" value="<?php echo $this->lastname; ?>"type="text" size="20" name="lastname">			
+                        <input class="loginText" tabindex="1" value="<?php echo $this->fullname; ?>" type="text" size="25" autofocus="" name="fullname">			
                     </td>
                 </tr>
                 <tr>
                     <td class="mw-label"><label>E-mail</label></td>
                     <td class="mw-input">
-                        <input class="loginText" value="<?php echo $this->email; ?>" tabindex="3" size="20" type="email" name="email">					
+                        <input class="loginText" value="<?php echo $this->email; ?>" tabindex="2" size="25" type="email" name="email">					
                     </td>
                 </tr>
                 <tr>
                     <td class="mw-label"><label>Password:</label></td>
                     <td class="mw-input">
-                        <input class="loginPassword" value="" tabindex="4" size="20" type="password" name="password">			
+                        <input class="loginPassword" value="" tabindex="3" size="20" type="password" name="password">			
                     </td>
                 </tr>
                 <tr>
                     <td class="mw-label"><label>Confirm password</label></td>
                     <td class="mw-input">
-                        <input class="loginPassword" value="" tabindex="5" size="20" type="password" name="passwordConfirm">			
+                        <input class="loginPassword" value="" tabindex="4" size="20" type="password" name="passwordConfirm">			
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td class="mw-input">
-                        <input name="rememberPassword" type="checkbox" value="1" checked="checked" tabindex="6">&nbsp;<label>Remember password</label>			
+                        <input name="rememberPassword" type="checkbox" value="1" checked="checked" tabindex="5">&nbsp;<label>Remember password</label>			
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td class="mw-submit">
-                        <button type="submit" name="wpCreateaccount" id="wpCreateaccount" tabindex="7">Create account</button>
+                        <button type="submit" name="wpCreateaccount" id="wpCreateaccount" tabindex="6">Create account</button>
                     </td>
                 </tr>
             </tbody>

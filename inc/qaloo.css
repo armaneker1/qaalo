@@ -47,6 +47,10 @@ input, textarea {
     border-radius: 3px;
 }
 
+.fields input {
+    margin-bottom:6px;
+}
+
 button:active {
     -moz-box-shadow:
         0px 0px 0px rgba(000,000,000,0),
@@ -66,6 +70,11 @@ button:active {
     -ms-transition: all 0.1s linear;
     -kthtml-transition: all 0.1s linear;
     transition: all 0.1s linear;
+}
+
+button.small {
+    font-size:11px;
+    padding: 7px 7px;
 }
 
 button {
@@ -217,13 +226,13 @@ button {
     margin:0 auto;
 }
 
-.main .left {
+.main .left, .settings .left {
     float:left;
     width:649px;
     padding-top:20px;
 }
 
-.main .right {
+.main .right, .settings .right {
     float:right;
     width:250px;
     border:solid 1px #d5d5d5;
@@ -247,6 +256,14 @@ button {
 
 }
 
+.settings .left {
+    width:550px;
+}
+
+.settings .right {
+    width:300px !important;
+}
+
 
 .over {
     background-color:red;
@@ -258,7 +275,7 @@ button {
 }
 
 .error ul {
-    margin:10px 0 0 30px;
+    margin:30px 0 0 30px;
     padding:0;
 }
 
@@ -408,6 +425,12 @@ textarea.autogrow
     top:-10px;
     margin-left:32px;
     margin-top:5px;
+}
+
+.fieldDescription {
+    font-size:12px;
+    color:#999;
+    margin:0px 0 10px 3px;
 }
 
 .popup {
@@ -596,6 +619,57 @@ ul.itemsInput li {
     text-transform:capitalize;
 }
 
+.profileContainer {
+
+}
+
+.profileContainer button {
+    float:right;
+}
+
+.profileEdit {
+    float:left;
+    display:none;
+}
+.userPic {
+    float:left;
+    margin-right: 12px;
+    width:60px;
+    height:60px;
+    background-color:white;
+    padding:5px;
+    margin-bottom:2px;
+    cursor: pointer;
+    -moz-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.userPic img {
+    -moz-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+ul {
+    margin:10px 0 0 0;
+    padding:0;
+    list-style-type: none;
+}
+li {
+    padding:0 0 7px 0;
+    margin:0;
+}
+
+h2 {
+    margin:0 0 10px 0;
+}
+h3 {
+    margin:0 0 5px 0;
+    font-size:18px;
+}
+
+
 /* tokeninput */
 /* Example tokeninput style #2: Facebook style */
 ul.token-input-list {
@@ -718,4 +792,128 @@ div.token-input-dropdown ul li em {
 div.token-input-dropdown ul li.token-input-selected-dropdown-item {
     background-color: #3b5998;
     color: #fff;
+}
+
+div.leftContainer {
+    float:left;
+    width:460px;
+    margin-right:20px;
+}
+div.rightContainer {
+    float:right;
+    width:460px;
+    margin-left:20px;
+}
+ul.categoryList h3 {
+    color:#963e3c;
+}
+
+ul.categoryList {
+    border-top:solid 1px #ddd;
+    margin-top:20px;
+}
+ul.categoryList li {
+    border-bottom:solid 1px #ddd;
+}
+
+ul.categoryList button {
+    float:right;
+    margin-top:14px;
+}
+
+.categoryText {
+    float:left;
+    width:390px;
+}
+
+.fields label {
+    font-size:15px;
+    display:block;
+    margin:5px 0 2px 3px;
+}
+
+
+/*    */
+/*
+ * Stylesheet for Ambiance - Notification Plugin for jQuery
+ * Version 1.0.1
+ *
+ * Copyright (c) 2012 Richard Hsu
+ * Documentation: http://www.github.com/richardhsu/jquery.ambiance
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+*/
+
+/* Notification area will be top right but feel free to modify it below. */
+#ambiance-notification {
+    display: block;
+    position: fixed;
+    top: -3px;
+    right: 15px;
+    z-index: 9999;
+}
+
+#ambiance-notification a {
+    color:white !important;
+}
+
+/* Built in custom styling for the notifications. */
+.ambiance-title {
+    font-weight: bold;
+}
+
+.ambiance {
+    float: right;
+    clear: both;
+    border: 3px solid transparent;
+}
+
+.ambiance:hover {
+    border: 3px solid #DDDDDD;
+}
+
+.ambiance-default, .ambiance-success, .ambiance-error {
+    border-radius: 5px;
+    -moz-border-radius: 5px; /* Firefox 3.6 and earlier. */
+    padding: 10px;
+    margin: 10px;
+}
+
+.ambiance-default {
+    background: #000000;
+    color: #DDDDDD;
+}
+
+.ambiance-success {
+    background: #468847;
+    color: #DFF0D8;
+}
+
+.ambiance-error {
+    background: #B94A48;
+    color: #F2DEDE;
+}
+
+/* Close button attributes -- based off Twitter Bootstrap alert close item. */
+.ambiance-close {
+    display: block;
+    position: relative;
+    top: -2px;
+    right: 0px;
+    color: #FFFFFF !important;
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+    filter: alpha(opacity=20);
+    text-decoration: none;
+    position: relative;
+    line-height: 14px;
+    margin-left: 5px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.ambiance-close:hover {
+    color: #BBBBBB !important;
+    cursor: pointer;
 }

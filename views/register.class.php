@@ -8,8 +8,7 @@ require_once __ROOT__ . 'vendors/DB.php';
 
 class RegisterController extends BaseController {
 
-    public $firstname;
-    public $lastname;
+    public $fullname;
     public $email;
     public $password;
     public $passwordConfirm;
@@ -26,7 +25,7 @@ class RegisterController extends BaseController {
             $this->redirect("base.home");
             return;
         }
-        
+
         if (isset($this->urlValues["id"])) {
             $this->inviteCode = $this->urlValues["id"];
             if (!$this->inviteIsValid($this->inviteCode)) {
@@ -49,15 +48,17 @@ class RegisterController extends BaseController {
     }
 
     protected function register() {
-        if (strlen($this->firstname) < 3) {
-            $this->addError("Your first name is not valid");
-        }
-        if (strlen($this->lastname) < 3) {
-            $this->addError("Your last name is not valid");
+        if (strlen($this->fullname) < 3) {
+            $this->addError("Your name is not valid");
         }
 
+        $db = DB::getConnection();
         if (!preg_match('/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/', $this->email)) {
             $this->addError("Email is not valid");
+        } else {
+            if (count(User::findByExample($db, User::create()->setEmail(strtolower(trim($this->email))))) > 0) {
+                $this->addError("Email is in use. Did you register before?");
+            }
         }
 
         if ($this->password != $this->passwordConfirm) {
@@ -66,11 +67,9 @@ class RegisterController extends BaseController {
             $this->addError("Password is not valid");
         }
 
-        $db = DB::getConnection();
 
-        if (count(User::findByExample($db, User::create()->setEmail($this->email))) > 0) {
-            $this->addError("Email is in use. Did you register before?");
-        }
+
+
 
 
         if (!$this->hasError()) {
@@ -80,12 +79,14 @@ class RegisterController extends BaseController {
                 return;
             }
 
+            $validationCode = Tool::randomString(16);
+
             $user = new User();
-            $user->setFirstname($this->firstname);
-            $user->setLastname($this->lastname);
-            $user->setEmail($this->email);
+            $user->setFullname($this->fullname);
+            $user->setEmail(strtolower(trim($this->email)));
             $user->setPassword($this->password);
             $user->setLastLogin(time());
+            $user->setValidationCode($validationCode);
             $user->insertIntoDatabase($db);
 
             if ($this->rememberPassword != '') {
@@ -93,8 +94,8 @@ class RegisterController extends BaseController {
             } else {
                 Tool::forgetMe();
             }
-            
-            $params=array(array('name',$user->getFirstname()),array('email_address',$user->getEmail()));
+
+            $params = array(array('name', $user->getFirstname()), array('validationCode', $validationCode), array('email_address', $user->getEmail()));
             Tool::sendEmail("welcome", $params, $user->getEmail(), "Welcome to Qaalo");
 
             $this->redirect("base.login/index/" . $this->inviteCode);
@@ -102,7 +103,8 @@ class RegisterController extends BaseController {
     }
 
     public function ticketIsValid($ticketCode, $use = false) {
-        if ( trim($ticketCode) == "") return false;
+        if (trim($ticketCode) == "")
+            return false;
         $db = DB::getConnection();
         $tickets = Registerticket::findByExample($db, Registerticket::create()->setCode($ticketCode));
         if (count($tickets) > 0) {
@@ -111,7 +113,7 @@ class RegisterController extends BaseController {
                 if ($use) {
                     $ticket->setQty($ticket->getQty() - 1);
                     $ticket->setLastUsedOn(time());
-                    
+
                     var_dump($ticket);
                     $ticket->updateToDatabase($db);
                 }
@@ -121,9 +123,10 @@ class RegisterController extends BaseController {
             }
         }
     }
-    
+
     public function inviteIsValid($inviteCode) {
-        if ( trim($inviteCode) == "") return false;
+        if (trim($inviteCode) == "")
+            return false;
         $db = DB::getConnection();
         $tickets = Topic::findByExample($db, Topic::create()->setInviteCode($inviteCode));
         if (count($tickets) > 0) {

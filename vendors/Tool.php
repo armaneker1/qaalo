@@ -6,6 +6,8 @@ require_once __ROOT__ . 'vendors/SimpleEmailService.php';
 
 class Tool {
 
+    private static $allowedExts = array("jpg", "jpeg", "gif", "png");
+
     public static function rememberMe($email, $password) {
         setcookie("auth", 'usr=' . $email . '&hash=' . md5($password), time() + 3600 * 24 * 365, "/");
     }
@@ -14,10 +16,17 @@ class Tool {
         setcookie("auth", '', time() - 1000, "/");
     }
 
+    public static function getLink($url) {
+        if ($url != "") {
+            return "<a href='" . (substr(strtolower($url), 0, 7) != "http://" ? "http://" : "" ) . $url . "' target='_blank'>" . $url . "</a>";
+        }
+    }
+
     public static function randomString($length) {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
         $size = strlen($chars);
+        $str = "";
         for ($i = 0; $i < $length; $i++) {
             $str .= $chars[rand(0, $size - 1)];
         }
@@ -26,7 +35,7 @@ class Tool {
     }
 
     public static function sendEmail($fileName, $params, $to, $subject) {
-        $file = __ROOT__ . "inc/emailTemplates/". $fileName.".html";
+        $file = __ROOT__ . "inc/emailTemplates/" . $fileName . ".html";
         if (file_exists($file)) {
             $template = file_get_contents($file);
             if (!empty($params) && sizeof($params) > 0) {
@@ -103,6 +112,15 @@ class Tool {
             }
         }
         return false;
+    }
+
+    public static function isValidImage($type, $name) {
+        $extension = strtolower(end(explode(".", $name)));
+        if ((($type == "image/gif") || ($type == "image/jpeg") || ($type == "image/png") || ($type == "image/pjpeg")) && in_array($extension, Tool::$allowedExts)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
