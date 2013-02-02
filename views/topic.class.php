@@ -5,6 +5,8 @@ require_once __ROOT__ . 'models/Topic.class.php';
 require_once __ROOT__ . 'models/Item.class.php';
 require_once __ROOT__ . 'models/Vote.class.php';
 require_once __ROOT__ . 'models/Writer.class.php';
+require_once __ROOT__ . 'models/Category.class.php';
+
 require_once __ROOT__ . 'vendors/DB.php';
 require_once __ROOT__ . 'vendors/Tool.php';
 
@@ -23,6 +25,7 @@ class TopicController extends BaseController {
     public $isWriter = false;
     public $isInvited = false;
     public $inviteCode;
+    public $categories;
 
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
@@ -37,36 +40,7 @@ class TopicController extends BaseController {
         $this->title = $_GET["id"];
     }
 
-    protected function add() {
-        $db = DB::getConnection();
-
-        $this->setPageTitle($_GET["id"]);
-
-        $topic = Topic::findById($db, $this->topicID);
-        if (isset($topic)) {
-
-            //Insert categories
-            foreach ($this->itemText as $str) {
-                if (strlen($str) > 0 && $str != "Yes, what's next?" && $str != "Enter first item here" && $str != "You have something to add?") {
-                    $item = new Item();
-                    $item->setText($str);
-                    $item->setUserID($this->_userID);
-                    $item->setTopicID($this->topicID);
-                    $item->setCreatedOn(time());
-                    $item->setCommentCount(0);
-                    $item->insertIntoDatabase($db);
-                }
-            }
-
-            $this->redirect("l", $topic->getUrl());
-        } else {
-            $this->redirect("error");
-        }
-    }
-
     protected function view() {
-
-
         $this->title = $_GET["id"];
         $db = DB::getConnection();
         $topics = Topic::findByExample($db, Topic::create()->setUrl($this->title));
@@ -90,15 +64,15 @@ class TopicController extends BaseController {
             }
 
             foreach ($writersID as $userID) {
-
                 $user = User::findById($db, $userID);
                 if (isset($user)) {
-                    $this->writers[] = $user->getFullname();
+                    $this->writers[] = array($user->getFullname(),$user->getThumbPhotoUrl());
                 }
             }
 
 
-
+            $this->categories = Category::findBySql($db, "select * from category where id in (select categoryID from topiccategorylink where topicID=". $this->topic->getId() .")");
+            
 
             usort($this->items, function($a, $b) {
                         $voteA = $a->getVoteUp() - $a->getVoteDown();
@@ -120,6 +94,8 @@ class TopicController extends BaseController {
                     $this->isWriter = count($writers) > 0;
                 }
             }
+            
+            
 
 
             if (!$this->isWriter && isset($this->urlValues["inviteCode"])) {

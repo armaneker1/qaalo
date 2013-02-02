@@ -15,8 +15,8 @@
                         $a = 0;
                         foreach ($this->items as $item) {
                             ?>
-                            <li id="existingItem<?= $a ?>" <?php echo (!$this->isWriter && $a>=10 ? "class=\"hiddenItem\"" :"");?>>
-                                <div class="circle<?php echo ($a>=10 ? " low" :"");?>">&#9679;<div><?= $a + 1 ?></div></div>
+                            <li id="existingItem<?= $a ?>" <?php echo (!$this->isWriter && $a >= 10 ? "class=\"hiddenItem\"" : ""); ?>>
+                                <div class="circle<?php echo ($a >= 10 ? " low" : ""); ?>">&#9679;<div><?= $a + 1 ?></div></div>
                                 <div class="itemContainer">
                                     <?php echo $item->getText(); ?>
                                     <?php if ($this->isLoggedIn()) { ?>
@@ -70,24 +70,29 @@
         <?php
         $a = count($this->writers);
         foreach ($this->writers as $writer) {
+            $show = "<img class='tinyPhoto' src='" . $writer[1] . "'>" . $writer[0];
             $a--;
 
             if ($a == count($this->writers) - 1) {
                 if (count($this->writers) > 1) {
-                    echo "<b>" . $writer . "</b> is listing with ";
+                    echo "<b>" . $show . "</b> is listing with ";
                 } else {
-                    echo "<b>" . $writer . "</b> is listing";
+                    echo "<b>" . $show . "</b> is listing";
                 }
             } else {
-                echo $writer . ( $a > 0 ? ", " : "" );
+                echo $show . ( $a > 0 ? ", " : "" );
             }
         }
         ?>
         <hr/>
-        <?= $this->totalVotes ?> ratings<br/>
-
+        <ul class="categoryList clearfix">
+            <?php foreach ($this->categories as $category) { ?>
+                <li><a href="/c/<?= $category->getUrl() ?>"><?= $category->getName() ?></a></li>
+            <?php } ?>
+        </ul>
         <hr/>
-
+        <?= $this->totalVotes ?> ratings<br/>
+        <hr/>
         <?php if ($this->isWriter) { ?>
             Use <a style="font-weight: bold;" href="/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>">this link</a> to ask people add items to this list
             <hr>

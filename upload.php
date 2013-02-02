@@ -29,22 +29,22 @@ $user = User::findById($db, $userID);
 
 if ($user) {
     $filePrefix = $userID . Tool::randomString(6);
-    $fileName = $filePrefix . "." . end(explode(".", $_FILES["file"]["name"][0]));
+    $extension = "." . end(explode(".", $_FILES["file"]["name"][0]));
     $filePath = __ROOT__ . "inc/img/user/";
 
-    move_uploaded_file($_FILES["file"]["tmp_name"][0], $filePath . $fileName);
-    $resizeObj = new Image($filePath . $fileName);
+    move_uploaded_file($_FILES["file"]["tmp_name"][0], $filePath . $filePrefix . $extension);
+    $resizeObj = new Image($filePath . $filePrefix . $extension);
     $resizeObj->resizeImage(60, 60, 'crop');
-    $resizeObj->saveImage($filePath . "t" . $fileName, 90);
+    $resizeObj->saveImage($filePath . "t" . $filePrefix . ".jpg", 90);
 
-    $resizeObj = new Image($filePath . $fileName);
+    $resizeObj = new Image($filePath . $filePrefix . $extension);
     $resizeObj->resizeImage(95, 95, 'crop');
-    $resizeObj->saveImage($filePath . $fileName, 90);
+    $resizeObj->saveImage($filePath . $filePrefix . ".jpg", 90);
 
     $user->setPhoto($filePrefix);
     $user->updateToDatabase($db);
-    
-    echo json_encode(array("filename" => $fileName));
+
+    echo json_encode(array("filename" => $filePrefix . ".jpg"));
 } else {
     echo json_encode(array("error" => "error2"));
     die();

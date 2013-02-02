@@ -2,7 +2,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#userPic").ajaxUploadPrompt({
-            url: '/views/upload.php',
+            url: '/upload.php',
             success: function (data, status, xhr) {
                 var response = jQuery.parseJSON( data );
                 if (response.error) {
@@ -107,11 +107,11 @@
             <h2>Notification Settings</h2>
             <ul>
                 <li>
-                    <input type="checkbox" name="listUpdateMail" value="<?= $this->listUpdateMail; ?>" id="listUpdateMail">
+                    <input ajaxAction="back.user/notify" type="checkbox" name="updateMail" <?= $this->user->receivesUpdateMail() ? "checked" : ""; ?> id="listUpdateMail">
                     <label for="listUpdateMail">Send me a mail when my lists updated</label>
                 </li>
                 <li>
-                    <input type="checkbox" name="weeklyMail" value="<?= $this->weeklyMail; ?>" id="weeklyMail">
+                    <input ajaxAction="back.user/notify" type="checkbox" name="weeklyMail" <?= $this->user->receivesWeeklyMail() ? "checked" : ""; ?> id="weeklyMail">
                     <label for="weeklyMail">Send me a weekly mail about the topics i watch</label>
                 </li>
             </ul>

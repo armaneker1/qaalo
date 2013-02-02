@@ -3,6 +3,8 @@
 require_once __ROOT__ . 'models/User.class.php';
 require_once __ROOT__ . 'models/Topic.class.php';
 require_once __ROOT__ . 'models/Item.class.php';
+require_once __ROOT__ . 'models/Category.class.php';
+require_once __ROOT__ . 'models/TopicCategoryLink.class.php';
 require_once __ROOT__ . 'vendors/DB.php';
 require_once __ROOT__ . 'vendors/Tool.php';
 
@@ -10,6 +12,7 @@ class CreateController extends BaseController {
 
     public $title;
     public $itemText;
+    public $categories;
 
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
@@ -24,6 +27,8 @@ class CreateController extends BaseController {
     protected function create() {
         $db = DB::getConnection();
 
+
+
         if (trim($this->title) == "Enter title here" || trim($this->title) == "") {
             $this->addError("Please enter a valid title");
         }
@@ -34,8 +39,12 @@ class CreateController extends BaseController {
                 $count++;
             }
         }
-        if ($count==0) {
+        if ($count == 0) {
             $this->addError("Enter at least 1 item");
+        }
+
+        if (trim($this->categories) == "") {
+            $this->addError("Select a category");
         }
 
         if (!$this->hasError()) {
@@ -51,7 +60,7 @@ class CreateController extends BaseController {
             $topic->setRate(0);
             $topic->insertIntoDatabase($db);
 
-            //Insert categories
+            //Insert items
             foreach ($this->itemText as $str) {
                 if (strlen($str) > 0 && $str != "Yes, what's next?" && $str != "Enter first item here") {
                     $item = new Item();
@@ -64,6 +73,29 @@ class CreateController extends BaseController {
                 }
             }
 
+            //Insert categories
+            $categories = explode(",", $this->categories);
+            foreach ($categories as $category) {
+                $categoryID = 0;
+                if (is_numeric($category)) {
+                    $categoryID = $category;
+                } else {
+                    $newCategory = new Category();
+                    $newCategory->setLinkCount(1);
+                    $newCategory->setName($category);
+                    $newCategory->setUserID($this->getUserID());
+                    $newCategory->setUrl(Tool::getURL($category));
+                    $newCategory->insertIntoDatabase($db);
+                    $categoryID = $newCategory->getId();
+                }
+
+                $link = new TopicCategoryLink();
+                $link->setCategoryId($categoryID);
+                $link->setTopicId($topic->getId());
+                $link->insertIntoDatabase($db);
+            }
+            
+            $this->addInfo("Yay, we have a new list now :)");
             $this->redirect("l", Tool::getURL($this->title));
         }
     }

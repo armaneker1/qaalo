@@ -27,6 +27,18 @@ $(document).ready(function(){
         }
     });
     
+    $("[ajaxAction]").each(function() {
+        $(this).change(function() {
+            $.ajax({
+                type: "POST",
+                url: "/"+ $(this).attr("ajaxAction"),
+                data: $(this).attr("name") +"="+ ($(this).is(':checked') ? "1" : "0")
+            }).done(function( data ) {
+                
+            });
+        });
+    });
+    
     
     
 });

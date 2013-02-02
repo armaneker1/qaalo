@@ -1,19 +1,10 @@
 <div class="mainSub">
     <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autosize-min.js" ></script>
     <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tokeninput.js" ></script>
-    
-     <div>
-        <input type="text" id="demo-input" name="blah" />
-        <script type="text/javascript">
+
+    <script type="text/javascript">
         $(document).ready(function() {
-            $("#demo-input").tokenInput("http://shell.loopj.com/tokeninput/tvshows.php");
-        });
-        </script>
-    </div>
-    
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function()
-        {
+            $("#categories").tokenInput("/back.category/search");
             $('.autogrow').autosize();
         });
     </script>
@@ -35,9 +26,10 @@
                     </ul>
                     <div class="description" style="margin-top: 8px;">Press <b>Enter</b> to add new items</div>
                 </div>
-                
+
             </div>
-            
-            <p><button type="submit">Next ➜</button></p>
+            <input type="text" id="categories" name="categories" />
+            <div class="description" style="margin: 8px 0 0 0;">Add categories to your list</div>
+            <button type="submit">Next ➜</button>
     </form>
 </div>

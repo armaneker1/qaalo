@@ -4,3 +4,4 @@ RewriteRule ^back.([a-zA-Z]*)/?([a-zA-Z]*)?/?([a-zA-Z0-9]*)?/?$ index.php?contro
 RewriteRule ^base.([a-zA-Z]*)/?([a-zA-Z]*)?/?([a-zA-Z0-9]*)?/?$ index.php?controller=$1&action=$2&id=$3 [NC,L]
 RewriteRule ^l/(.*)/invitecode/(.*)?$ index.php?controller=topic&action=view&id=$1&inviteCode=$2 [NC,L]
 RewriteRule ^l/(.*)/?$ index.php?controller=topic&action=view&id=$1 [NC,L]
+RewriteRule ^c/(.*)/?$ index.php?controller=category&action=index&id=$1 [NC,L]
