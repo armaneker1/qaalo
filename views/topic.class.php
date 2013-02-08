@@ -6,7 +6,7 @@ require_once __ROOT__ . 'models/Item.class.php';
 require_once __ROOT__ . 'models/Vote.class.php';
 require_once __ROOT__ . 'models/Writer.class.php';
 require_once __ROOT__ . 'models/Category.class.php';
-
+require_once __ROOT__ . 'models/UserCategoryLink.class.php';
 require_once __ROOT__ . 'vendors/DB.php';
 require_once __ROOT__ . 'vendors/Tool.php';
 
@@ -66,13 +66,17 @@ class TopicController extends BaseController {
             foreach ($writersID as $userID) {
                 $user = User::findById($db, $userID);
                 if (isset($user)) {
-                    $this->writers[] = array($user->getFullname(),$user->getThumbPhotoUrl());
+                    $this->writers[] = array($user->getFullname(), $user->getThumbPhotoUrl());
                 }
             }
 
 
-            $this->categories = Category::findBySql($db, "select * from category where id in (select categoryID from topiccategorylink where topicID=". $this->topic->getId() .")");
-            
+            $this->categories = Category::findBySql($db, "select * from category where id in (select categoryID from topiccategorylink where topicID=" . $this->topic->getId() . ")");
+            foreach ($this->categories as $category) {
+                if (count(UserCategoryLink::findByExample($db, UserCategoryLink::create()->setUserId($this->getUserID())->setCategoryId($category->getId()))) > 0) {
+                    $category->isFollowed = true;
+                }
+            }
 
             usort($this->items, function($a, $b) {
                         $voteA = $a->getVoteUp() - $a->getVoteDown();
@@ -94,8 +98,8 @@ class TopicController extends BaseController {
                     $this->isWriter = count($writers) > 0;
                 }
             }
-            
-            
+
+
 
 
             if (!$this->isWriter && isset($this->urlValues["inviteCode"])) {

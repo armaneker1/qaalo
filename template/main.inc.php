@@ -8,6 +8,7 @@
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery-1.8.3.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autocomplete.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.ambiance.js" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.qtip-1.0.0-rc3.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js" ></script>
     </head>
     <body>
@@ -20,7 +21,9 @@
                         <input class="default" spellcheck="false" autocomplete="off" autofocus="on" type="text" placeholder="Search anything..." id="searchBox" name="searchKeyword">
                     </form>
                 </div>
+                
                 <div class="profile">
+                    
                     <?php if ($this->isLoggedIn()) { ?>
                         <a class="profileLink" >Hello, <?= $_SESSION["firstname"] ?> ▾</a>
                         <div id="profileMenu" class="popup profileMenu">

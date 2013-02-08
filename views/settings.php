@@ -1,25 +1,3 @@
-<script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.ajaxupload.js" ></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#userPic").ajaxUploadPrompt({
-            url: '/upload.php',
-            success: function (data, status, xhr) {
-                var response = jQuery.parseJSON( data );
-                if (response.error) {
-                    $.ambiance({message: "invalid picture, try again!", type: "error"}); 
-                } else {
-                    $("#userPic").empty();
-                    $("#userPic").append($("<img>").attr("src", "<?php echo __WEBROOT__ ?>inc/img/user/t" + response.filename));
-                    $.ambiance({message: "voow, you look good :)", type: "success"}); 
-                }
-            },
-            error: function (e) {
-                console.log(e);
-            }
-        });
-    });
-</script>
-
 <div class="settings">
 
     <div class="right">
@@ -79,26 +57,22 @@
 
         <?php if ($this->getCurrentAction() == "index") { ?>
             <h2>Categories</h2>
-            You can watch categories and can track the lists about that category on your timeline.
-            <ul class="categoryList">
-                <li>
-                    <div class="clearfix">
-                        <div class="categoryText">
-                            <h3>Math</h3>
-                            What is your love to numbers
-                        </div>
-                        <button class="small">remove</button>
+            You can follow categories and can track the lists about that category on your timeline. <a href="javascript:$('.addCategoryForm').toggle('fast');">Follow more categories?</a>
+            <div class="addCategoryForm">
+                <form action="<?php echo $this->getAction("addCategory"); ?>" method="post">
+                    <div style="float:left;">
+                        <input type="text" id="categories" name="categories" />
                     </div>
-                </li>
-                <li>
-                    <div class="clearfix">
-                        <div class="categoryText">
-                            <h3>Math</h3>
-                            What is your love to numbers
-                        </div>
-                        <button class="small">remove</button>
+                    <div style="float:left; margin-top:2px; padding:10px"><button style="padding:9px;">Add ➜</button>
                     </div>
-                </li>
+                    <div style="clear: both;"></div>
+                    <div class="description" style="margin: 0 0 0 0;">Add categories to your list</div>
+                </form>
+            </div>
+            <ul id="categoryList" class="categoryList clearfix" style="margin-top:25px !important;">
+                <?php foreach ($this->categories as $category) { ?>
+                    <li><a href="/c/<?= $category->getUrl() ?>"><?= $category->getName() ?></a><div categoryTitle="<?= $category->getName(); ?>" categoryID="<?= $category->getID(); ?>" permanent="1" class="categoryItem unfollow">x</div></li>
+                <?php } ?>
             </ul>
         <?php } ?>
 
@@ -118,4 +92,31 @@
         </div>
     <?php } ?>
 </div>
-</div>
+
+<script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.ajaxupload.js" ></script>
+<script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tokeninput.js" ></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#categories").tokenInput("/back.category/search")
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#userPic").ajaxUploadPrompt({
+            url: '/upload.php',
+            success: function (data, status, xhr) {
+                var response = jQuery.parseJSON( data );
+                if (response.error) {
+                    $.ambiance({message: "invalid picture, try again!", type: "error"}); 
+                } else {
+                    $("#userPic").empty();
+                    $("#userPic").append($("<img>").attr("src", "<?php echo __WEBROOT__ ?>inc/img/user/t" + response.filename));
+                    $.ambiance({message: "voow, you look good :)", type: "success"}); 
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    });
+</script>

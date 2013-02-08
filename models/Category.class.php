@@ -17,6 +17,8 @@ class Category extends Db2PhpEntityBase implements Db2PhpEntityModificationTrack
     public static function create() {
         return new Category();
     }
+    
+    public $isFollowed = false;
 
     private static $CLASS_NAME = 'Category';
 

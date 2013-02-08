@@ -87,11 +87,11 @@
         <hr/>
         <ul class="categoryList clearfix">
             <?php foreach ($this->categories as $category) { ?>
-                <li><a href="/c/<?= $category->getUrl() ?>"><?= $category->getName() ?></a></li>
+            <li><a href="/c/<?= $category->getUrl() ?>"><?= $category->getName() ?></a><div categoryTitle="<?=$category->getName(); ?>" categoryID="<?= $category->getID(); ?>" class="categoryItem <?=$category->isFollowed ? "unfollow" : "follow";?>"><?=$category->isFollowed ? "-" : "+";?></div></li>
             <?php } ?>
         </ul>
-        <hr/>
-        <?= $this->totalVotes ?> ratings<br/>
+        
+        <?= $this->totalVotes >0 ? "<hr/>". $this->totalVotes." ratings" : "" ?>
         <hr/>
         <?php if ($this->isWriter) { ?>
             Use <a style="font-weight: bold;" href="/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>">this link</a> to ask people add items to this list

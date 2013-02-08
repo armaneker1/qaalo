@@ -273,11 +273,13 @@
                 case KEY.ENTER:
                 case KEY.NUMPAD_ENTER:
                 case KEY.COMMA:
+                    event.preventDefault();
                     if(selected_dropdown_item) {
                         add_token($(selected_dropdown_item).data("tokeninput"));
                         hidden_input.change();
                         return false;
                     }
+                    
                     break;
 
                 case KEY.ESCAPE:

@@ -2,6 +2,8 @@
 
 require_once __ROOT__ . 'models/User.class.php';
 require_once __ROOT__ . 'models/Topic.class.php';
+require_once __ROOT__ . 'models/Category.class.php';
+require_once __ROOT__ . 'models/UserCategoryLink.class.php';
 require_once __ROOT__ . 'vendors/Tool.php';
 require_once __ROOT__ . 'vendors/DB.php';
 
@@ -16,6 +18,7 @@ class SettingsController extends BaseController {
     public $bio;
     public $password;
     public $passwordConfirm;
+    public $categories;
 
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues, false, true);
@@ -24,7 +27,13 @@ class SettingsController extends BaseController {
     }
 
     protected function index() {
-        
+        $db = DB::getConnection();
+        $this->categories = Category::findBySql($db, "select * from category where id in (select categoryID from usercategorylink where userID=" . $this->getUserID() . ")");
+
+        usort($this->categories, function($a, $b) {
+
+                    return $a->getName() < $b->getName() ? -1 : 1;
+                });
     }
 
     protected function profile() {
@@ -53,6 +62,40 @@ class SettingsController extends BaseController {
             $this->addInfo("your password updated");
             $this->redirect("base.settings");
         }
+    }
+
+    protected function addCategory() {
+        $db = DB::getConnection();
+        $added = false;
+        $categories = explode(",", $this->categories);
+        foreach ($categories as $category) {
+            $categoryID = 0;
+            if (is_numeric($category)) {
+                $categoryID = $category;
+                if ( count( UserCategoryLink::findByExample($db, UserCategoryLink::create()->setCategoryId($categoryID)->setUserId($this->getUserID())) )>0 ) {
+                    continue;
+                }
+            } else {
+                $newCategory = new Category();
+                $newCategory->setLinkCount(1);
+                $newCategory->setName($category);
+                $newCategory->setUserID($this->getUserID());
+                $newCategory->setUrl(Tool::getURL($category));
+                $newCategory->insertIntoDatabase($db);
+                $categoryID = $newCategory->getId();
+            }
+            
+            $added = true;
+
+            $link = new UserCategoryLink();
+            $link->setCategoryId($categoryID);
+            $link->setUserId($this->getUserID());
+            $link->insertIntoDatabase($db);
+        }
+        if ($added) {
+            $this->addInfo("you are following new categories now");
+        }
+        $this->redirect("base.settings");
     }
 
     protected function update() {
@@ -96,9 +139,9 @@ class SettingsController extends BaseController {
                 $params = array(array('name', $this->user->getFirstname()), array('email_address', $this->user->getEmail(), array('validationCode', $validationCode)));
                 Tool::sendEmail("mailChanged", $params, $this->user->getEmail(), "You have changed your email");
             }
-            
+
             $this->addInfo("your profile updated");
-            
+
             $this->redirect("base.settings");
         }
     }

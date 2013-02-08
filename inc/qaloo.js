@@ -3,9 +3,36 @@ $itemIndis = 0;
 $(document).ready(function(){
     $('.default').each(onEachDefault);
     
-    
     $('.itemInput').keypress(onItemInputKeyPress);
-
+    
+    $(".categoryItem").click(function () {
+        var title=$(this).attr("categoryTitle");
+        var obj = $(this);
+        $.ajax({
+            type: "POST",
+            url: "/back.category/follow",
+            data: {
+                categoryID : $(this).attr("categoryID")
+            }
+        }).done(function( data ) {
+            if (data == "followed") {
+                obj.removeClass("follow").addClass("unfollow");
+                obj.empty();
+                obj.append("-");
+            } else {
+                if (obj.attr("permanent")=="1") {
+                    obj.parent().remove();
+                } else {
+                    obj.removeClass("unfollow").addClass("follow");
+                    obj.empty();
+                    obj.append("+");
+                }
+            }
+        });
+    });
+    
+    
+    
     $('#searchBox').autocomplete({
         serviceUrl: '/back.topic/search',
         type:'post',
@@ -35,11 +62,10 @@ $(document).ready(function(){
                 data: $(this).attr("name") +"="+ ($(this).is(':checked') ? "1" : "0")
             }).done(function( data ) {
                 
-            });
+                });
         });
     });
-    
-    
+   
     
 });
 
@@ -118,5 +144,23 @@ function vote($id, $dir) {
         }
     }).done(function( data ) {
         console.log(data);
+    });
+}
+
+$.fn.fadeSlideRight = function(speed,fn) {
+    return $(this).animate({
+        'opacity' : 1,
+        'width' : '750px'
+    },speed || 400, function() {
+        $.isFunction(fn) && fn.call(this);
+    });
+}
+
+$.fn.fadeSlideLeft = function(speed,fn) {
+    return $(this).animate({
+        'opacity' : 0,
+        'width' : '0px'
+    },speed || 400,function() {
+        $.isFunction(fn) && fn.call(this);
     });
 }
