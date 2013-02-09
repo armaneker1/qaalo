@@ -25,7 +25,7 @@ class HomeController extends BaseController {
 
           echo $value; */
         
-        Queue::createList(12, 25);
+        
 
 
 

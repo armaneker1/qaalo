@@ -15,22 +15,22 @@ require_once __ROOT__ . 'vendors/Stomp/Stomp.php';
 class Queue {
 
     public static function createList($userID, $topicID) {
-        self::send(array(
-            "type"=>"createList",
-            "userID"=>$userID,
-            "topicID"=>$topicID,
+        self::send("topic", "create", array(
+            "userID" => $userID,
+            "topicID" => $topicID,
         ));
     }
 
     public static function followCategory($userID, $categoryID) {
-        self::send(array(
-            "type"=>"followCategory",
-            "userID"=>$userID,
-            "categoryID"=>$categoryID,
+        self::send("category", "follow", array(
+            "userID" => $userID,
+            "categoryID" => $categoryID,
         ));
     }
 
-    private static function send($obj) {
+    private static function send($method, $action, $obj) {
+        $obj->method = $method;
+        $obj->action = $action;
         $conn = self::getConnection();
         self::getConnection()->send("qaalo", json_encode($obj), array('persistent' => 'true'));
         $conn->disconnect();
