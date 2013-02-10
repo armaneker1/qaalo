@@ -18,12 +18,15 @@
                 <a class="logo" href="/"></a>
                 <div id="search">
                     <form method="post" action="<?php echo $this->getControllerAction("topic", "search"); ?>">
-                        <input class="default" spellcheck="false" autocomplete="off" autofocus="on" type="text" placeholder="Search anything..." id="searchBox" name="searchKeyword">
+                        <input class="default" spellcheck="false" autocomplete="off" autofocus="on" type="text" placeholder="Search a list..." id="searchBox" name="searchKeyword">
                     </form>
                 </div>
-                
+
+                <?php if ($this->isLoggedIn()) { ?>
+                    <div class="create"><a href="/base.create">or Create a List ➜</a>                </div>
+                <?php } ?>
+
                 <div class="profile">
-                    
                     <?php if ($this->isLoggedIn()) { ?>
                         <a class="profileLink" >Hello, <?= $_SESSION["firstname"] ?> ▾</a>
                         <div id="profileMenu" class="popup profileMenu">
@@ -55,7 +58,8 @@
         });
             </script>
             <?php $_SESSION["messages"] = null;
-        } ?>
+        }
+        ?>
 
         <script src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' type='text/javascript'></script>
         <script type="text/javascript" charset="utf-8">

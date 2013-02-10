@@ -17,6 +17,8 @@ class Topic extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking
     public static function create() {
         return new Topic();
     }
+    
+    
 
     private static $CLASS_NAME = 'Topic';
 

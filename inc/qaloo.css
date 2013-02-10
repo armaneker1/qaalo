@@ -293,7 +293,7 @@ button {
     padding:0;
 }
 
-a:link,a:visited,a:active{
+a:link,a:visited,a:active {
     color:#963e3c;
     text-decoration: none;
 }
@@ -424,7 +424,7 @@ textarea.autogrow
 }
 .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
 .autocomplete-selected { background: #F0F0F0; }
-.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-suggestions strong { font-weight: bold; color: #963e3c; }
 
 .description {
     position:relative;
@@ -493,7 +493,7 @@ textarea.autogrow
 hr {
     border:none;
     border-top: solid 1px #dedede;
-    margin:8px 40px 8px 20px;
+    margin:8px 8px 8px 8px;
 }
 
 .info {
@@ -664,8 +664,8 @@ ul.itemsInput li {
     -moz-border-radius: 2px;
     -khtml-border-radius: 2px;
     -webkit-border-radius: 2px;
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
     margin-right:2px;
 }
 
@@ -1006,4 +1006,66 @@ div.rightContainer {
 
 .addCategoryForm {
     display: none;
+}
+
+.timeline {
+    margin-top:5px;
+    
+}
+
+.timeline li {
+    padding:2px 0px 10px 0px;
+    border-bottom: solid 1px #dedede;
+}
+
+.timeline ul {
+    display:inline-block;
+    padding:0px !important;
+    margin:0px !important;
+}
+
+
+.itemInfo {
+    margin-top:9px !important;
+}
+
+.topicInfo,.itemInfo {
+    color:#999;
+    font-size:12px;
+    margin-top:3px;
+}
+
+.timeline ul li {
+    padding:0px 2px 0px 2px !important;
+    margin:0px 0px 0px 2px !important;
+    font-size:10px;
+}
+.timeline ul li a {
+    padding:2px 2px 2px 2px !important;
+}
+
+.timeline .title {
+    font-size:28px;
+    color:#354b62;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 1);
+    font-weight: bold;
+}
+
+.timeline .circle {
+    margin-top:5px !important;
+    margin-left:15px !important;
+}
+
+.timeline .itemContainer {
+    margin-left:45px !important;
+}
+
+div.create {
+    float:left;
+    margin-top:19px;
+    margin-left:20px;
+}
+
+div.create:active {
+    margin-top:21px;
 }

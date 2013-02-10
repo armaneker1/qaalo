@@ -1,12 +1,15 @@
 <?php
 
+require_once __ROOT__ . 'models/Writer.class.php';
 require_once __ROOT__ . 'models/User.class.php';
 require_once __ROOT__ . 'models/Topic.class.php';
 require_once __ROOT__ . 'models/Item.class.php';
 require_once __ROOT__ . 'models/Category.class.php';
 require_once __ROOT__ . 'models/TopicCategoryLink.class.php';
+require_once __ROOT__ . 'models/UserCategoryLink.class.php';
 require_once __ROOT__ . 'vendors/DB.php';
 require_once __ROOT__ . 'vendors/Tool.php';
+require_once __ROOT__ . 'vendors/Queue.php';
 
 class CreateController extends BaseController {
 
@@ -49,7 +52,7 @@ class CreateController extends BaseController {
 
         if (!$this->hasError()) {
             $this->setPageTitle($_GET["id"]);
-
+            //TODO check for existing url
             //Save topic
             $topic = new Topic();
             $topic->setCreatedOn(time());
@@ -87,6 +90,11 @@ class CreateController extends BaseController {
                     $newCategory->setUrl(Tool::getURL($category));
                     $newCategory->insertIntoDatabase($db);
                     $categoryID = $newCategory->getId();
+
+                    $link = new UserCategoryLink();
+                    $link->setCategoryId($categoryID);
+                    $link->setUserId($this->getUserID());
+                    $link->insertIntoDatabase($db);
                 }
 
                 $link = new TopicCategoryLink();
@@ -94,7 +102,18 @@ class CreateController extends BaseController {
                 $link->setTopicId($topic->getId());
                 $link->insertIntoDatabase($db);
             }
-            
+
+            $writer = new Writer();
+            $writer->setTopicID($topic->getId());
+            $writer->setUserID($this->getUserID());
+            $writer->setCreatedOn(time());
+            $writer->insertIntoDatabase($db);
+
+
+            Queue::createList($topic->getId());
+
+
+
             $this->addInfo("Yay, we have a new list now :)");
             $this->redirect("l", Tool::getURL($this->title));
         }

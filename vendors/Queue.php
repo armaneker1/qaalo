@@ -14,9 +14,8 @@ require_once __ROOT__ . 'vendors/Stomp/Stomp.php';
  */
 class Queue {
 
-    public static function createList($userID, $topicID) {
+    public static function createList($topicID) {
         self::send("topic", "create", array(
-            "userID" => $userID,
             "topicID" => $topicID,
         ));
     }
@@ -27,10 +26,16 @@ class Queue {
             "categoryID" => $categoryID,
         ));
     }
+    
+    public static function addItem($itemID) {
+        self::send("item", "add", array(
+            "itemID" => $itemID,
+        ));
+    }
 
     private static function send($method, $action, $obj) {
-        $obj->method = $method;
-        $obj->action = $action;
+        $obj["method"] = $method;
+        $obj["action"] = $action;
         $conn = self::getConnection();
         self::getConnection()->send("qaalo", json_encode($obj), array('persistent' => 'true'));
         $conn->disconnect();
@@ -46,6 +51,8 @@ class Queue {
         }
         return null;
     }
+
+    
 
 }
 

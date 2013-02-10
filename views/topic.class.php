@@ -9,6 +9,7 @@ require_once __ROOT__ . 'models/Category.class.php';
 require_once __ROOT__ . 'models/UserCategoryLink.class.php';
 require_once __ROOT__ . 'vendors/DB.php';
 require_once __ROOT__ . 'vendors/Tool.php';
+require_once __ROOT__ . 'vendors/Queue.php';
 
 class TopicController extends BaseController {
 
@@ -30,6 +31,40 @@ class TopicController extends BaseController {
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
     }
+    
+    protected function add() {
+        $db = DB::getConnection();
+
+        $this->setPageTitle($_GET["id"]);
+
+        $topic = Topic::findById($db, $this->topicID);
+        if (isset($topic)) {
+            
+            $lastItemId = -1;
+            //Insert categories
+            foreach ($this->itemText as $str) {
+                if (strlen($str) > 0 && $str != "Yes, what's next?" && $str != "Enter first item here" && $str != "You have something to add?") {
+                    $item = new Item();
+                    $item->setText($str);
+                    $item->setUserID($this->_userID);
+                    $item->setTopicID($this->topicID);
+                    $item->setCreatedOn(time());
+                    $item->setCommentCount(0);
+                    $item->insertIntoDatabase($db);
+                    
+                    $lastItemId = $item->getId();
+                }
+            }
+            if ($lastItemId != -1) {
+                Queue::addItem($lastItemId);
+            }
+
+            $this->redirect("l", $topic->getUrl());
+        } else {
+            $this->redirect("error");
+        }
+    }
+
 
     protected function search() {
         $this->redirect("topic", $this->searchKeyword);
