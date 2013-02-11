@@ -948,13 +948,13 @@ div.rightContainer {
     border-radius: 3px;
     border: 1px solid #adadad !important;
     background-color: white;
-    
+
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
     cursor: pointer;
-    
+
     -webkit-transition: all 0.1s linear;
     -o-transition: all 0.1s linear;
     -moz-transition: all 0.1s linear;
@@ -983,7 +983,7 @@ div.rightContainer {
 
 .follow:hover {
     background-color: #963e3c;
-    
+
     -webkit-transition: all 0.1s linear;
     -o-transition: all 0.1s linear;
     -moz-transition: all 0.1s linear;
@@ -1001,7 +1001,7 @@ div.rightContainer {
 }
 
 .follow:hover {
-    
+
 }
 
 .addCategoryForm {
@@ -1010,7 +1010,7 @@ div.rightContainer {
 
 .timeline {
     margin-top:5px;
-    
+
 }
 
 .timeline li {
@@ -1068,4 +1068,25 @@ div.create {
 
 div.create:active {
     margin-top:21px;
+}
+
+.maxlength-feedback { 
+    position: relative; 
+    left: -24px;
+    top: -2px; 
+    color: #aaa !important; 
+    text-align: right !important;
+    font-size:11px !important;
+    vertical-align: bottom;
+    display: inline-block;
+    width: 20px;
+}
+
+div.itemContainer .maxlength-feedback {
+    top:-8px;
+    left:-25px;
+}
+
+.maxlength-overflow {
+    color:red !important;
 }

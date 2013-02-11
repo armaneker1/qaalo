@@ -26,6 +26,7 @@ class TopicProcessor {
 
         foreach ($categories as $category) {
             $categoryList[] = $category->getName();
+            $redis->zincrby("trendingCategories:" .date("Ymd"),5, $category->getId());
         }
         
         

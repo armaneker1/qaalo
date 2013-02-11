@@ -5,8 +5,6 @@ require_once __ROOT__ . 'vendors/Predis/Autoloader.php';
 require_once __ROOT__ . 'vendors/KLogger.php';
 $log = KLogger::instance('/home/ubuntu/log/',KLogger::DEBUG);
 
-
-
 Predis\Autoloader::register();
 
 $data = $_POST["data"];

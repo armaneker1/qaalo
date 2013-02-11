@@ -18,13 +18,11 @@ class CreateController extends BaseController {
     public $categories;
 
     public function __construct($action, $urlValues) {
-        parent::__construct("main", $action, $urlValues);
+        parent::__construct("main", $action, $urlValues, false, true);
     }
 
     protected function index() {
-        if (!isset($this->_userID)) {
-            $this->redirect("base.register");
-        }
+        
     }
 
     protected function create() {
@@ -75,6 +73,23 @@ class CreateController extends BaseController {
                     $item->insertIntoDatabase($db);
                 }
             }
+
+            /*
+             * $text = "Merhaba t.co http://www.test.com/dsasda/mil http://www.test.net/tes";
+              $pattern = "/\b[-a-zA-Z0-9@:%_\+.~#?&\/\/=]{1,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?\b/i";
+
+              $offset = 0;
+              while (true) {
+              preg_match($pattern, $text, $matches, PREG_OFFSET_CAPTURE, $offset);
+              if (count($matches) > 0) {
+              $offset = $matches[0][1] + strlen($matches[0][0]);
+              echo $matches[0][0]."<br>";
+              } else {
+              break;
+              }
+              }
+             */
+
 
             //Insert categories
             $categories = explode(",", $this->categories);

@@ -5,6 +5,8 @@ $(document).ready(function(){
     
     $('.itemInput').keypress(onItemInputKeyPress);
     
+    $('[charlength]').maxlength({feedbackText: '{r}',showFeedback:"active"});
+    
     $(".categoryItem").click(function () {
         var title=$(this).attr("categoryTitle");
         var obj = $(this);
@@ -100,10 +102,11 @@ function onItemInputKeyPress(e) {
                 $("<div>").attr("class","circle").append("&#9679;<div>"+ ($itemIndis+1) +"</div>")
                 ).append(
                 $("<div>").attr("class","itemContainer").append(
-                    $('<textarea>').attr('id','itemInput'+$itemIndis).attr('maxlength','120').attr('autocomplete','off').attr("rows","1").attr('placeholder','Yes, what\'s next?').attr('class','itemInput default autogrow').attr('name','itemText[]')
+                    $('<textarea>').attr('id','itemInput'+$itemIndis).attr('charlength','60').attr('autocomplete','off').attr("rows","1").attr('placeholder','Yes, what\'s next?').attr('class','itemInput default autogrow').attr('name','itemText[]')
                     )
                 ).attr('id','item'+ $itemIndis)
             );
+        $('#itemInput'+ $itemIndis).maxlength({feedbackText: '{r}',showFeedback:"active"});
         $('#itemInput'+ $itemIndis).keypress(onItemInputKeyPress);
         $('#itemInput'+ $itemIndis).each(onEachDefault);
         $('#itemInput'+ $itemIndis).focus();

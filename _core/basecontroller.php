@@ -1,6 +1,8 @@
 <?php
 
 require_once __ROOT__ . 'vendors/Tool.php';
+require_once __ROOT__ . 'vendors/KLogger.php';
+
 
 abstract class BaseController {
 
@@ -13,12 +15,14 @@ abstract class BaseController {
     public $_title = "Qaalo";
     public $_userID;
     public $_standalone;
+    public $log;
 
     public function __construct($template, $action, $urlValues, $standalone = false, $signinRequired = false) {
         $this->action = $action;
         $this->urlValues = $urlValues;
         $this->template = $template;
         $this->_standalone = $standalone;
+        $this->log = KLogger::instance('/home/ubuntu/log/',KLogger::DEBUG);
 
         session_start();
         if (isset($_SESSION['userID']) || Tool::autoLogin()) {

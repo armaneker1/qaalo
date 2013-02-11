@@ -8,6 +8,7 @@
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery-1.8.3.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autocomplete.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.ambiance.js" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.maxlength.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.qtip-1.0.0-rc3.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js" ></script>
     </head>
