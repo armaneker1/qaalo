@@ -7,7 +7,6 @@ require_once __ROOT__ . 'models/Category.class.php';
 require_once __ROOT__ . 'models/UserCategoryLink.class.php';
 require_once __ROOT__ . 'vendors/DB.php';
 require_once __ROOT__ . 'vendors/Queue.php';
-require_once __ROOT__ . 'vendors/Predis/Autoloader.php';
 
 class HomeController extends BaseController {
 
@@ -19,9 +18,16 @@ class HomeController extends BaseController {
     }
 
     protected function index() {
-        Predis\Autoloader::register();
         $redis = new Predis\Client('tcp://qaalo.com:6379');
         $db = DB::getConnection();
+
+        $script = <<<LUA
+    local hash = redis.call('hgetall', KEYS[1]);
+    if #hash == 0 then
+        return { err = 'The key "'..KEYS[1]..'" does not exist' }
+    end
+    return redis.call('hmset', KEYS[2], unpack(hash));
+LUA;
 
         $this->timeline = $redis->zrevrange("user:" . $this->getUserID() . ":timeline", 0, 10, array(
             'withscores' => true)

@@ -26,6 +26,12 @@ class Queue {
             "categoryID" => $categoryID,
         ));
     }
+    public static function unfollowCategory($userID, $categoryID) {
+        self::send("category", "unfollow", array(
+            "userID" => $userID,
+            "categoryID" => $categoryID,
+        ));
+    }
     
     public static function addItem($itemID) {
         self::send("item", "add", array(

@@ -3,6 +3,7 @@
 require_once __ROOT__ . 'models/Category.class.php';
 require_once __ROOT__ . 'models/UserCategoryLink.class.php';
 require_once __ROOT__ . 'vendors/DB.php';
+require_once __ROOT__ . 'vendors/Queue.php';
 
 /**
  * Description of Vote
@@ -38,12 +39,14 @@ class CategoryController extends BaseController {
             if (count($categories)>0) {
                 $category = $categories[0];
                 $category->deleteFromDatabase($db);
+                Queue::unfollowCategory($this->getUserID(), $this->categoryID);
                 echo "unfollowed";
             } else {
                 $link = new UserCategoryLink();
                 $link->setCategoryId($this->categoryID);
                 $link->setUserId($this->getUserID());
                 $link->insertIntoDatabase($db);
+                Queue::followCategory($this->getUserID(), $this->categoryID);
                 echo "followed";
             }
         } else {

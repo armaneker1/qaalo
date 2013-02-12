@@ -9,7 +9,7 @@ class CategoryController extends BaseController {
 
     public $topics;
     public $category;
-    
+
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
     }
@@ -22,11 +22,11 @@ class CategoryController extends BaseController {
             $this->redirect("/");
         }
         $this->category = $categories[0];
-        
-        $this->topics = Topic::findBySql($db,"select * from topic where id in (select topicID from topiccategorylink where categoryID=". $this->category->getId() .") order by id desc" );
-    }
 
-    
+        $redis = new Predis\Client('tcp://qaalo.com:6379');
+        $this->topics = $redis->zrevrange("category:". $this->category->getId() .":timeline", 0, -1, array(
+            'withscores' => true));
+    }
 
 }
 
