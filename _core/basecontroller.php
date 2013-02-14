@@ -12,7 +12,7 @@ abstract class BaseController {
     protected $view;
     protected $template;
     private $errors;
-    public $_title = "Qaalo";
+    public $_title = "Qaalo - Everything listed.";
     public $_userID;
     public $_standalone;
     public $log;

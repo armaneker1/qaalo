@@ -5,7 +5,11 @@ $(document).ready(function(){
     
     $('.itemInput').keypress(onItemInputKeyPress);
     
-    $('[charlength]').maxlength({feedbackText: '{r}',showFeedback:"active"});
+    $('[charlength]').maxlength({
+        feedbackText: '{r}',
+        showFeedback:"active",
+        delay:1500
+    });
     
     $(".categoryItem").click(function () {
         var title=$(this).attr("categoryTitle");
@@ -21,7 +25,7 @@ $(document).ready(function(){
                 obj.removeClass("follow").addClass("unfollow");
                 obj.empty();
                 obj.append("-");
-            } else {
+            } else if (data == "unfollowed") {
                 if (obj.attr("permanent")=="1") {
                     obj.parent().remove();
                 } else {
@@ -71,6 +75,51 @@ $(document).ready(function(){
     
 });
 
+function showUser(userID) {
+    $("#cardProfilePicture").attr("src","");
+    $("#cardFullName").empty();
+    $("#cardBio").empty();
+    $("#cardLink").empty();
+    $("#talkingAbout").hide();
+    $("#latest").hide();
+    $("#cardCategoryList").empty();
+    $("#cardTopicList").empty();
+    
+    $("#userCard").lightbox_me();
+    
+    $.ajax({
+        type: "POST",
+        url: "/back.user/card",
+        data: "userID=" + userID,
+        dataType: 'json'
+    }).done(function( data ) {
+        
+        $("#cardProfilePicture").attr("src", data.pic == "" ? "http://qaalo.com/inc/profile.jpg" : "http://qaalo.com/inc/img/user/"+ data.pic+".jpg");
+        $("#cardFullName").append(data.name);
+        $("#cardBio").append(data.bio);
+        $("#cardLink").append("<a href='"+ data.url +"' target='_blank'>"+ data.url +"</a>");
+        
+        if (data.categories) {
+            for (var key in data.categories) {
+                $("#cardCategoryList").append($("<li>").append("<a href='/c/"+ key +"'>"+ data.categories[key] +"</a>"));
+            }
+            $("#talkingAbout").show();
+        }
+        
+        if (data.list) {
+            for (var key in data.list) {
+                $("#cardTopicList").append($("<li>").append("<a href='/l/"+ key +"'>"+ data.list[key] +"</a>"));
+            }
+            $("#latest").show();
+        }
+        
+        
+        
+        
+    });
+    
+}
+
 function showAll() {
     $(".hiddenItem").show("fast");
     $(".showAll").hide("fast");
@@ -95,6 +144,7 @@ function onEachDefault(){
 function showInviteForm() {
     $("#addListers").hide();
     $(".inviteForm").show("fast");
+    
 }
  
 $itemIndis = 0;
@@ -104,14 +154,17 @@ function onItemInputKeyPress(e) {
         $itemIndis = $itemIndis +1;
         $('#itemInputList').append(
             $('<li>').append(
-                $("<div>").attr("class","circle").append("&#9679;<div>"+ ($itemIndis+1) +"</div>")
+                $("<div>").attr("class","circle").append(($itemIndis+1))
                 ).append(
                 $("<div>").attr("class","itemContainer").append(
                     $('<textarea>').attr('id','itemInput'+$itemIndis).attr('charlength','60').attr('autocomplete','off').attr("rows","1").attr('placeholder','Yes, what\'s next?').attr('class','itemInput default autogrow').attr('name','itemText[]')
                     )
                 ).attr('id','item'+ $itemIndis)
             );
-        $('#itemInput'+ $itemIndis).maxlength({feedbackText: '{r}',showFeedback:"active"});
+        $('#itemInput'+ $itemIndis).maxlength({
+            feedbackText: '{r}',
+            showFeedback:"active"
+        });
         $('#itemInput'+ $itemIndis).keypress(onItemInputKeyPress);
         $('#itemInput'+ $itemIndis).each(onEachDefault);
         $('#itemInput'+ $itemIndis).focus();
@@ -151,8 +204,8 @@ function vote($id, $dir) {
             dir: $dir
         }
     }).done(function( data ) {
-        console.log(data);
-    });
+        
+        });
 }
 
 $.fn.fadeSlideRight = function(speed,fn) {

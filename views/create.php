@@ -24,7 +24,7 @@
                 <div class="itemsHeader">
                     <ul id="itemInputList" class="items itemsInput">
                         <li id="item0">
-                            <div class="circle">&#9679;<div>1</div></div>
+                            <div class="circle">1</div>
                             <div class="itemContainer">
                                 <textarea type="text" placeholder="Enter first item here" name="itemText[]" charlength="60" autocomplete="off" class="itemInput default autogrow" rows="1"></textarea>
                             </div>

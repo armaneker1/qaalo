@@ -1,11 +1,11 @@
 <div class="clearfix">
-    
+
     <div class="left">
 
         <?php if ($this->isInvited) { ?>
-        <div class="info">You are invited to this list. <a style="font-weight: bold" href='/base.login/index/<?= $this->inviteCode; ?>'>Login</a> or <a style="font-weight: bold" href='/base.register/index/<?= $this->inviteCode; ?>'>register</a> to join listing.</div>
-    <?php } ?>
-        
+            <div class="info">You are invited to this list. <a style="font-weight: bold" href='/base.login/index/<?= $this->inviteCode; ?>'>Login</a> or <a style="font-weight: bold" href='/base.register/index/<?= $this->inviteCode; ?>'>register</a> to join listing.</div>
+        <?php } ?>
+
         <div class="list">
             <h2><?= $this->topic->getTitle(); ?></h2>
             <div class="itemBar">
@@ -16,9 +16,9 @@
                         foreach ($this->items as $item) {
                             ?>
                             <li id="existingItem<?= $a ?>" <?php echo (!$this->isWriter && $a >= 10 ? "class=\"hiddenItem\"" : ""); ?>>
-                                <div class="circle<?php echo ($a >= 10 ? " low" : ""); ?>">&#9679;<div><?= $a + 1 ?></div></div>
+                                <div class="circle<?php echo ($a >= 10 ? " low" : ""); ?>"><?= $a + 1 ?></div>
                                 <div class="itemContainer">
-                                    <?php echo $item->getText(); ?>
+                                    <?php echo Tool::renderItem($item->getText()); ?>
                                     <?php if ($this->isLoggedIn()) { ?>
                                         <div class = "icons">
                                             <a id="voteUp<?= $item->getID(); ?>" href="javascript:vote(<?= $item->getID(); ?>,1)" class = "icon voteUp <?= $item->vote == 1 ? "voted" : "" ?>"></a>
@@ -45,7 +45,7 @@
                             <input type="hidden" name="topicID" value="<?php echo $this->topic->getID() ?>"/>
                             <ul start="<?= $a + 1 ?>" id="itemInputList" class="items itemsInput">
                                 <li id="item0" name="itemText">
-                                    <div class="circle">&#9679;<div><?= $a + 1; ?></div></div>
+                                    <div class="circle"><?= $a + 1; ?></div>
                                     <div class="itemContainer">
                                         <textarea type="text" onfocus="$('#addForm').show('fast')" placeholder="You have something to add?" name="itemText[]" class="itemInput default autogrow" rows="1"></textarea>
                                     </div>
@@ -70,7 +70,7 @@
         <?php
         $a = count($this->writers);
         foreach ($this->writers as $writer) {
-            $show = "<img class='tinyPhoto' src='" . $writer[1] . "'>" . $writer[0];
+            $show = "<img class='tinyPhoto' src='" . $writer[1] . "'><a href='javascript:showUser(". $writer[2] .")'>" . $writer[0] . "</a>";
             $a--;
 
             if ($a == count($this->writers) - 1) {
@@ -89,7 +89,7 @@
             <div class="inviteForm">
                 <hr/>
                 <div class="tweetInvite">
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>" data-lang="en" data-text="Join me with creating '<?= $this->topic->getTitle(); ?>' list" data-count="none" data-via="theqaalo">Invite Followers</a><span class="desc">to invite your friends</span>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>" data-lang="en" data-text="Join me with creating <?= htmlspecialchars($this->topic->getTitle()); ?> list" data-count="none" data-via="theqaalo">Invite Followers</a><span class="desc">to invite your friends</span>
                 </div>
                 <form action="<?php echo $this->getAction("invite"); ?>" method="post">
                     <input type="hidden" name="topicID" value="<?php echo $this->topic->getID() ?>"/>
@@ -109,9 +109,9 @@
         </ul>
         <hr/>
 
-        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl() ?>" data-text='Check out this list: "<?= $this->topic->getTitle(); ?>"' data-via="theqaalo">Tweet</a>
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl() ?>" data-text="Check out this list: <?= htmlspecialchars($this->topic->getTitle()); ?>" data-via="theqaalo">Tweet</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-        
+
         <script>(function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;

@@ -127,7 +127,7 @@ class TopicController extends BaseController {
             foreach ($writersID as $userID) {
                 $user = User::findById($db, $userID);
                 if (isset($user)) {
-                    $this->writers[] = array($user->getFullname(), $user->getThumbPhotoUrl());
+                    $this->writers[] = array($user->getFullname(), $user->getThumbPhotoUrl(),$user->getId());
                 }
             }
 

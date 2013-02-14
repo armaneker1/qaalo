@@ -17,7 +17,7 @@ class CategoryController extends BaseController {
     protected function index() {
         $categoryName = $_GET["id"];
         $db = DB::getConnection();
-        $categories = Category::findByExample($db, Category::create()->setName($categoryName));
+        $categories = Category::findByExample($db, Category::create()->setUrl($categoryName));
         if (count($categories) == 0) {
             $this->redirect("/");
         }

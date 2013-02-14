@@ -22,15 +22,14 @@ class TopicProcessor {
         $topic = Topic::findById($db, $this->topicID);
         $categoryLinks = TopicCategoryLink::findByExample($db, TopicCategoryLink::create()->setTopicId($this->topicID));
 
-
-
-
-
         $categories = Category::findBySql($db, "select * from category where id in (select categoryID from topiccategorylink where topicID=" . $this->topicID . ")");
         $categoryList = array();
         foreach ($categories as $category) {
             $categoryList[] = $category->getName();
         }
+
+
+
 
         $obj = json_encode(array(
             "type" => "topic.create",
@@ -62,14 +61,17 @@ class TopicProcessor {
 
             //Add topic to the related topic's timeline
             $redis->zadd("category:" . $category->getId() . ":timeline", $topic->getCreatedOn(), $obj);
+
+            //Add for talkingAbout
+            $redis->zincrby("user:" . $topic->getUserID() . ":talkingAbout", 2, json_encode(array($category->getUrl(), $category->getName())));
         }
-
-
+        
+        //Add for latestLists
+        $redis->zincrby("user:" . $topic->getUserID() . ":latestLists", 1, json_encode(array($topic->getUrl(), $topic->getTitle())));
 
         unset($notifiedUsers);
     }
 
-    
 }
 
 ?>

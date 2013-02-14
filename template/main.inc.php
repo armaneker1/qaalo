@@ -2,18 +2,39 @@
 <html lang="tr">
     <head>
         <meta charset="utf-8" />
-<?php $this->dumpMetaTags(); ?>
+        <?php $this->dumpMetaTags(); ?>
         <title><?php echo $this->_title ?></title>
-        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css" rel='stylesheet' type="text/css" media="screen">
+        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css?d=021420132302" rel='stylesheet' type="text/css" media="screen">
         <link href="<?php echo __WEBROOT__ ?>inc/barometer.css" rel='stylesheet' type="text/css" media="screen">
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery-1.8.3.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autocomplete.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.ambiance.js" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.lightbox_me.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.maxlength.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.qtip-1.0.0-rc3.min.js" ></script>
-        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js?d=021420132302" ></script>
     </head>
     <body>
+        <div id="userCard" class="userCard">
+            <div class="profile">
+                <div class="userPic">
+                    <img id="cardProfilePicture">
+                </div>
+                <h3 id="cardFullName"></h3>
+                    <div id="cardBio"></div>
+                    <div id="cardLink"></div>
+            </div>
+            <div id="talkingAbout" class="talkingAbout">
+                <div class="description">listing about</div>
+                <ul id="cardCategoryList" class="categoryList clearfix">
+                </ul>
+            </div>
+            <div id="latest" class="latest">
+                <div class="description">latest lists</div>
+                <ul id="cardTopicList"  class="topicList clearfix">
+                </ul>
+            </div>
+        </div>
 
         <div class="bar">
             <div class="menu clearfix">

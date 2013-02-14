@@ -18,7 +18,7 @@ class CategoryProcessor {
         if ($category) {
             $redis = new Predis\Client();
             $log->logInfo("category.follow > " . $category->getName() . " for user " . $this->userID);
-            $redis->zunionstore("user:" . $this->userID . ":timeline", 2, "category:" . $this->categoryID . ":timeline", "user:" . $this->userID . ":timeline","weights",1,0);
+            $redis->zunionstore("user:" . $this->userID . ":timeline", 2, "category:" . $this->categoryID . ":timeline", "user:" . $this->userID . ":timeline","AGGREGATE","max");
         }
     }
 

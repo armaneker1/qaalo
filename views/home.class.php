@@ -18,7 +18,8 @@ class HomeController extends BaseController {
     }
 
     protected function index() {
-        $redis = new Predis\Client('tcp://qaalo.com:6379');
+        
+        $redis = new Predis\Client();
         $db = DB::getConnection();
 
         $script = <<<LUA

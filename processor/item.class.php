@@ -22,7 +22,12 @@ class ItemProcessor {
         $categories = Category::findBySql($db, "select * from category where id in (select categoryID from topiccategorylink where topicID=" . $topic->getId() . ")");
         foreach ($categories as $category) {
             $redis->zincrby("trendingCategories:" . date("Ymd"), 3, $category->getId());
+            
+            //Add for talkingAbout
+            $redis->zincrby("user:" . $item->getUserID() . ":talkingAbout", 1, json_encode(array($category->getUrl(), $category->getName())));
         }
+        
+        
 
         $obj = array(
             "type" => "item.add",

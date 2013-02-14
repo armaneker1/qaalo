@@ -13,12 +13,15 @@ class UserController extends BaseController {
     public $query;
     public $weeklyMail;
     public $updateMail;
+    public $userID;
 
     public function __construct($action, $urlValues) {
-        parent::__construct("main", $action, $urlValues, true, true);
+        parent::__construct("main", $action, $urlValues, true, false);
     }
 
     public function notify() {
+        if ($this->isLoggedIn())
+            return;
         $db = DB::getConnection();
         $user = User::findById($db, $this->getUserID());
         if ($user) {
@@ -32,6 +35,44 @@ class UserController extends BaseController {
 
             $user->setMailSettings($weeklyMail . "," . $updateMail);
             $user->updateToDatabase($db);
+        }
+    }
+
+    public function card() {
+        $userID = $this->userID;
+        $db = DB::getConnection();
+        $user = User::findById($db, $userID);
+
+        if ($user) {
+            $res["name"] = $user->getFullname();
+            $res["bio"] = $user->getBio() == null ? "" : $user->getBio();
+            $res["url"] = $user->getUrl() == null ? "" : $user->getUrl();
+            $res["pic"] = $user->getPhoto() == null ? "" : $user->getPhoto();
+
+            $redis = new Predis\Client();
+            $categories = $redis->zrevrange("user:" . $userID . ":talkingAbout", "0", "-1");
+            if (count($categories) > 0) {
+                $categoryList;
+                foreach ($categories as $category) {
+                    $cat = json_decode($category);
+                    $categoryList[$cat[0]] = $cat[1];
+                }
+                $res["categories"] = $categoryList;
+            }
+
+            $lists = $redis->zrevrange("user:" . $userID . ":latestLists", "0", "-1");
+            if (count($lists) > 0) {
+                $topicList;
+                foreach ($lists as $list) {
+                    $lst = json_decode($list);
+                    $topicList[$lst[0]] = $lst[1];
+                }
+                $res["list"] = $topicList;
+            }
+
+            echo json_encode($res);
+        } else {
+            echo '{"type":"error"}';
         }
     }
 

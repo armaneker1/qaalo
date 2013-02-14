@@ -12,6 +12,7 @@ define("MONTH", 30 * DAY);
 class Tool {
 
     private static $allowedExts = array("jpg", "jpeg", "gif", "png");
+    private static $urlRegex = '/([-a-zA-Z0-9@:%_\\\+.~#?&\/\/=]{1,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\\\+.~#?&\/\/=]*)?)/i';
 
     public static function rememberMe($email, $password) {
         setcookie("auth", 'usr=' . $email . '&hash=' . md5($password), time() + 3600 * 24 * 365, "/");
@@ -39,7 +40,32 @@ class Tool {
         return $str;
     }
 
-    public static function sendEmail($fileName, $params, $to, $subject,$from ='Qaalo') {
+    public static function renderItem($item) {
+        $position = 0;
+        $res = "";
+        $link = "";
+        while (preg_match(self::$urlRegex, $item, $match, PREG_OFFSET_CAPTURE, $position)) {
+            list($url, $urlPosition) = $match[0];
+            $res .= htmlspecialchars(substr($item, $position, $urlPosition - $position));
+            
+            $link = $url;
+            if (strtolower(substr($link,0,7))!="http://") {
+                $link = "http://" . $link;
+            }
+            $hostComponent = parse_url($link);
+            $host  = $hostComponent["host"];
+            if (strtolower(substr($host,0,4)) == "www.") {
+                $host = substr($host,4);
+            }
+            
+            $res .= '<a class="externalLink" target="_blank" href="'.$link.'"><img src="http://www.google.com/s2/u/0/favicons?domain='. $host .'"> '. $host .'</a>';
+            $position = $urlPosition + strlen($url);
+        }
+        $res .= htmlspecialchars(substr($item, $position));
+        return $res;
+    }
+
+    public static function sendEmail($fileName, $params, $to, $subject, $from = 'Qaalo') {
         $file = __ROOT__ . "inc/emailTemplates/" . $fileName . ".html";
         if (file_exists($file)) {
             $template = file_get_contents($file);
