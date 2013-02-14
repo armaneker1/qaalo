@@ -46,8 +46,9 @@ class Client implements ClientInterface
      * @param mixed $parameters Connection parameters for one or multiple servers.
      * @param mixed $options Options that specify certain behaviours for the client.
      */
-    public function __construct($parameters = null, $options = null)
+    public function __construct($parameters = 'tcp://qaalo.com:6379', $options = null)
     {
+        
         $this->options = $this->filterOptions($options);
         $this->profile = $this->options->profile;
         $this->connections = $this->options->connections;

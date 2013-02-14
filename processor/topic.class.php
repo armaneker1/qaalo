@@ -18,7 +18,7 @@ class TopicProcessor {
         $log->logInfo("topic.create > creating");
 
         $db = DB::getConnection();
-        $redis = new Predis\Client('tcp://127.0.0.1:6379');
+        $redis = new Predis\Client();
         $topic = Topic::findById($db, $this->topicID);
         $categoryLinks = TopicCategoryLink::findByExample($db, TopicCategoryLink::create()->setTopicId($this->topicID));
 
@@ -56,13 +56,6 @@ class TopicProcessor {
             }
         }
 
-        $obj = json_encode(array(
-            "title" => $topic->getTitle(),
-            "url" => $topic->getUrl(),
-            "categories" => $categoryList,
-                )
-        );
-
         foreach ($categories as $category) {
             //Increment by 5 for trending topics
             $redis->zincrby("trendingCategories:" . date("Ymd"), 5, $category->getId());
@@ -76,14 +69,7 @@ class TopicProcessor {
         unset($notifiedUsers);
     }
 
-    public function rate() {
-        
-    }
-
-    public function add() {
-        
-    }
-
+    
 }
 
 ?>

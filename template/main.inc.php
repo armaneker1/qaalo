@@ -2,6 +2,7 @@
 <html lang="tr">
     <head>
         <meta charset="utf-8" />
+<?php $this->dumpMetaTags(); ?>
         <title><?php echo $this->_title ?></title>
         <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css" rel='stylesheet' type="text/css" media="screen">
         <link href="<?php echo __WEBROOT__ ?>inc/barometer.css" rel='stylesheet' type="text/css" media="screen">
@@ -58,13 +59,28 @@
     <?php } ?>
         });
             </script>
-            <?php $_SESSION["messages"] = null;
+            <?php
+            $_SESSION["messages"] = null;
         }
         ?>
 
         <script src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' type='text/javascript'></script>
         <script type="text/javascript" charset="utf-8">
             BAROMETER.load('RTCN9DZSyYXF51RO69QsN');
+        </script>
+
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-38235310-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
         </script>
 
     </body>

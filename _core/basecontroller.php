@@ -16,6 +16,7 @@ abstract class BaseController {
     public $_userID;
     public $_standalone;
     public $log;
+    private $metaTags;
 
     public function __construct($template, $action, $urlValues, $standalone = false, $signinRequired = false) {
         $this->action = $action;
@@ -73,11 +74,25 @@ abstract class BaseController {
         session_start();
         $_SESSION["messages"][] = $str;
     }
+    
+    public function addMetaTag($tag,$value) {
+        $this->metaTags[] = array("name"=>$tag,"value"=>$value);
+    }
 
     public function hasError() {
         return isset($this->errors);
     }
 
+    public function dumpMetaTags() {
+        if (isset($this->metaTags)) {
+            $tags = "";
+            foreach ($this->metaTags as $metaTag) {
+                $tags .="\t<meta property=\"". $metaTag["name"] ."\" content=\"". $metaTag["value"] ."\"/>\n";
+            }
+            echo $tags;
+        }
+    }
+    
     public function dumpErrors() {
         if (isset($this->errors)) {
             $msg = "<div class='error'><ul>";

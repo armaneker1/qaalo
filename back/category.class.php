@@ -33,8 +33,7 @@ class CategoryController extends BaseController {
     public function follow() {
         if ($this->isLoggedIn()) {
             $db = DB::getConnection();
-            $isFollowing = false;
-
+            
             $categories = UserCategoryLink::findByExample($db, UserCategoryLink::create()->setCategoryId($this->categoryID)->setUserId($this->getUserID()));
             if (count($categories)>0) {
                 $category = $categories[0];

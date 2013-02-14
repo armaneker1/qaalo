@@ -1,10 +1,10 @@
 <?php
-require_once 'vendors/Predis/Autoloader.php';
-Predis\Autoloader::register();
 
 class Unfollow extends Predis\Command\ScriptedCommand {
 
     public function getKeysCount() {
+        // Tell Predis to use all the arguments but the last one as arguments
+        // for KEYS. The last one will be used to populate ARGV.
         return -1;
     }
 
@@ -25,13 +25,12 @@ class Unfollow extends Predis\Command\ScriptedCommand {
                         found = 1
                     end
                 end
-                if found==1 then break end
+                if found == 1 then break end
             end
             if found==0 then
                 for i,name in  ipairs(obj.categories) do
                     if name == KEYS[2] then
                         redis.call('zrem',KEYS[1],v)
-                        val = v
                     end
                 end
             end
@@ -43,9 +42,5 @@ LUA;
     }
 
 }
-
-$redis = new Predis\Client('tcp://qaalo.com:6379');
-$redis->getProfile()->defineCommand('unfollow', 'Unfollow');
-var_dump( $redis->unfollow('user:2:timeline','Bilgisayar','["Teknolojil"]'));
 
 ?>

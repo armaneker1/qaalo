@@ -67,11 +67,6 @@ class RegisterController extends BaseController {
             $this->addError("Password is not valid");
         }
 
-
-
-
-
-
         if (!$this->hasError()) {
 
             if (!$this->ticketIsValid($this->ticket, true)) {
@@ -103,8 +98,9 @@ class RegisterController extends BaseController {
     }
 
     public function ticketIsValid($ticketCode, $use = false) {
-        if (trim($ticketCode) == "")
+        if (trim($ticketCode) == "") {
             return false;
+        }
         $db = DB::getConnection();
         $tickets = Registerticket::findByExample($db, Registerticket::create()->setCode($ticketCode));
         if (count($tickets) > 0) {
@@ -114,7 +110,6 @@ class RegisterController extends BaseController {
                     $ticket->setQty($ticket->getQty() - 1);
                     $ticket->setLastUsedOn(time());
 
-                    var_dump($ticket);
                     $ticket->updateToDatabase($db);
                 }
                 return true;

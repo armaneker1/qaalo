@@ -16,7 +16,7 @@ class TaskController extends BaseController {
         //Calculate trending categories
         $yesterdayTrends = "trendingCategories:" .date("Ymd", strtotime('-1 days'));
         $todayTrends = "trendingCategories:" .date("Ymd");
-        $redis = new Predis\Client("tcp://qaalo.com:6379");
+        $redis = new Predis\Client();
         $redis->zunionstore("trendingCategories:current", array($yesterdayTrends, $todayTrends));
         
     }

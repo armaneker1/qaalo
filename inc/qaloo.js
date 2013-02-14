@@ -91,6 +91,11 @@ function onEachDefault(){
         }
     }).blur();
 }
+
+function showInviteForm() {
+    $("#addListers").hide();
+    $(".inviteForm").show("fast");
+}
  
 $itemIndis = 0;
 function onItemInputKeyPress(e) {

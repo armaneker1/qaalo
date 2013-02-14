@@ -77,6 +77,11 @@ button.small {
     padding: 7px 7px;
 }
 
+button.thin {
+    padding:3px 8px 3px 8px !important;
+    font-size:11px;
+}
+
 button {
     font-size: 14px;
     color: #333333;
@@ -498,6 +503,7 @@ hr {
 
 .info {
     background-color: #fcefa1;
+    margin-bottom: 7px;
     padding:10px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -1090,3 +1096,35 @@ div.itemContainer .maxlength-feedback {
 .maxlength-overflow {
     color:red !important;
 }
+
+.inviteForm {
+    margin:8px 0px 8px 0px;
+    display:none;
+}
+
+.inviteForm input {
+    padding:6px 6px 6px 6px;
+    margin:0px 0px 0px 0px;
+    width:180px;
+    font-size:13px;
+}
+.tweetInvite {
+    margin-bottom:6px;
+}
+
+.tweetInvite span.desc {
+    display:inline-block;
+    vertical-align: top;
+    margin-left:5px;
+}
+
+.shareLink {
+    margin-top:4px;
+    color:#888;
+}
+
+.shareLink input {
+    width:230px;
+}
+
+.twitter-share-button[style] { vertical-align: text-bottom !important; }

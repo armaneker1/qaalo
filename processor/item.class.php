@@ -13,7 +13,7 @@ class ItemProcessor {
 
     public function add() {
         $db = DB::getConnection();
-        $redis = new Predis\Client('tcp://127.0.0.1:6379');
+        $redis = new Predis\Client();
 
         $item = Item::findById($db, $this->itemID);
         $topic = Topic::findById($db, $item->getTopicID());
@@ -43,7 +43,7 @@ class ItemProcessor {
 
     public function vote() {
         $db = DB::getConnection();
-        $redis = new Predis\Client('tcp://127.0.0.1:6379');
+        $redis = new Predis\Client();
 
         $item = Item::findById($db, $this->itemID);
         $topic = Topic::findById($db, $item->getTopicID());

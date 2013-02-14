@@ -39,7 +39,7 @@ class Tool {
         return $str;
     }
 
-    public static function sendEmail($fileName, $params, $to, $subject) {
+    public static function sendEmail($fileName, $params, $to, $subject,$from ='Qaalo') {
         $file = __ROOT__ . "inc/emailTemplates/" . $fileName . ".html";
         if (file_exists($file)) {
             $template = file_get_contents($file);
@@ -69,7 +69,7 @@ class Tool {
                 foreach ($tos as $mail) {
                     $m->addTo($mail);
                 }
-                $m->setFrom("Qaalo <from@qaalo.com>");
+                $m->setFrom($from . " <from@qaalo.com>");
                 $m->setSubject($subject);
                 $m->setMessageFromString(null, $template);
                 return $ses->sendEmail($m);

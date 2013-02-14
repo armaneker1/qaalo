@@ -8,6 +8,7 @@ $log = KLogger::instance('/home/ubuntu/log/',KLogger::DEBUG);
 Predis\Autoloader::register();
 
 $data = $_POST["data"];
+//$data = $_GET["data"];
 $obj = json_decode($data);
 
 $log->logInfo("process > " . $data);

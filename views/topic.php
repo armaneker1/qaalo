@@ -1,11 +1,11 @@
 <div class="clearfix">
-    <?php if ($this->isInvited) { ?>
-
-        <div class="info">You are invited to this list. <a style="font-weight: bold" href='/base.login/index/<?= $this->inviteCode; ?>'>Login</a> or <a style="font-weight: bold" href='/base.register/index/<?= $this->inviteCode; ?>'>register</a> to join listing.</div>
-        <br/>
-    <?php } ?>
+    
     <div class="left">
 
+        <?php if ($this->isInvited) { ?>
+        <div class="info">You are invited to this list. <a style="font-weight: bold" href='/base.login/index/<?= $this->inviteCode; ?>'>Login</a> or <a style="font-weight: bold" href='/base.register/index/<?= $this->inviteCode; ?>'>register</a> to join listing.</div>
+    <?php } ?>
+        
         <div class="list">
             <h2><?= $this->topic->getTitle(); ?></h2>
             <div class="itemBar">
@@ -84,24 +84,42 @@
             }
         }
         ?>
+        <?php if ($this->isWriter) { ?>
+            <?php echo count($this->writers) == 1 ? "with " : "and "; ?><button id="addListers" onclick="showInviteForm();" class="thin">add ➜</button>
+            <div class="inviteForm">
+                <hr/>
+                <div class="tweetInvite">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>" data-lang="en" data-text="Join me with creating '<?= $this->topic->getTitle(); ?>' list" data-count="none" data-via="theqaalo">Invite Followers</a><span class="desc">to invite your friends</span>
+                </div>
+                <form action="<?php echo $this->getAction("invite"); ?>" method="post">
+                    <input type="hidden" name="topicID" value="<?php echo $this->topic->getID() ?>"/>
+                    <input name="emails" placeholder="or type emails to invite">
+                    <button type="submit" class="small">invite</button>
+                </form>
+                <div class="shareLink">
+                    or share this link: <input onclick="$(this).select();" name="emails" readonly="" value="http://qaalo.com/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>">
+                </div>
+            </div>
+        <? } ?>
         <hr/>
         <ul class="categoryList clearfix">
             <?php foreach ($this->categories as $category) { ?>
-            <li><a href="/c/<?= $category->getUrl() ?>"><?= $category->getName() ?></a><div categoryTitle="<?=$category->getName(); ?>" categoryID="<?= $category->getID(); ?>" class="categoryItem <?=$category->isFollowed ? "unfollow" : "follow";?>"><?=$category->isFollowed ? "-" : "+";?></div></li>
+                <li><a href="/c/<?= $category->getUrl() ?>"><?= $category->getName() ?></a><div categoryTitle="<?= $category->getName(); ?>" categoryID="<?= $category->getID(); ?>" class="categoryItem <?= $category->isFollowed ? "unfollow" : "follow"; ?>"><?= $category->isFollowed ? "-" : "+"; ?></div></li>
             <?php } ?>
         </ul>
-        
-        <?= $this->totalVotes >0 ? "<hr/>". $this->totalVotes." ratings" : "" ?>
         <hr/>
-        <?php if ($this->isWriter) { ?>
-            Use <a style="font-weight: bold;" href="/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>">this link</a> to ask people add items to this list
-            <hr>
-        <?php } ?>
 
-
-
-        <a href="https://twitter.com/share" class="twitter-share-button" data-text="<?= $this->topic->getTitle(); ?>" data-via="theqaalo">Tweet</a>
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl() ?>" data-text='Check out this list: "<?= $this->topic->getTitle(); ?>"' data-via="theqaalo">Tweet</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+        
+        <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/tr_TR/all.js#xfbml=1&appId=318546488256998";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+        <div class="fb-like" data-href="http://qaalo.com/l/<?= $this->topic->getUrl() ?>" data-send="false" data-layout="button_count" data-width="250" data-show-faces="false"></div>
     </div>
 
 </div>

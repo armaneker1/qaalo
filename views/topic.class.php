@@ -27,11 +27,12 @@ class TopicController extends BaseController {
     public $isInvited = false;
     public $inviteCode;
     public $categories;
+    public $emails;
 
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
     }
-    
+
     protected function add() {
         $db = DB::getConnection();
 
@@ -39,7 +40,7 @@ class TopicController extends BaseController {
 
         $topic = Topic::findById($db, $this->topicID);
         if (isset($topic)) {
-            
+
             $lastItemId = -1;
             //Insert categories
             foreach ($this->itemText as $str) {
@@ -51,7 +52,7 @@ class TopicController extends BaseController {
                     $item->setCreatedOn(time());
                     $item->setCommentCount(0);
                     $item->insertIntoDatabase($db);
-                    
+
                     $lastItemId = $item->getId();
                 }
             }
@@ -65,6 +66,31 @@ class TopicController extends BaseController {
         }
     }
 
+    protected function invite() {
+        $db = DB::getConnection();
+        $topic = Topic::findById($db, $this->topicID);
+        if (isset($topic) && $this->checkWriter($this->topicID)) {
+
+            $emailArray = split(",", $this->emails);
+            $emailStr = "";
+            foreach ($emailArray as $email) {
+                $email = trim($email);
+                if (preg_match('/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/', $email)) {
+                    $emailStr .= $email . ",";
+                }
+            }
+
+            if (strlen($emailStr) > 0) {
+                $emailStr = substr($emailStr, 0, strlen($emailStr) - 1);
+                Queue::inviteToTopic($this->getUserID(), $this->topicID, $emailStr);
+            }
+
+            $this->addInfo("Invitations sent");
+            $this->redirect("l", $topic->getUrl());
+        } else {
+            $this->redirect("/");
+        }
+    }
 
     protected function search() {
         $this->redirect("topic", $this->searchKeyword);
@@ -125,14 +151,7 @@ class TopicController extends BaseController {
 
 
             //Check if user is writer
-            if ($this->isLoggedIn()) {
-                if ($this->topic->getUserID() == $this->_userID) {
-                    $this->isWriter = true;
-                } else {
-                    $writers = Writer::findByExample($db, Writer::create()->setTopicID($this->topic->getId())->setUserID($this->_userID));
-                    $this->isWriter = count($writers) > 0;
-                }
-            }
+            $this->isWriter = $this->checkWriter($this->topic->getId());
 
 
 
@@ -160,6 +179,25 @@ class TopicController extends BaseController {
 
             $this->user = User::findById($db, $this->topic->getUserID());
             $this->setPageTitle($this->topic->getTitle());
+
+            $itemsStr = "";
+            $a = 1;
+            foreach ($this->items as $item) {
+                $itemsStr .= $a . ") " . $item->getText() . ", ";
+
+                $a++;
+                if ($a > 4) {
+                    break;
+                }
+            }
+
+            $itemsStr = substr($itemsStr, 0, strlen($itemsStr) - 2) . " ...";
+
+            $this->addMetaTag("og:title", $this->topic->getTitle());
+            $this->addMetaTag("og:description", $itemsStr);
+            $this->addMetaTag("og:image", "http://qaalo.com/inc/qaaloSquare.png");
+            $this->addMetaTag("og:type", "article");
+            $this->addMetaTag("og:site_name", "Qaalo");
         } else {
             $this->redirect("404");
         }
@@ -174,6 +212,13 @@ class TopicController extends BaseController {
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function checkWriter($topicID) {
+        if ($this->isLoggedIn()) {
+            $writers = Writer::findByExample(DB::getConnection(), Writer::create()->setTopicID($topicID)->setUserID($this->getUserID()));
+            return count($writers) > 0;
         }
     }
 

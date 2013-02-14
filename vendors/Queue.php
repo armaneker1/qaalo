@@ -38,6 +38,17 @@ class Queue {
             "itemID" => $itemID,
         ));
     }
+    
+    public static function inviteToTopic($userID,$topicID,$emails) {
+        self::send("email", "inviteToTopic", array(
+            "userID" => $userID,
+            "topicID" => $topicID,
+            "emails" => $emails,
+        ));
+    }
+    
+    
+    //--------------------------------------------------------------------------
 
     private static function send($method, $action, $obj) {
         $obj["method"] = $method;

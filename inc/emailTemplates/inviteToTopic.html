@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>Welcome</title>
+        <title>Invitation</title>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     </head>
     <body style="font-family: Verdana;background-color: #eee;">
@@ -13,18 +13,20 @@
                 <td><hr style="border:none;border-bottom:solid 1px white; border-top:solid 1px #ddd;"/></td>
             </tr>
             <tr>
-                <td><h1 style="font-size: 24px;color: #6a6a6a;">Hey ${name},</h1></td>
+                <td><h1 style="font-size: 24px;color: #6a6a6a;">Hello,</h1></td>
             </tr>
             <tr>
                 <td style="width: 611px;">
                     <p style="font-size: 16px;color: #6a6a6a;">
-                        Welcome to Qaalo. Qaalo is a collabrative tool where everyhing is listed. You can create lists with your close network.
-                        <br/><br/>
-                        You can validate your email by clicking the following url:
-                        http://qaalo.com/base.validate/${validationCode}
-                        <br/><br/>
-                        How about <a style="color:#963e3c;" href="http://qaalo.com/base.create">create a list</a> now?
+                        ${sender} invited you to list '${listName}' and asking for your contributions.
                     </p>
+                    <br/>
+                    <b>${listName}</b>
+                    <ol>
+                        <li>${item1}</li>
+                        <li>${item2}</li>
+                        <li><a href="${link}">Add your item to the list ➜</a></li>
+                    </ol>
                     <br/><br/>
                 </td>
             </tr>
