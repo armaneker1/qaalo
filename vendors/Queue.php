@@ -51,11 +51,14 @@ class Queue {
     //--------------------------------------------------------------------------
 
     private static function send($method, $action, $obj) {
+        /*
         $obj["method"] = $method;
         $obj["action"] = $action;
         $conn = self::getConnection();
         self::getConnection()->send("qaalo", json_encode($obj), array('persistent' => 'true'));
         $conn->disconnect();
+         * 
+         */
     }
 
     private static function getConnection() {

@@ -137,6 +137,10 @@ class TopicController extends BaseController {
                 if (count(UserCategoryLink::findByExample($db, UserCategoryLink::create()->setUserId($this->getUserID())->setCategoryId($category->getId()))) > 0) {
                     $category->isFollowed = true;
                 }
+                
+                if (!isset($_SESSION["categories"]) || !in_array($category->getId(),$_SESSION["categories"])) {
+                    $_SESSION["categories"][] = $category->getId();
+                }
             }
 
             usort($this->items, function($a, $b) {

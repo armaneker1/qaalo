@@ -22,15 +22,15 @@ class CreateController extends BaseController {
     }
 
     protected function index() {
-        
+        $this->setPageTitle("Create your list");
     }
 
     protected function create() {
         $db = DB::getConnection();
 
 
-
-        if (trim($this->title) == "Enter title here" || trim($this->title) == "") {
+        $this->title = trim($this->title);
+        if ($this->title == "Enter title here" || $this->title == "") {
             $this->addError("Please enter a valid title");
         }
 
@@ -65,7 +65,7 @@ class CreateController extends BaseController {
             foreach ($this->itemText as $str) {
                 if (strlen($str) > 0 && $str != "Yes, what's next?" && $str != "Enter first item here") {
                     $item = new Item();
-                    $item->setText($str);
+                    $item->setText(trim($str));
                     $item->setUserID($this->_userID);
                     $item->setTopicID($topic->getId());
                     $item->setCreatedOn(time());

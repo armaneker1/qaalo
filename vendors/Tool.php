@@ -1,6 +1,7 @@
 <?php
 
 require_once __ROOT__ . 'models/User.class.php';
+require_once __ROOT__ . 'models/Topic.class.php';
 require_once __ROOT__ . 'vendors/DB.php';
 require_once __ROOT__ . 'vendors/SimpleEmailService.php';
 define("SECOND", 1);
@@ -12,7 +13,18 @@ define("MONTH", 30 * DAY);
 class Tool {
 
     private static $allowedExts = array("jpg", "jpeg", "gif", "png");
-    private static $urlRegex = '/([-a-zA-Z0-9@:%_\\\+.~#?&\/\/=]{1,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\\\+.~#?&\/\/=]*)?)/i';
+    private static $urlRegex = '/([-a-zA-Z0-9@:%_\\\+.~#?&\/\/=]{1,256}\.[a-z]{2,4}[a-zA-Z0-9@:%_+.~#?\\\&\/=-]{0,255})/i';
+
+    public static function inviteIsValid($inviteCode) {
+        if (trim($inviteCode) == "")
+            return false;
+        $tickets = Topic::findByExample(DB::getConnection(), Topic::create()->setInviteCode($inviteCode));
+        if (count($tickets) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static function rememberMe($email, $password) {
         setcookie("auth", 'usr=' . $email . '&hash=' . md5($password), time() + 3600 * 24 * 365, "/");
@@ -47,18 +59,32 @@ class Tool {
         while (preg_match(self::$urlRegex, $item, $match, PREG_OFFSET_CAPTURE, $position)) {
             list($url, $urlPosition) = $match[0];
             $res .= htmlspecialchars(substr($item, $position, $urlPosition - $position));
-            
+
             $link = $url;
-            if (strtolower(substr($link,0,7))!="http://") {
+            if (strtolower(substr($link, 0, 7)) != "http://" && strtolower(substr($link, 0, 8)) != "https://") {
                 $link = "http://" . $link;
             }
+
             $hostComponent = parse_url($link);
-            $host  = $hostComponent["host"];
-            if (strtolower(substr($host,0,4)) == "www.") {
-                $host = substr($host,4);
+            $host = $hostComponent["host"];
+            if (strtolower(substr($host, 0, 4)) == "www.") {
+                $host = substr($host, 4);
             }
-            
-            $res .= '<a class="externalLink" target="_blank" href="'.$link.'"><img src="http://www.google.com/s2/u/0/favicons?domain='. $host .'"> '. $host .'</a>';
+
+            if (strtolower($host) == "twitter.com") {
+                $hostIndex = strpos($link, "twitter.com");
+                $slashIndex = strpos($link, "/", $hostIndex);
+                if ($slashIndex>0 && $slashIndex+1 < strlen($link)) {
+                    $newHost = substr($link,$slashIndex+1);
+                    if (preg_match('/[a-zA-Z0-9_]{1,255}/', $newHost)) {
+                    $host = "@" . $newHost;
+                    }
+                }
+            }
+
+
+
+            $res .= '<a class="externalLink" target="_blank" href="' . $link . '"><img src="http://www.google.com/s2/u/0/favicons?domain=' . $hostComponent["host"] . '"> ' . $host . '</a>';
             $position = $urlPosition + strlen($url);
         }
         $res .= htmlspecialchars(substr($item, $position));

@@ -48,6 +48,10 @@ class UserController extends BaseController {
             $res["bio"] = $user->getBio() == null ? "" : $user->getBio();
             $res["url"] = $user->getUrl() == null ? "" : $user->getUrl();
             $res["pic"] = $user->getPhoto() == null ? "" : $user->getPhoto();
+            
+            if ($res["url"]!="" && substr($res["url"],0,7) != "http://" ) {
+                $res["url"] = "http://" . $res["url"];
+            }
 
             $redis = new Predis\Client();
             $categories = $redis->zrevrange("user:" . $userID . ":talkingAbout", "0", "-1");

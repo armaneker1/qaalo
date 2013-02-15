@@ -3,7 +3,7 @@
     <div class="left">
 
         <?php if ($this->isInvited) { ?>
-            <div class="info">You are invited to this list. <a style="font-weight: bold" href='/base.login/index/<?= $this->inviteCode; ?>'>Login</a> or <a style="font-weight: bold" href='/base.register/index/<?= $this->inviteCode; ?>'>register</a> to join listing.</div>
+            <div class="info">You are invited to contribute to this list. Feel free to add items.</div>
         <?php } ?>
 
         <div class="list">
@@ -40,23 +40,27 @@
                         ?>
                     </ul>
 
-                    <?php if ($this->isWriter) { ?>
+                    <?php if ($this->isWriter || $this->isInvited) { ?>
                         <form action="<?php echo $this->getAction("add"); ?>" method="post">
                             <input type="hidden" name="topicID" value="<?php echo $this->topic->getID() ?>"/>
                             <ul start="<?= $a + 1 ?>" id="itemInputList" class="items itemsInput">
                                 <li id="item0" name="itemText">
                                     <div class="circle"><?= $a + 1; ?></div>
                                     <div class="itemContainer">
-                                        <textarea type="text" onfocus="$('#addForm').show('fast')" placeholder="You have something to add?" name="itemText[]" class="itemInput default autogrow" rows="1"></textarea>
+                                        <textarea type="text" onfocus="$('#addForm').show('fast')" placeholder="You have something to add?" charlength="60" name="itemText[]" class="itemInput default autogrow" rows="1"></textarea>
                                     </div>
                                 </li>
                             </ul>
                             <div id="addForm" style="display: none;">
                                 <span class="description">Press <b>Enter</b> to add new items</span>
+                                <?php if (!$this->isLoggedIn() && $this->isInvited) { ?>
+                                <button style="margin-left: 20px;" onclick="showRegisterForm();return false;">Add ➜</button>
+                                <?php } else { ?>
                                 <button style="margin-left: 20px;" type="submit">Add ➜</button>
+                                <?php } ?>
                             </div>
                         </form>
-                        <script type="text/javascript">$itemIndis = <?= $a; ?></script>
+                        <script type="text/javascript">$initialItemIndis=<?= $a; ?>; $itemIndis = <?= $a; ?>;$topicID=<?= $this->topic->getID()?>;$inviteCode='<?= $this->inviteCode?>'</script>
                     <?php } ?>
                 </div>
             </div>

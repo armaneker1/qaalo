@@ -1,9 +1,43 @@
 $itemIndis = 0;
+$initialItemIndis = 0;
+$topicID = 0;
 
 $(document).ready(function(){
     $('.default').each(onEachDefault);
     
     $('.itemInput').keypress(onItemInputKeyPress);
+    
+    $('.autogrow').autosize();
+    
+    $("#categories").tokenInput("/back.category/search");
+    
+    $("#topicForm").submit(function() {
+        if ($("#title").val() == $("#title").attr("placeholder")) {
+            $.ambiance({
+                message: "Please a title for your list", 
+                type: "error"
+            }); 
+            return false;
+        }
+        if ( $("#categories").tokenInput("get").length==0 ) {
+            $.ambiance({
+                message: "Please select some categories", 
+                type: "error"
+            }); 
+            return false;
+        }
+        
+        
+    });
+    
+    $('form').submit(function() {
+        $(this).find("input[placeholder], textarea[placeholder]").each(function() {
+            if ( this.value == $(this).attr("placeholder") ) {
+                this.value = "";
+            }
+        });
+    });
+    
     
     $('[charlength]').maxlength({
         feedbackText: '{r}',
@@ -112,12 +146,35 @@ function showUser(userID) {
             }
             $("#latest").show();
         }
-        
-        
-        
-        
     });
     
+}
+
+function showRegisterForm() {
+    $("#registerItems").empty();
+    $("#registerTopicID").val("");
+    $("#registerInviteCode").val("");
+    
+    $("#loginItems").empty();
+    $("#loginTopicID").val("");
+    $("#loginInviteCode").val("");
+    
+    if ($topicID >0) {
+        $("[name=\"itemText\[\]\"]").each(function () {
+            var obj = $(this);
+            if (obj.attr("placeholder") != obj.val()) {
+                $("#registerItems").append($("<input>").attr("type", "hidden").attr("name", "itemText[]").val($(this).val()));
+                $("#loginItems").append($("<input>").attr("type", "hidden").attr("name", "itemText[]").val($(this).val()));
+            }
+        });
+        
+        
+        $("#registerTopicID").val($topicID);
+        $("#registerInviteCode").val($inviteCode);
+        $("#loginTopicID").val($topicID);
+        $("#loginInviteCode").val($inviteCode);
+    }
+    $("#loginRegister").lightbox_me();
 }
 
 function showAll() {

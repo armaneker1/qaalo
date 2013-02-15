@@ -5,6 +5,7 @@ require_once __ROOT__ . 'models/Topic.class.php';
 require_once __ROOT__ . 'models/Category.class.php';
 require_once __ROOT__ . 'models/UserCategoryLink.class.php';
 require_once __ROOT__ . 'vendors/Tool.php';
+require_once __ROOT__ . 'vendors/Queue.php';
 require_once __ROOT__ . 'vendors/DB.php';
 
 class SettingsController extends BaseController {
@@ -86,7 +87,9 @@ class SettingsController extends BaseController {
             }
             
             $added = true;
-
+            
+            Queue::followCategory($this->getUserID(), $categoryID);
+            
             $link = new UserCategoryLink();
             $link->setCategoryId($categoryID);
             $link->setUserId($this->getUserID());

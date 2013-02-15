@@ -1,7 +1,12 @@
 <div class="mainSub">
+    <h2>Welcome to Qaalo!</h2>
     <form action="<?php echo $this->getAction("register") ?>" method="post">
         <input type="hidden" name="inviteCode" value="<?= $this->inviteCode ?>">
         <input type="hidden" name="ticket" value="<?= $this->ticket ?>">
+        <input type="hidden" name="topicID" value="<?= $this->topicID ?>">
+        <?php if ($this->itemText!="") {foreach($this->itemText as $itemStr) { ?>
+        <input type="hidden" name="itemText[]" value="<?= $itemStr ?>">
+        <?php }}?>
         <table>
             <tbody>
                 <tr>

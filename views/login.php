@@ -1,6 +1,10 @@
 <div class="mainSub">
     <form action="<?php echo $this->getAction("login") ?>" method="post">
         <input type="hidden" name="inviteCode" value="<?= $this->inviteCode ?>">
+        <input type="hidden" name="topicID" value="<?= $this->topicID ?>">
+        <?php if ($this->itemText!="") {foreach($this->itemText as $itemStr) { ?>
+        <input type="hidden" name="itemText[]" value="<?= $itemStr ?>">
+        <?php }}?>
         <table>
             <tbody><tr>
                     <td class="mw-label"><label>Email:</label></td>

@@ -1,4 +1,5 @@
 <?php
+
 require_once __ROOT__ . 'vendors/db2php/Db2PhpEntity.class.php';
 require_once __ROOT__ . 'vendors/db2php/Db2PhpEntityBase.class.php';
 require_once __ROOT__ . 'vendors/db2php/Db2PhpEntityModificationTracking.class.php';
@@ -6,6 +7,7 @@ require_once __ROOT__ . 'vendors/db2php/DFCInterface.class.php';
 require_once __ROOT__ . 'vendors/db2php/DFCAggregate.class.php';
 require_once __ROOT__ . 'vendors/db2php/DFC.class.php';
 require_once __ROOT__ . 'vendors/db2php/DSC.class.php';
+
 /**
  * 
  *
@@ -13,56 +15,55 @@ require_once __ROOT__ . 'vendors/db2php/DSC.class.php';
  * @package entity
  */
 class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking {
-    
+
     public function receivesWeeklyMail() {
         $arr = $this->getMailSettingsArray();
         return $arr[0] == "1";
     }
-    
+
     public function receivesUpdateMail() {
         $arr = $this->getMailSettingsArray();
         return $arr[1] == "1";
     }
-    
+
     private function getMailSettingsArray() {
         return explode(",", $this->getMailSettings() == "" ? "," : $this->getMailSettings());
     }
-    
+
     public function getThumbPhotoUrl() {
         if ($this->photo == "") {
             return __WEBROOT__ . "inc/thumb.jpg";
         } else {
-            return __WEBROOT__ . "inc/img/user/t". $this->photo .".jpg";
+            return __WEBROOT__ . "inc/img/user/t" . $this->getPhoto() . ".jpg";
         }
     }
-    
+
     public function getPhotoUrl() {
         if ($this->photo == "") {
             return __WEBROOT__ . "inc/profile.jpg";
         } else {
-            return __WEBROOT__ . "inc/img/user/". $this->photo .".jpg";
+            return __WEBROOT__ . "inc/img/user/" . $this->getPhoto() . ".jpg";
         }
     }
-    
+
     public static function create() {
         return new User();
     }
 
     public function getFirstname() {
-        $arr = explode(' ', trim($this->fullname));
+        $arr = explode(' ', trim($this->getFullName()));
         return $arr[0];
     }
-    
+
     //--------------------KEEEP------------------------------
-    
-    
+
     private static $CLASS_NAME = 'User';
 
     const SQL_IDENTIFIER_QUOTE = '';
     const SQL_TABLE_NAME = 'user';
-    const SQL_INSERT = 'INSERT INTO user (id,email,password,lastLogin,fullname,bio,url,profession,mailSettings,loginCount,validationCode,photo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-    const SQL_INSERT_AUTOINCREMENT = 'INSERT INTO user (email,password,lastLogin,fullname,bio,url,profession,mailSettings,loginCount,validationCode,photo) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-    const SQL_UPDATE = 'UPDATE user SET id=?,email=?,password=?,lastLogin=?,fullname=?,bio=?,url=?,profession=?,mailSettings=?,loginCount=?,validationCode=?,photo=? WHERE id=?';
+    const SQL_INSERT = 'INSERT INTO user (id,email,password,lastLogin,fullname,bio,url,profession,mailSettings,loginCount,validationCode,photo,emailValidatedOn) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    const SQL_INSERT_AUTOINCREMENT = 'INSERT INTO user (email,password,lastLogin,fullname,bio,url,profession,mailSettings,loginCount,validationCode,photo,emailValidatedOn) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+    const SQL_UPDATE = 'UPDATE user SET id=?,email=?,password=?,lastLogin=?,fullname=?,bio=?,url=?,profession=?,mailSettings=?,loginCount=?,validationCode=?,photo=?,emailValidatedOn=? WHERE id=?';
     const SQL_SELECT_PK = 'SELECT * FROM user WHERE id=?';
     const SQL_DELETE_PK = 'DELETE FROM user WHERE id=?';
     const FIELD_ID = -147180002;
@@ -77,6 +78,7 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
     const FIELD_LOGINCOUNT = 1712791849;
     const FIELD_VALIDATIONCODE = -1491451255;
     const FIELD_PHOTO = 528863823;
+    const FIELD_EMAILVALIDATEDON = -152325356;
 
     private static $PRIMARY_KEYS = array(self::FIELD_ID);
     private static $AUTOINCREMENT_FIELDS = array(self::FIELD_ID);
@@ -92,20 +94,22 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
         self::FIELD_MAILSETTINGS => 'mailSettings',
         self::FIELD_LOGINCOUNT => 'loginCount',
         self::FIELD_VALIDATIONCODE => 'validationCode',
-        self::FIELD_PHOTO => 'photo');
+        self::FIELD_PHOTO => 'photo',
+        self::FIELD_EMAILVALIDATEDON => 'emailValidatedOn');
     private static $PROPERTY_NAMES = array(
         self::FIELD_ID => 'id',
         self::FIELD_EMAIL => 'email',
         self::FIELD_PASSWORD => 'password',
-        self::FIELD_LASTLOGIN => 'lastLogin',
-        self::FIELD_FULLNAME => 'fullname',
+        self::FIELD_LASTLOGIN => 'lastLogIn',
+        self::FIELD_FULLNAME => 'fullName',
         self::FIELD_BIO => 'bio',
         self::FIELD_URL => 'url',
         self::FIELD_PROFESSION => 'profession',
         self::FIELD_MAILSETTINGS => 'mailSettings',
-        self::FIELD_LOGINCOUNT => 'loginCount',
+        self::FIELD_LOGINCOUNT => 'logInCount',
         self::FIELD_VALIDATIONCODE => 'validationCode',
-        self::FIELD_PHOTO => 'photo');
+        self::FIELD_PHOTO => 'photo',
+        self::FIELD_EMAILVALIDATEDON => 'emailValidatedOn');
     private static $PROPERTY_TYPES = array(
         self::FIELD_ID => Db2PhpEntity::PHP_TYPE_INT,
         self::FIELD_EMAIL => Db2PhpEntity::PHP_TYPE_STRING,
@@ -118,7 +122,8 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
         self::FIELD_MAILSETTINGS => Db2PhpEntity::PHP_TYPE_STRING,
         self::FIELD_LOGINCOUNT => Db2PhpEntity::PHP_TYPE_INT,
         self::FIELD_VALIDATIONCODE => Db2PhpEntity::PHP_TYPE_STRING,
-        self::FIELD_PHOTO => Db2PhpEntity::PHP_TYPE_STRING);
+        self::FIELD_PHOTO => Db2PhpEntity::PHP_TYPE_STRING,
+        self::FIELD_EMAILVALIDATEDON => Db2PhpEntity::PHP_TYPE_INT);
     private static $FIELD_TYPES = array(
         self::FIELD_ID => array(Db2PhpEntity::JDBC_TYPE_INTEGER, 10, 0, false),
         self::FIELD_EMAIL => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 255, 0, false),
@@ -131,7 +136,8 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
         self::FIELD_MAILSETTINGS => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 45, 0, true),
         self::FIELD_LOGINCOUNT => array(Db2PhpEntity::JDBC_TYPE_INTEGER, 10, 0, true),
         self::FIELD_VALIDATIONCODE => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 16, 0, false),
-        self::FIELD_PHOTO => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 45, 0, true));
+        self::FIELD_PHOTO => array(Db2PhpEntity::JDBC_TYPE_VARCHAR, 45, 0, true),
+        self::FIELD_EMAILVALIDATEDON => array(Db2PhpEntity::JDBC_TYPE_INTEGER, 10, 0, true));
     private static $DEFAULT_VALUES = array(
         self::FIELD_ID => null,
         self::FIELD_EMAIL => '',
@@ -144,19 +150,21 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
         self::FIELD_MAILSETTINGS => null,
         self::FIELD_LOGINCOUNT => 0,
         self::FIELD_VALIDATIONCODE => '',
-        self::FIELD_PHOTO => null);
+        self::FIELD_PHOTO => null,
+        self::FIELD_EMAILVALIDATEDON => null);
     private $id;
     private $email;
     private $password;
-    private $lastLogin;
-    private $fullname;
+    private $lastLogIn;
+    private $fullName;
     private $bio;
     private $url;
     private $profession;
     private $mailSettings;
-    private $loginCount;
+    private $logInCount;
     private $validationCode;
     private $photo;
+    private $emailValidatedOn;
 
     /**
      * set value for id 
@@ -238,12 +246,12 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
      *
      * type:INT UNSIGNED,size:10,default:null
      *
-     * @param mixed $lastLogin
+     * @param mixed $lastLogIn
      * @return User
      */
-    public function &setLastLogin($lastLogin) {
-        $this->notifyChanged(self::FIELD_LASTLOGIN, $this->lastLogin, $lastLogin);
-        $this->lastLogin = $lastLogin;
+    public function &setLastLogIn($lastLogIn) {
+        $this->notifyChanged(self::FIELD_LASTLOGIN, $this->lastLogIn, $lastLogIn);
+        $this->lastLogIn = $lastLogIn;
         return $this;
     }
 
@@ -254,8 +262,8 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
      *
      * @return mixed
      */
-    public function getLastLogin() {
-        return $this->lastLogin;
+    public function getLastLogIn() {
+        return $this->lastLogIn;
     }
 
     /**
@@ -263,12 +271,12 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
      *
      * type:VARCHAR,size:100,default:null
      *
-     * @param mixed $fullname
+     * @param mixed $fullName
      * @return User
      */
-    public function &setFullname($fullname) {
-        $this->notifyChanged(self::FIELD_FULLNAME, $this->fullname, $fullname);
-        $this->fullname = $fullname;
+    public function &setFullName($fullName) {
+        $this->notifyChanged(self::FIELD_FULLNAME, $this->fullName, $fullName);
+        $this->fullName = $fullName;
         return $this;
     }
 
@@ -279,8 +287,8 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
      *
      * @return mixed
      */
-    public function getFullname() {
-        return $this->fullname;
+    public function getFullName() {
+        return $this->fullName;
     }
 
     /**
@@ -388,12 +396,12 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
      *
      * type:INT UNSIGNED,size:10,default:0,nullable
      *
-     * @param mixed $loginCount
+     * @param mixed $logInCount
      * @return User
      */
-    public function &setLoginCount($loginCount) {
-        $this->notifyChanged(self::FIELD_LOGINCOUNT, $this->loginCount, $loginCount);
-        $this->loginCount = $loginCount;
+    public function &setLogInCount($logInCount) {
+        $this->notifyChanged(self::FIELD_LOGINCOUNT, $this->logInCount, $logInCount);
+        $this->logInCount = $logInCount;
         return $this;
     }
 
@@ -404,8 +412,8 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
      *
      * @return mixed
      */
-    public function getLoginCount() {
-        return $this->loginCount;
+    public function getLogInCount() {
+        return $this->logInCount;
     }
 
     /**
@@ -456,6 +464,31 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
      */
     public function getPhoto() {
         return $this->photo;
+    }
+
+    /**
+     * set value for emailValidatedOn 
+     *
+     * type:INT UNSIGNED,size:10,default:null,nullable
+     *
+     * @param mixed $emailValidatedOn
+     * @return User
+     */
+    public function &setEmailValidatedOn($emailValidatedOn) {
+        $this->notifyChanged(self::FIELD_EMAILVALIDATEDON, $this->emailValidatedOn, $emailValidatedOn);
+        $this->emailValidatedOn = $emailValidatedOn;
+        return $this;
+    }
+
+    /**
+     * get value for emailValidatedOn 
+     *
+     * type:INT UNSIGNED,size:10,default:null,nullable
+     *
+     * @return mixed
+     */
+    public function getEmailValidatedOn() {
+        return $this->emailValidatedOn;
     }
 
     /**
@@ -571,15 +604,16 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
             self::FIELD_ID => $this->getId(),
             self::FIELD_EMAIL => $this->getEmail(),
             self::FIELD_PASSWORD => $this->getPassword(),
-            self::FIELD_LASTLOGIN => $this->getLastLogin(),
-            self::FIELD_FULLNAME => $this->getFullname(),
+            self::FIELD_LASTLOGIN => $this->getLastLogIn(),
+            self::FIELD_FULLNAME => $this->getFullName(),
             self::FIELD_BIO => $this->getBio(),
             self::FIELD_URL => $this->getUrl(),
             self::FIELD_PROFESSION => $this->getProfession(),
             self::FIELD_MAILSETTINGS => $this->getMailSettings(),
-            self::FIELD_LOGINCOUNT => $this->getLoginCount(),
+            self::FIELD_LOGINCOUNT => $this->getLogInCount(),
             self::FIELD_VALIDATIONCODE => $this->getValidationCode(),
-            self::FIELD_PHOTO => $this->getPhoto());
+            self::FIELD_PHOTO => $this->getPhoto(),
+            self::FIELD_EMAILVALIDATEDON => $this->getEmailValidatedOn());
     }
 
     /**
@@ -851,15 +885,16 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
         $this->setId($result['id']);
         $this->setEmail($result['email']);
         $this->setPassword($result['password']);
-        $this->setLastLogin($result['lastLogin']);
-        $this->setFullname($result['fullname']);
+        $this->setLastLogIn($result['lastLogin']);
+        $this->setFullName($result['fullname']);
         $this->setBio($result['bio']);
         $this->setUrl($result['url']);
         $this->setProfession($result['profession']);
         $this->setMailSettings($result['mailSettings']);
-        $this->setLoginCount($result['loginCount']);
+        $this->setLogInCount($result['loginCount']);
         $this->setValidationCode($result['validationCode']);
         $this->setPhoto($result['photo']);
+        $this->setEmailValidatedOn($result['emailValidatedOn']);
     }
 
     /**
@@ -897,15 +932,16 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
         $stmt->bindValue(1, $this->getId());
         $stmt->bindValue(2, $this->getEmail());
         $stmt->bindValue(3, $this->getPassword());
-        $stmt->bindValue(4, $this->getLastLogin());
-        $stmt->bindValue(5, $this->getFullname());
+        $stmt->bindValue(4, $this->getLastLogIn());
+        $stmt->bindValue(5, $this->getFullName());
         $stmt->bindValue(6, $this->getBio());
         $stmt->bindValue(7, $this->getUrl());
         $stmt->bindValue(8, $this->getProfession());
         $stmt->bindValue(9, $this->getMailSettings());
-        $stmt->bindValue(10, $this->getLoginCount());
+        $stmt->bindValue(10, $this->getLogInCount());
         $stmt->bindValue(11, $this->getValidationCode());
         $stmt->bindValue(12, $this->getPhoto());
+        $stmt->bindValue(13, $this->getEmailValidatedOn());
     }
 
     /**
@@ -919,15 +955,16 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
             $stmt = self::prepareStatement($db, self::SQL_INSERT_AUTOINCREMENT);
             $stmt->bindValue(1, $this->getEmail());
             $stmt->bindValue(2, $this->getPassword());
-            $stmt->bindValue(3, $this->getLastLogin());
-            $stmt->bindValue(4, $this->getFullname());
+            $stmt->bindValue(3, $this->getLastLogIn());
+            $stmt->bindValue(4, $this->getFullName());
             $stmt->bindValue(5, $this->getBio());
             $stmt->bindValue(6, $this->getUrl());
             $stmt->bindValue(7, $this->getProfession());
             $stmt->bindValue(8, $this->getMailSettings());
-            $stmt->bindValue(9, $this->getLoginCount());
+            $stmt->bindValue(9, $this->getLogInCount());
             $stmt->bindValue(10, $this->getValidationCode());
             $stmt->bindValue(11, $this->getPhoto());
+            $stmt->bindValue(12, $this->getEmailValidatedOn());
         } else {
             $stmt = self::prepareStatement($db, self::SQL_INSERT);
             $this->bindValues($stmt);
@@ -955,7 +992,7 @@ class User extends Db2PhpEntityBase implements Db2PhpEntityModificationTracking 
     public function updateToDatabase(PDO $db) {
         $stmt = self::prepareStatement($db, self::SQL_UPDATE);
         $this->bindValues($stmt);
-        $stmt->bindValue(13, $this->getId());
+        $stmt->bindValue(14, $this->getId());
         $affected = $stmt->execute();
         if (false === $affected) {
             $stmt->closeCursor();

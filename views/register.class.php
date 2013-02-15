@@ -2,8 +2,10 @@
 
 require_once __ROOT__ . 'models/User.class.php';
 require_once __ROOT__ . 'models/Topic.class.php';
+require_once __ROOT__ . 'models/Item.class.php';
 require_once __ROOT__ . 'models/Registerticket.class.php';
 require_once __ROOT__ . 'vendors/Tool.php';
+require_once __ROOT__ . 'vendors/Queue.php';
 require_once __ROOT__ . 'vendors/DB.php';
 
 class RegisterController extends BaseController {
@@ -15,25 +17,18 @@ class RegisterController extends BaseController {
     public $rememberPassword;
     public $inviteCode;
     public $ticket;
+    public $itemText;
+    public $topicID;
 
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
+        
+        $this->setPageTitle("Register");
     }
 
     protected function index() {
         if ($this->isLoggedIn()) {
             $this->redirect("base.home");
-            return;
-        }
-
-        if (isset($this->urlValues["id"])) {
-            $this->inviteCode = $this->urlValues["id"];
-            if (!$this->inviteIsValid($this->inviteCode)) {
-                $this->redirect("base.signup");
-                return;
-            }
-        } else {
-            $this->redirect("base.signup");
             return;
         }
     }
@@ -48,8 +43,12 @@ class RegisterController extends BaseController {
     }
 
     protected function register() {
+        if ($this->isLoggedIn()) {
+            $this->redirect("base.home");
+        }
+        
         if (strlen($this->fullname) < 3) {
-            $this->addError("Your name is not valid");
+            $this->addError("Your name seems to be invalid");
         }
 
         $db = DB::getConnection();
@@ -63,16 +62,11 @@ class RegisterController extends BaseController {
 
         if ($this->password != $this->passwordConfirm) {
             $this->addError("Passwords doesn't match");
-        } else if (!preg_match('/^[a-z0-9]{6,18}$/ ', $this->password)) {
-            $this->addError("Password is not valid");
+        } else if (!preg_match('/^[a-zA-Z0-9]{6,18}$/ ', $this->password)) {
+            $this->addError("Password is not valid. Only a-z,A-Z and 0-9!");
         }
 
         if (!$this->hasError()) {
-
-            if (!$this->ticketIsValid($this->ticket, true)) {
-                $this->redirect("base.signup");
-                return;
-            }
 
             $validationCode = Tool::randomString(16);
 
@@ -86,12 +80,38 @@ class RegisterController extends BaseController {
 
             if ($this->rememberPassword != '') {
                 Tool::rememberMe($this->email, $this->password);
+                $this->addInfo("Welcome to Qaalo!");
             } else {
                 Tool::forgetMe();
             }
 
             $params = array(array('name', $user->getFirstname()), array('validationCode', $validationCode), array('email_address', $user->getEmail()));
             Tool::sendEmail("welcome", $params, $user->getEmail(), "Welcome to Qaalo");
+
+            if (Tool::inviteIsValid($this->inviteCode)) {
+
+                if ($this->itemText != "" && count($this->itemText) > 0) {
+                    $topic = Topic::findById($db, $this->topicID);
+                    if (isset($topic)) {
+                        $lastItemId = -1;
+                        foreach ($this->itemText as $str) {
+                            if (strlen($str) > 0 && $str != "Yes, what's next?" && $str != "Enter first item here" && $str != "You have something to add?") {
+                                $item = new Item();
+                                $item->setText(trim($str));
+                                $item->setUserID($user->getId());
+                                $item->setTopicID($this->topicID);
+                                $item->setCreatedOn(time());
+                                $item->setCommentCount(0);
+                                $item->insertIntoDatabase($db);
+                                $lastItemId = $item->getId();
+                            }
+                        }
+                        if ($lastItemId != -1) {
+                            Queue::addItem($lastItemId);
+                        }
+                    }
+                }
+            }
 
             $this->redirect("base.login/index/" . $this->inviteCode);
         }
@@ -119,17 +139,7 @@ class RegisterController extends BaseController {
         }
     }
 
-    public function inviteIsValid($inviteCode) {
-        if (trim($inviteCode) == "")
-            return false;
-        $db = DB::getConnection();
-        $tickets = Topic::findByExample($db, Topic::create()->setInviteCode($inviteCode));
-        if (count($tickets) > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+   
 
 }
 

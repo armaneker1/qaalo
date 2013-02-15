@@ -44,7 +44,7 @@ class Loader {
         if (class_exists($this->controllerClass)) {
             $parents = class_parents($this->controllerClass);
             
-            if (in_array("BaseController",$parents)) {   
+            if (in_array("BaseController",$parents)) {
                 if (method_exists($this->controllerClass,$this->action))
                 {
                     return new $this->controllerClass($this->action,$this->urlValues);

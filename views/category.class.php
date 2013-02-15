@@ -23,8 +23,12 @@ class CategoryController extends BaseController {
         }
         $this->category = $categories[0];
 
+        if (!isset($_SESSION["categories"]) || !in_array($this->category->getId(), $_SESSION["categories"])) {
+            $_SESSION["categories"][] = $this->category->getId();
+        }
+
         $redis = new Predis\Client('tcp://qaalo.com:6379');
-        $this->topics = $redis->zrevrange("category:". $this->category->getId() .":timeline", 0, -1, array(
+        $this->topics = $redis->zrevrange("category:" . $this->category->getId() . ":timeline", 0, -1, array(
             'withscores' => true));
     }
 

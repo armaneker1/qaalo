@@ -57,16 +57,15 @@
 
         <?php if ($this->getCurrentAction() == "index") { ?>
             <h2>Categories</h2>
-            You can follow categories and can track the lists about that category on your timeline. <a href="javascript:$('.addCategoryForm').toggle('fast');">Follow more categories?</a>
+            You can follow categories and can track the lists about that category on your timeline. <a href="#" onclick="$('.addCategoryForm').toggle('fast');">Follow more categories?</a>
             <div class="addCategoryForm">
                 <form action="<?php echo $this->getAction("addCategory"); ?>" method="post">
                     <div style="float:left;">
-                        <input type="text" id="categories" name="categories" />
+                        <input type="text" id="addCategoryList" name="categories" />
                     </div>
                     <div style="float:left; margin-top:2px; padding:10px"><button style="padding:9px;">Add ➜</button>
                     </div>
                     <div style="clear: both;"></div>
-                    <div class="description" style="margin: 0 0 0 0;">Add categories to your list</div>
                 </form>
             </div>
             <ul id="categoryList" class="categoryList clearfix" style="margin-top:25px !important;">
@@ -97,7 +96,7 @@
 <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tokeninput.js" ></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#categories").tokenInput("/back.category/search")
+        $("#addCategoryList").tokenInput("/back.category/search")
     });
 </script>
 <script type="text/javascript">
