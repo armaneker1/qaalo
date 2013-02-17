@@ -13,7 +13,9 @@ define("MONTH", 30 * DAY);
 class Tool {
 
     private static $allowedExts = array("jpg", "jpeg", "gif", "png");
-    private static $urlRegex = '/([-a-zA-Z0-9@:%_\\\+.~#?&\/\/=]{1,256}\.[a-z]{2,4}[a-zA-Z0-9@:%_+.~#?\\\&\/=-]{0,255})/i';
+    private static $urlRegex = '/([-a-zA-Z0-9:%_\\\+.~#?&\/\/=]{1,256}\.[a-z]{2,4}[a-zA-Z0-9@:%_+.~#?\\\&\/=-]{0,255})/i';
+    private static $twitterRegex = '/(?<![a-zA-Z0-9_"\'<>])@([a-z0-9_]{1,20})\b/i';
+    private static $twitterHashtag = '/(?<![^\s#])#([^\s#]+)(?=(\s|$))/i';
 
     public static function inviteIsValid($inviteCode) {
         if (trim($inviteCode) == "")
@@ -56,6 +58,10 @@ class Tool {
         $position = 0;
         $res = "";
         $link = "";
+        
+        $item = preg_replace(self::$twitterRegex, "http://www.twitter.com/$1", $item);
+        $item = preg_replace(self::$twitterHashtag, "http://twitter.com/#$1", $item);
+        
         while (preg_match(self::$urlRegex, $item, $match, PREG_OFFSET_CAPTURE, $position)) {
             list($url, $urlPosition) = $match[0];
             $res .= htmlspecialchars(substr($item, $position, $urlPosition - $position));
@@ -76,17 +82,24 @@ class Tool {
                 $slashIndex = strpos($link, "/", $hostIndex);
                 if ($slashIndex>0 && $slashIndex+1 < strlen($link)) {
                     $newHost = substr($link,$slashIndex+1);
-                    if (preg_match('/[a-zA-Z0-9_]{1,255}/', $newHost)) {
-                    $host = "@" . $newHost;
+                    
+                    if (substr($newHost, 0,1)=="#") {
+                        $host = $newHost;
+                    } else if (preg_match('/^[a-zA-Z0-9_]{1,255}$/', $newHost)) {
+                        $host = "@" . $newHost;
                     }
                 }
             }
-
-
-
-            $res .= '<a class="externalLink" target="_blank" href="' . $link . '"><img src="http://www.google.com/s2/u/0/favicons?domain=' . $hostComponent["host"] . '"> ' . $host . '</a>';
+            
+            $img = 'http://www.google.com/s2/u/0/favicons?domain=' . $hostComponent["host"];
+            if (substr($host,0,1)=="@") {
+                $img ='https://api.twitter.com/1/users/profile_image?screen_name='. substr($host,1) .'&size=mini';
+            }
+            $res .= '<a class="externalLink" target="_blank" href="' . $link . '"><img src="'.$img .'"> ' . $host . '</a>';
             $position = $urlPosition + strlen($url);
         }
+        
+        
         $res .= htmlspecialchars(substr($item, $position));
         return $res;
     }

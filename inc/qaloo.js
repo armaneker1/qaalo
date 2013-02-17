@@ -7,6 +7,8 @@ $(document).ready(function(){
     
     $('.itemInput').keypress(onItemInputKeyPress);
     
+    $('.toolTip').tooltipster();
+    
     $('.autogrow').autosize();
     
     $("#categories").tokenInput("/back.category/search");
@@ -108,6 +110,7 @@ $(document).ready(function(){
    
     
 });
+
 
 function showUser(userID) {
     $("#cardProfilePicture").attr("src","");

@@ -71,7 +71,7 @@ class HomeController extends BaseController {
         
 
         if ($this->isLoggedIn()) {
-            $this->timeline = $redis->zrevrange("user:" . $this->getUserID() . ":timeline", 0, 10, array(
+            $this->timeline = $redis->zrevrange("user:" . $this->getUserID() . ":timeline", 0, 20, array(
                 'withscores' => true)
             );
             

@@ -3,7 +3,6 @@
 require_once __ROOT__ . 'vendors/Tool.php';
 require_once __ROOT__ . 'vendors/KLogger.php';
 
-
 abstract class BaseController {
 
     protected $urlValues;
@@ -17,15 +16,20 @@ abstract class BaseController {
     public $_standalone;
     public $log;
     private $metaTags;
+    private $metaDescription = "Qaalo is a collaborative social tool where you can create lists with your close network and follow lists matching your interests";
 
     public function __construct($template, $action, $urlValues, $standalone = false, $signinRequired = false) {
         $this->action = $action;
         $this->urlValues = $urlValues;
         $this->template = $template;
         $this->_standalone = $standalone;
-        $this->log = KLogger::instance('/home/ubuntu/log/',KLogger::DEBUG);
+        $this->log = KLogger::instance('/home/ubuntu/log/', KLogger::DEBUG);
+        
+        echo $this->model;
 
-        session_start();
+        if (!isset($_SESSION)) {
+            session_start();
+        }
         if (isset($_SESSION['userID']) || Tool::autoLogin()) {
             $this->_userID = $_SESSION['userID'];
         } else if ($signinRequired) {
@@ -64,6 +68,10 @@ abstract class BaseController {
     public function setPageTitle($title) {
         $this->_title = $title . " - Qaalo";
     }
+    
+    public function setPageDescription($desc) {
+        $this->metaDescription = $desc;
+    }
 
     public function addError($errorMsg) {
         $this->errors[] = $errorMsg;
@@ -71,12 +79,14 @@ abstract class BaseController {
     }
 
     public function addInfo($str) {
-        session_start();
+        if (!isset($_SESSION)) {
+            session_start();
+        }
         $_SESSION["messages"][] = $str;
     }
-    
-    public function addMetaTag($tag,$value) {
-        $this->metaTags[] = array("name"=>$tag,"value"=>$value);
+
+    public function addMetaTag($tag, $value) {
+        $this->metaTags[] = array("name" => $tag, "value" => $value);
     }
 
     public function hasError() {
@@ -87,12 +97,14 @@ abstract class BaseController {
         if (isset($this->metaTags)) {
             $tags = "";
             foreach ($this->metaTags as $metaTag) {
-                $tags .="\t<meta property=\"". $metaTag["name"] ."\" content=\"". $metaTag["value"] ."\"/>\n";
+                $tags .="\t<meta property=\"" . $metaTag["name"] . "\" content=\"" . $metaTag["value"] . "\"/>\n";
             }
             echo $tags;
         }
     }
     
+    
+
     public function dumpErrors() {
         if (isset($this->errors)) {
             $msg = "<div class='error'><ul>";

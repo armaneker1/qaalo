@@ -54,7 +54,7 @@ class UserController extends BaseController {
             }
 
             $redis = new Predis\Client();
-            $categories = $redis->zrevrange("user:" . $userID . ":talkingAbout", "0", "-1");
+            $categories = $redis->zrevrange("user:" . $userID . ":talkingAbout", "0", "9");
             if (count($categories) > 0) {
                 $categoryList;
                 foreach ($categories as $category) {
@@ -64,7 +64,7 @@ class UserController extends BaseController {
                 $res["categories"] = $categoryList;
             }
 
-            $lists = $redis->zrevrange("user:" . $userID . ":latestLists", "0", "-1");
+            $lists = $redis->zrevrange("user:" . $userID . ":latestLists", "0", "2");
             if (count($lists) > 0) {
                 $topicList;
                 foreach ($lists as $list) {

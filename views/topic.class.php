@@ -31,6 +31,8 @@ class TopicController extends BaseController {
 
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
+
+        $this->setPageDescription(null);
     }
 
     protected function add() {
@@ -71,7 +73,7 @@ class TopicController extends BaseController {
         $topic = Topic::findById($db, $this->topicID);
         if (isset($topic) && $this->checkWriter($this->topicID)) {
 
-            $emailArray = split(",", $this->emails);
+            $emailArray = explode(",", $this->emails);
             $emailStr = "";
             foreach ($emailArray as $email) {
                 $email = trim($email);
@@ -111,7 +113,6 @@ class TopicController extends BaseController {
 
             $writersID = array();
             foreach ($this->items as $item) {
-                //$item->setText($item);
                 $votes = Vote::findByExample($db, Vote::create()->setItemID($item->getId())->setUserID($this->_userID));
                 if (count($votes) > 0) {
                     $vote = $votes[0];
@@ -127,7 +128,7 @@ class TopicController extends BaseController {
             foreach ($writersID as $userID) {
                 $user = User::findById($db, $userID);
                 if (isset($user)) {
-                    $this->writers[] = array($user->getFullname(), $user->getThumbPhotoUrl(),$user->getId());
+                    $this->writers[] = array($user->getFullname(), $user->getThumbPhotoUrl(), $user->getId());
                 }
             }
 
@@ -137,8 +138,8 @@ class TopicController extends BaseController {
                 if (count(UserCategoryLink::findByExample($db, UserCategoryLink::create()->setUserId($this->getUserID())->setCategoryId($category->getId()))) > 0) {
                     $category->isFollowed = true;
                 }
-                
-                if (!isset($_SESSION["categories"]) || !in_array($category->getId(),$_SESSION["categories"])) {
+
+                if (!isset($_SESSION["categories"]) || !in_array($category->getId(), $_SESSION["categories"])) {
                     $_SESSION["categories"][] = $category->getId();
                 }
             }

@@ -22,6 +22,7 @@ class CreateController extends BaseController {
     }
 
     protected function index() {
+        
         $this->setPageTitle("Create your list");
     }
 

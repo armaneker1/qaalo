@@ -4,18 +4,20 @@
         <meta charset="utf-8" />
         <?php $this->dumpMetaTags(); ?>
         <title><?php echo $this->_title ?></title>
-        <meta name="description" content="Qaalo is a collaborative social tool where you can create lists with your close network and follow lists matching your interests">
-        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css?d=021520132254" rel='stylesheet' type="text/css" media="screen">
-        <link href="<?php echo __WEBROOT__ ?>inc/barometer.css" rel='stylesheet' type="text/css" media="screen">
+        <?php if (isset($this->metaDescription)) { ?>
+        <meta name="description" content="<?= $this->metaDescription?>">
+        <?php } ?>
+        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css?d=021620132254" rel='stylesheet' type="text/css" media="screen">
+        <link href="<?php echo __WEBROOT__ ?>inc/tooltipster.css" rel='stylesheet' type="text/css" media="screen">
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery-1.8.3.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autocomplete.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.ambiance.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.lightbox_me.js" ></script>
-        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.maxlength.min.js" ></script>
-        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.qtip-1.0.0-rc3.min.js" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.maxlength.min.js?d=021520132254" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autosize-min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tokeninput.js" ></script>
-        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js?d=021520132254" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tooltipster.min.js" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js?d=021620132254" ></script>
     </head>
     <body>
         <div id="loginRegister" class="overlay loginRegister">
@@ -112,13 +114,13 @@
             <div class="menu clearfix">
                 <a class="logo" href="/"></a>
                 <div id="search">
-                    <form method="post" action="<?php echo $this->getControllerAction("topic", "search"); ?>">
-                        <input class="default" spellcheck="false" autocomplete="off" autofocus="on" type="text" placeholder="Search a list..." id="searchBox" name="searchKeyword">
-                    </form>
+                    <input class="default" spellcheck="false" autocomplete="off" autofocus="on" type="text" placeholder="Search a list..." id="searchBox" name="searchKeyword">
                 </div>
 
                 <?php if ($this->isLoggedIn()) { ?>
                     <div class="create"><a href="/base.create">or Create a List ➜</a>                </div>
+                <?php } else { ?>
+                    <div class="create"><a href="/base.register" onclick="showRegisterForm();return false;">or Create a List ➜</a>                </div>
                 <?php } ?>
 
                 <div class="profile">
@@ -142,6 +144,13 @@
         <div class="main" id="main">
             <?php $this->dumpErrors(); ?>
             <?php require "views/" . $this->urlValues["controller"] . ".php"; ?>
+            <div class="clearfix"></div>
+        </div>
+        <div class="footer">
+            <ul>
+                <li><a href="/base.directory">directory</a></li>
+                <li>Qaalo Inc © 2013</li>
+            </ul>
         </div>
 
         <?php if (isset($_SESSION["messages"])) { ?>
@@ -157,10 +166,7 @@
         }
         ?>
 
-        <script src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' type='text/javascript'></script>
-        <script type="text/javascript" charset="utf-8">
-            BAROMETER.load('RTCN9DZSyYXF51RO69QsN');
-        </script>
+
 
         <script type="text/javascript">
 

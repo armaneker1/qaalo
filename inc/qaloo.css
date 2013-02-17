@@ -12,6 +12,10 @@
     src: local('Open Sans Bold'), local('OpenSans-Bold'), url(opensansBold.woff) format('woff');
 }
 
+image {
+    border: none;
+}
+
 root {
     display: block;
 }
@@ -229,7 +233,32 @@ button {
 .main {
     width:960px;
     margin:0 auto;
+    min-height: 500px;
 }
+
+.footer {
+    width:960px;
+    margin:20px auto;
+    border-top:solid 1px #ddd;
+    text-align: right;
+    color:#888;
+    font-size:13px;
+}
+
+.footer a {
+    color:#888 !important;
+}
+
+.footer ul {
+    margin-top: 4px;
+    float:right;
+}
+
+.footer li {
+    float:left;
+    margin-left:15px;
+}
+
 
 .main .left, .settings .left {
     float:left;
@@ -1221,7 +1250,7 @@ div.create:active {
 .userCard div.profile {
     padding:20px;
     text-align: center;
-    
+
 }
 
 .profile .userPic {
@@ -1293,4 +1322,7 @@ div.create:active {
 .loginRegister ul {
     list-style-type: circle;
     margin-left:25px;
+}
+.userContainer {
+    display: inline-block;
 }

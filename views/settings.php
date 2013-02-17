@@ -2,7 +2,7 @@
 
     <div class="right">
         <div class="clearfix">
-            <div id="userPic" class="userPic">
+            <div id="userPic" class="userPic toolTip" title="Click to change">
                 <img src="<?= $this->user->getThumbPhotoUrl(); ?>">
             </div>
             <h3><?= $this->user->getFullname(); ?></h3>
@@ -73,6 +73,7 @@
                     <li><a href="/c/<?= $category->getUrl() ?>"><?= $category->getName() ?></a><div categoryTitle="<?= $category->getName(); ?>" categoryID="<?= $category->getID(); ?>" permanent="1" class="categoryItem unfollow">x</div></li>
                 <?php } ?>
             </ul>
+            
         <?php } ?>
 
 

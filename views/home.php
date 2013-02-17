@@ -77,16 +77,16 @@
     <?php if ($event->type == "topic.create") { ?>
 
                     <a class="title" href="/l/<?= $event->url ?>"><?= $event->title ?></a>
-                    <div class="topicInfo">A new list created about <?= Tool::getCategories($event->categories) ?></div>
+                    <div class="topicInfo">A new list created about <?= Tool::getCategories($event->categories) ?> <?= Tool::getFriendlyDate($date) ?></div>
 
     <?php } else if ($event->type == "item.add") { ?>
                     <div style="margin-top:14px;">
                         <div class="circle">+</div>
-                        <div class="itemContainer"><a href="/l/<?= $event->url ?>"><?= $event->item ?></a></div>
+                        <div class="itemContainer"><a href="/l/<?= $event->url ?>"><?= Tool::renderItem($event->item) ?></a></div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="itemInfo">
-                    <?= $event->username ?> added a new item to '<a href="/l/<?= $event->url ?>"><?= $event->title ?></a>'
+                    <?= $event->username ?> added a new item to '<a href="/l/<?= $event->url ?>"><?= $event->title ?></a>' <?= Tool::getFriendlyDate($date) ?>
                     </div>
 
             <?php } ?>

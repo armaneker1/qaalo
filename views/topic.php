@@ -33,9 +33,6 @@
                             </li>
                             <?php
                             $a++;
-                            if ($a >= 10) {
-                                //break;
-                            }
                         }
                         ?>
                     </ul>
@@ -54,13 +51,13 @@
                             <div id="addForm" style="display: none;">
                                 <span class="description">Press <b>Enter</b> to add new items</span>
                                 <?php if (!$this->isLoggedIn() && $this->isInvited) { ?>
-                                <button style="margin-left: 20px;" onclick="showRegisterForm();return false;">Add ➜</button>
+                                    <button style="margin-left: 20px;" onclick="showRegisterForm();return false;">Add ➜</button>
                                 <?php } else { ?>
-                                <button style="margin-left: 20px;" type="submit">Add ➜</button>
+                                    <button style="margin-left: 20px;" type="submit">Add ➜</button>
                                 <?php } ?>
                             </div>
                         </form>
-                        <script type="text/javascript">$initialItemIndis=<?= $a; ?>; $itemIndis = <?= $a; ?>;$topicID=<?= $this->topic->getID()?>;$inviteCode='<?= $this->inviteCode?>'</script>
+                        <script type="text/javascript">$initialItemIndis=<?= $a; ?>; $itemIndis = <?= $a; ?>;$topicID=<?= $this->topic->getID() ?>;$inviteCode='<?= $this->inviteCode ?>'</script>
                     <?php } ?>
                 </div>
             </div>
@@ -70,11 +67,10 @@
         </div>
     </div>
     <div class="right">
-
         <?php
         $a = count($this->writers);
         foreach ($this->writers as $writer) {
-            $show = "<img class='tinyPhoto' src='" . $writer[1] . "'><a href='javascript:showUser(". $writer[2] .")'>" . $writer[0] . "</a>";
+            $show = "<div class='userContainer'><a href='#' onclick='showUser(" . $writer[2] . ")'><img class='tinyPhoto' src='" . $writer[1] . "'>" . $writer[0] . "</a></div>";
             $a--;
 
             if ($a == count($this->writers) - 1) {
@@ -88,6 +84,7 @@
             }
         }
         ?>
+
         <?php if ($this->isWriter) { ?>
             <?php echo count($this->writers) == 1 ? "with " : "and "; ?><button id="addListers" onclick="showInviteForm();" class="thin">add ➜</button>
             <div class="inviteForm">
@@ -105,6 +102,8 @@
                 </div>
             </div>
         <? } ?>
+
+        <div style="clear: both;"></div>
         <hr/>
         <ul class="categoryList clearfix">
             <?php foreach ($this->categories as $category) { ?>
