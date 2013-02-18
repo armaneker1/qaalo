@@ -188,8 +188,7 @@ class TopicController extends BaseController {
             $itemsStr = "";
             $a = 1;
             foreach ($this->items as $item) {
-                $itemsStr .= $a . ") " . $item->getText() . ", ";
-
+                $itemsStr .= $a . ") " . Tool::trimDomainInItem($item->getText()) . ", ";
                 $a++;
                 if ($a > 4) {
                     break;

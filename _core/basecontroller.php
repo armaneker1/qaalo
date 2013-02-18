@@ -66,7 +66,7 @@ abstract class BaseController {
     }
 
     public function setPageTitle($title) {
-        $this->_title = $title . " - Qaalo";
+        $this->_title = $title;
     }
     
     public function setPageDescription($desc) {

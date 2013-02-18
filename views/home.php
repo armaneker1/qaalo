@@ -8,7 +8,6 @@
         <div class="miniTopicForm">
             <form  id="topicForm" method="post" action="/base.create/create">
                 <textarea onfocus="$('#topicFormDetails').show('fast');" id="title" class="autogrow topicTitle default" autocomplete="off" placeholder="Type a topic to create a new list" charlength="60" name="title" cols="55" rows="1"></textarea>
-                
                 <div id="topicFormDetails" >
                     <div class="list">
                         <div class="itemBar">
@@ -103,5 +102,5 @@
     </ul>
     <hr/>
     <h3>Welcome to Qaalo</h3>
-    Qaalo is a collaborative social tool where you can create lists with your close network and follow lists matching your interests
+    Qaalo is a collaborative social tool where you can create lists with your close network and follow lists matching your interests. <a onclick="showHelp();" href="#help">How?</a>
 </div>

@@ -111,6 +111,26 @@ $(document).ready(function(){
     
 });
 
+function sendFacebookFriends() {
+    FB.init({
+        appId: '318546488256998', 
+        xfbml: true, 
+        cookie: true
+    });
+
+    FB.ui({
+        method: 'send',
+        name: $inviteTitle,
+        link: $inviteUrl
+    });
+}
+
+function showHelp() {
+    $("#helpImage").attr('src',"/inc/whatisQaalo.png");
+    $("#help").lightbox_me();
+    _gaq.push(['_setAccount', 'UA-38235310-1']);
+    _gaq.push(['_trackPageview', location.pathname + location.search + location.hash]);
+}
 
 function showUser(userID) {
     $("#cardProfilePicture").attr("src","");

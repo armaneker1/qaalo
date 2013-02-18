@@ -7,7 +7,7 @@
         <?php if (isset($this->metaDescription)) { ?>
         <meta name="description" content="<?= $this->metaDescription?>">
         <?php } ?>
-        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css?d=021620132254" rel='stylesheet' type="text/css" media="screen">
+        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css?d=021720131901" rel='stylesheet' type="text/css" media="screen">
         <link href="<?php echo __WEBROOT__ ?>inc/tooltipster.css" rel='stylesheet' type="text/css" media="screen">
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery-1.8.3.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autocomplete.min.js" ></script>
@@ -17,9 +17,12 @@
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autosize-min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tokeninput.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tooltipster.min.js" ></script>
-        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js?d=021620132254" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js?d=021720131743" ></script>
     </head>
     <body>
+        <div id="help" class="overlay">
+            <img id="helpImage" src=""/>
+        </div>
         <div id="loginRegister" class="overlay loginRegister">
             <div class="overlayLeft">
                 <form action="/base.register/register" method="post">
@@ -113,6 +116,9 @@
         <div class="bar">
             <div class="menu clearfix">
                 <a class="logo" href="/"></a>
+                <div class="helpLink">
+                    <a href="#help" onclick="showHelp();">HOW TO?</a>
+                </div>
                 <div id="search">
                     <input class="default" spellcheck="false" autocomplete="off" autofocus="on" type="text" placeholder="Search a list..." id="searchBox" name="searchKeyword">
                 </div>

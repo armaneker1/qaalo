@@ -16,6 +16,17 @@ image {
     border: none;
 }
 
+.helpLink {
+    float:left;
+    margin:20px 0px 0px 10px;
+}
+
+#help {
+    width:779px;
+    height:559px;
+    padding:10px;
+}
+
 root {
     display: block;
 }
@@ -224,7 +235,7 @@ button {
     border:none;
     font-size: 20px;
     padding:7px;
-    width:400px;
+    width:320px;
     margin:10px 0px 0px 20px;
     background-color: #f7f7f7;
 }
@@ -643,7 +654,7 @@ ul.itemsInput li {
 
 .itemContainer {
     font-size:21px;
-    width:570px;
+    width:660px;
     margin:0;
     padding:0;
 }
@@ -1167,7 +1178,8 @@ div.create:active {
 
 .inviteForm {
     margin:8px 0px 8px 0px;
-    display:none;
+    display: none;
+    
 }
 
 .inviteForm input {
@@ -1177,7 +1189,10 @@ div.create:active {
     font-size:13px;
 }
 .tweetInvite {
-    margin-bottom:6px;
+    text-align: center;
+    line-height: 25px;
+    margin:15px 0px 10px;
+    padding-right:5px;
 }
 
 .tweetInvite span.desc {
@@ -1325,4 +1340,71 @@ div.create:active {
 }
 .userContainer {
     display: inline-block;
+}
+
+.uibutton { 
+    position: relative; 
+    z-index: 1;
+    overflow: visible; 
+    display: inline-block; 
+    padding: 5px 10px 5px; 
+    border: 1px solid #999; 
+    border-bottom-color: #888;
+    margin: 0;
+    text-decoration: none; 
+    text-align: center;
+    font: bold 13px/normal 'lucida grande', tahoma, verdana, arial, sans-serif; 
+    white-space: nowrap; 
+    cursor: pointer; 
+    /* outline: none; */
+    color: #333; 
+    background-color: #eee;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f6f6), to(#e4e4e3));
+    background-image: -moz-linear-gradient(#f5f6f6, #e4e4e3);
+    background-image: -o-linear-gradient(#f5f6f6, #e4e4e3);
+    background-image: linear-gradient(#f5f6f6, #e4e4e3);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f5f6f6', EndColorStr='#e4e4e3'); /* for IE 6 - 9 */
+    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #fff;
+    -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #fff;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #fff;
+    /* IE hacks */
+    zoom: 1; 
+    display: inline; 
+    
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
+    border-radius: 2px;
+    vertical-align: 5px;
+}
+
+.uibutton.confirm {
+    border-color: #29447e #29447e #1a356e;
+    color: #fff;
+    background-color: #5B74A8;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#637bad), to(#5872a7));
+    background-image: -moz-linear-gradient(#637bad, #5872a7);
+    background-image: -o-linear-gradient(#637bad, #5872a7);
+    background-image: linear-gradient(#637bad, #5872a7);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#637bad', EndColorStr='#5872a7'); /* for IE 6 - 9 */
+    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #8a9cc2;
+    -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #8a9cc2;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 #8a9cc2;
+}
+
+
+.uibutton:hover,
+.uibutton:focus,
+.uibutton:active {
+    border-color: #777 #777 #666;
+}
+
+.uibutton:active {
+    border-color: #aaa;
+    background: #ddd;
+    filter: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }

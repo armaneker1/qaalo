@@ -13,7 +13,7 @@ define("MONTH", 30 * DAY);
 class Tool {
 
     private static $allowedExts = array("jpg", "jpeg", "gif", "png");
-    private static $urlRegex = '/([-a-zA-Z0-9:%_\\\+.~#?&\/\/=]{1,256}\.[a-z]{2,4}[a-zA-Z0-9@:%_+.~#?\\\&\/=-]{0,255})/i';
+    private static $urlRegex = '/(([a-z0-9A-Z:\/\/]{0,20}[-a-zA-Z0-9:_\\\+.]{1,256}\.[a-z]{2,4})[a-zA-Z\(\)0-9@:%_+.~#?\\\&\/=-]{0,255})/i';
     private static $twitterRegex = '/(?<![a-zA-Z0-9_"\'<>])@([a-z0-9_]{1,20})\b/i';
     private static $twitterHashtag = '/(?<![^\s#])#([^\s#]+)(?=(\s|$))/i';
 
@@ -54,6 +54,12 @@ class Tool {
         return $str;
     }
 
+    public static function trimDomainInItem($item) {
+        $item =preg_replace(self::$urlRegex, "$2",$item);
+        $item = preg_replace('/http(s)?:\/\/|www.|ftp:\/\//i', "", $item);
+        return $item;
+    }
+    
     public static function renderItem($item) {
         $position = 0;
         $res = "";
@@ -89,6 +95,8 @@ class Tool {
                         $host = "@" . $newHost;
                     }
                 }
+            } else if (strlen($host)>20) {
+                $host = "..." . substr($host, strlen($host)-20 );
             }
             
             $img = 'http://www.google.com/s2/u/0/favicons?domain=' . $hostComponent["host"];

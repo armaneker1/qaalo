@@ -1,4 +1,4 @@
-<div class="clearfix">
+<div class="clearfix" itemscope itemtype="http://schema.org/ItemList">
 
     <div class="left">
 
@@ -6,8 +6,10 @@
             <div class="info">You are invited to contribute to this list. Feel free to add items.</div>
         <?php } ?>
 
-        <div class="list">
-            <h2><?= $this->topic->getTitle(); ?></h2>
+        <div class="list" 
+            <meta itemprop="mainContentOfPage" content="true"/>
+            <h2 itemprop="name"><?= $this->topic->getTitle(); ?></h2>
+            <meta itemprop="itemListOrder" content="Descending" />
             <div class="itemBar">
                 <div class="itemsHeader">
                     <ul class="items">
@@ -18,7 +20,7 @@
                             <li id="existingItem<?= $a ?>" <?php echo (!$this->isWriter && $a >= 10 ? "class=\"hiddenItem\"" : ""); ?>>
                                 <div class="circle<?php echo ($a >= 10 ? " low" : ""); ?>"><?= $a + 1 ?></div>
                                 <div class="itemContainer">
-                                    <?php echo Tool::renderItem($item->getText()); ?>
+                                    <span itemprop="itemListElement"><?php echo Tool::renderItem($item->getText()); ?></span>
                                     <?php if ($this->isLoggedIn()) { ?>
                                         <div class = "icons">
                                             <a id="voteUp<?= $item->getID(); ?>" href="javascript:vote(<?= $item->getID(); ?>,1)" class = "icon voteUp <?= $item->vote == 1 ? "voted" : "" ?>"></a>
@@ -57,7 +59,11 @@
                                 <?php } ?>
                             </div>
                         </form>
-                        <script type="text/javascript">$initialItemIndis=<?= $a; ?>; $itemIndis = <?= $a; ?>;$topicID=<?= $this->topic->getID() ?>;$inviteCode='<?= $this->inviteCode ?>'</script>
+                        <script type="text/javascript">
+                            $initialItemIndis=<?= $a; ?>; $itemIndis = <?= $a; ?>;$topicID=<?= $this->topic->getID() ?>;$inviteCode='<?= $this->inviteCode ?>';
+                            $inviteUrl='http://qaalo.com/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>';
+                            $inviteTitle ='<?= str_replace('\'', "\\'",  $this->topic->getTitle()); ?>';
+                        </script>
                     <?php } ?>
                 </div>
             </div>
@@ -70,7 +76,7 @@
         <?php
         $a = count($this->writers);
         foreach ($this->writers as $writer) {
-            $show = "<div class='userContainer'><a href='#' onclick='showUser(" . $writer[2] . ")'><img class='tinyPhoto' src='" . $writer[1] . "'>" . $writer[0] . "</a></div>";
+            $show = "<div class='userContainer'><a href='#' onclick='showUser(" . $writer[2] . ")'><img class='tinyPhoto' src='" . $writer[1] . "'><span itemprop=\"author\">" . $writer[0] . "</span></a></div>";
             $a--;
 
             if ($a == count($this->writers) - 1) {
@@ -90,7 +96,9 @@
             <div class="inviteForm">
                 <hr/>
                 <div class="tweetInvite">
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>" data-lang="en" data-text="Join me with creating <?= htmlspecialchars($this->topic->getTitle()); ?> list" data-count="none" data-via="theqaalo">Invite Followers</a><span class="desc">to invite your friends</span>
+                    <a href="https://twitter.com/share" data-size="large" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>" data-lang="en" data-text="Join me with creating <?= htmlspecialchars($this->topic->getTitle()); ?> list" data-count="none" data-via="theqaalo">Invite Followers</a>
+                    or <a class="uibutton confirm" href="#" onclick="sendFacebookFriends();">Send</a>
+                    <span class="desc">to invite your friends</span>
                 </div>
                 <form action="<?php echo $this->getAction("invite"); ?>" method="post">
                     <input type="hidden" name="topicID" value="<?php echo $this->topic->getID() ?>"/>
