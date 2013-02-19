@@ -25,11 +25,10 @@ abstract class BaseController {
         $this->_standalone = $standalone;
         $this->log = KLogger::instance('/home/ubuntu/log/', KLogger::DEBUG);
         
-        echo $this->model;
-
         if (!isset($_SESSION)) {
             session_start();
         }
+        
         if (isset($_SESSION['userID']) || Tool::autoLogin()) {
             $this->_userID = $_SESSION['userID'];
         } else if ($signinRequired) {

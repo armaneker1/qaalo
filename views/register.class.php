@@ -3,6 +3,7 @@
 require_once __ROOT__ . 'models/User.class.php';
 require_once __ROOT__ . 'models/Topic.class.php';
 require_once __ROOT__ . 'models/Item.class.php';
+require_once __ROOT__ . 'models/Vote.class.php';
 require_once __ROOT__ . 'models/Registerticket.class.php';
 require_once __ROOT__ . 'vendors/Tool.php';
 require_once __ROOT__ . 'vendors/Queue.php';
@@ -19,10 +20,12 @@ class RegisterController extends BaseController {
     public $ticket;
     public $itemText;
     public $topicID;
+    public $itemID;
+    public $voteDir;
 
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
-        
+
         $this->setPageTitle("Register");
     }
 
@@ -46,7 +49,7 @@ class RegisterController extends BaseController {
         if ($this->isLoggedIn()) {
             $this->redirect("base.home");
         }
-        
+
         if (strlen($this->fullname) < 3) {
             $this->addError("Your name seems to be invalid");
         }
@@ -113,6 +116,32 @@ class RegisterController extends BaseController {
                 }
             }
 
+            if ($this->itemID != "") {
+                $item = Item::findById($db, $this->itemID);
+                if ($item) {
+                    $vote = new Vote();
+                    $vote->setUserID($user->getId());
+                    $vote->setItemID($this->itemID);
+                    $vote->setRate($this->voteDir);
+                    $vote->setCreatedOn(time());
+                    $vote->insertIntoDatabase($db);
+
+                    if ($this->voteDir == 1) {
+                        $item->setVoteUp($item->getVoteUp() + 1);
+                    } else {
+                        $item->setVoteDown($item->getVoteDown() + 1);
+                    }
+                    $item->updateToDatabase($db);
+
+                    $topic = Topic::findById($db, $this->topicID);
+                    if (isset($topic)) {
+                        if ($this->rememberPassword != '') {
+                            $this->redirect("l/" . $topic->getUrl());
+                        }
+                    }
+                }
+            }
+
             $this->redirect("base.login/index/" . $this->inviteCode);
         }
     }
@@ -138,8 +167,6 @@ class RegisterController extends BaseController {
             }
         }
     }
-
-   
 
 }
 

@@ -7,7 +7,7 @@
         <?php if (isset($this->metaDescription)) { ?>
         <meta name="description" content="<?= $this->metaDescription?>">
         <?php } ?>
-        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css?d=021720131901" rel='stylesheet' type="text/css" media="screen">
+        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css?d=021920131115" rel='stylesheet' type="text/css" media="screen">
         <link href="<?php echo __WEBROOT__ ?>inc/tooltipster.css" rel='stylesheet' type="text/css" media="screen">
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery-1.8.3.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autocomplete.min.js" ></script>
@@ -17,7 +17,7 @@
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autosize-min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tokeninput.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.tooltipster.min.js" ></script>
-        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js?d=021720131743" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/qaloo.js?d=021920131115" ></script>
     </head>
     <body>
         <div id="help" class="overlay">
@@ -30,6 +30,8 @@
                     </div>
                     <input type="hidden" id="registerTopicID" name="topicID" />
                     <input type="hidden" id="registerInviteCode" name="inviteCode" />
+                    <input type="hidden" id="registerVoteDir" name="voteDir" />
+                    <input type="hidden" id="registerItemID" name="itemID" />
                     <table>
                         <tbody>
                             <tr>
@@ -87,6 +89,8 @@
                     </div>
                     <input type="hidden" id="loginTopicID" name="topicID" />
                     <input type="hidden" id="loginInviteCode" name="inviteCode" />
+                    <input type="hidden" id="loginVoteDir" name="voteDir" />
+                    <input type="hidden" id="loginItemID" name="itemID" />
                     <button type="submit">Login now ➜</button>
                 </form>
             </div>
@@ -154,6 +158,7 @@
         </div>
         <div class="footer">
             <ul>
+                <li>All lists available under the terms of the Creative Commons Attribution 3.0 Unported License</li>
                 <li><a href="/base.directory">directory</a></li>
                 <li>Qaalo Inc © 2013</li>
             </ul>

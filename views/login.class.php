@@ -3,6 +3,7 @@
 require_once __ROOT__ . 'models/User.class.php';
 require_once __ROOT__ . 'models/Topic.class.php';
 require_once __ROOT__ . 'models/Item.class.php';
+require_once __ROOT__ . 'models/Vote.class.php';
 require_once __ROOT__ . 'vendors/Tool.php';
 require_once __ROOT__ . 'vendors/DB.php';
 require_once __ROOT__ . 'vendors/Queue.php';
@@ -15,14 +16,17 @@ class LoginController extends BaseController {
     public $inviteCode;
     public $itemText;
     public $topicID;
+    public $itemID;
+    public $voteDir;
 
     public function __construct($action, $urlValues) {
         parent::__construct("main", $action, $urlValues);
-        
+
         $this->setPageTitle("Login");
     }
 
     protected function index() {
+        
         if (!$this->inviteCode && isset($this->urlValues["id"])) {
             $this->inviteCode = $this->urlValues["id"];
         }
@@ -83,6 +87,56 @@ class LoginController extends BaseController {
                                 Queue::addItem($lastItemId);
                             }
                         }
+                    }
+                }
+
+                if ($this->itemID != "") {
+                    $votes = Vote::findByExample($db, Vote::create()->setItemID($this->itemID)->setUserID($user->getId()));
+                    $item = Item::findById($db, $this->itemID);
+                    
+                    if (count($votes) > 0) {
+                        $vote = $votes[0];
+                        if ($vote->getRate() == $this->voteDir) { //Delete vote
+                            $vote->deleteFromDatabase($db);
+                            if ($this->voteDir == 1) {
+                                $item->setVoteUp($item->getVoteUp() - 1);
+                            } else {
+                                $item->setVoteDown($item->getVoteDown() - 1);
+                            }
+                            $item->updateToDatabase($db);
+                        } else { //Update vote
+                            $vote->setRate($this->voteDir);
+                            $vote->updateToDatabase($db);
+
+                            if ($this->voteDir == -1) {
+                                $item->setVoteUp($item->getVoteUp() - 1);
+                                $item->setVoteDown($item->getVoteDown() + 1);
+                            } else {
+                                $item->setVoteUp($item->getVoteUp() + 1);
+                                $item->setVoteDown($item->getVoteDown() - 1);
+                            }
+                            $item->updateToDatabase($db);
+                        }
+                    } else { //Create new vote
+                        $vote = new Vote();
+                        $vote->setUserID($user->getId());
+                        $vote->setItemID($this->itemID);
+                        $vote->setRate($this->voteDir);
+                        $vote->setCreatedOn(time());
+                        $vote->insertIntoDatabase($db);
+
+                        if ($this->voteDir == 1) {
+                            $item->setVoteUp($item->getVoteUp() + 1);
+                        } else {
+                            $item->setVoteDown($item->getVoteDown() + 1);
+                        }
+                        $item->updateToDatabase($db);
+                    }
+
+
+                    $topic = Topic::findById($db, $this->topicID);
+                    if ($topic) {
+                        $this->redirect("l/" . $topic->getUrl());
                     }
                 }
 

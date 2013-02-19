@@ -1,7 +1,7 @@
 <div class="left" style="padding-top:0px;">
     <?php if (!$this->isLoggedIn()) { ?>
         <div class="welcome"><h2>Welcome to Qaalo</h2>
-            Qaalo is a collaborative social tool where you can create lists with your close network and follow lists matching your interests.<br><br>
+            Qaalo is a collaborative social tool where you can create lists with your close network and follow lists matching your interests. <a href="#help" onclick="showHelp();">Here is how.</a><br><br>
             <a onclick="showRegisterForm();return false;" href="/base.register" style="font-weight: bold;">Click here to register</a> for free now
         </div>
     <?php } else { ?>

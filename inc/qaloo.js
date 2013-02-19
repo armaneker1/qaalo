@@ -112,17 +112,15 @@ $(document).ready(function(){
 });
 
 function sendFacebookFriends() {
-    FB.init({
-        appId: '318546488256998', 
-        xfbml: true, 
-        cookie: true
-    });
+    
+    var obj = {
+        method: 'feed',
+        link: $inviteUrl,
+        picture: 'http://qaalo.com/inc/qaaloSquare.png',
+        name: $inviteTitle
+    };
 
-    FB.ui({
-        method: 'send',
-        name: $inviteTitle,
-        link: $inviteUrl
-    });
+    FB.ui(obj);
 }
 
 function showHelp() {
@@ -174,30 +172,54 @@ function showUser(userID) {
 }
 
 function showRegisterForm() {
+    
     $("#registerItems").empty();
     $("#registerTopicID").val("");
     $("#registerInviteCode").val("");
+    $("#registerItemID").val("");
+    $("#registerVoteDir").val("");
     
     $("#loginItems").empty();
     $("#loginTopicID").val("");
     $("#loginInviteCode").val("");
+    $("#loginItemID").val("");
+    $("#loginVoteDir").val("");
     
-    if ($topicID >0) {
-        $("[name=\"itemText\[\]\"]").each(function () {
-            var obj = $(this);
-            if (obj.attr("placeholder") != obj.val()) {
-                $("#registerItems").append($("<input>").attr("type", "hidden").attr("name", "itemText[]").val($(this).val()));
-                $("#loginItems").append($("<input>").attr("type", "hidden").attr("name", "itemText[]").val($(this).val()));
+    if (arguments.length>0) {
+        var type = arguments[0];
+        
+        if (type=="vote") {
+            var itemID = arguments[1];
+            var voteDir = arguments[2];
+            $("#registerItemID").val(itemID);
+            $("#registerVoteDir").val(voteDir);
+            $("#registerTopicID").val($topicID);
+            
+            $("#loginItemID").val(itemID);
+            $("#loginVoteDir").val(voteDir);
+            $("#loginTopicID").val($topicID);
+            
+        } else if (type=="addItem") {
+            if ($topicID >0) {
+                $("[name=\"itemText\[\]\"]").each(function () {
+                    var obj = $(this);
+                    if (obj.attr("placeholder") != obj.val()) {
+                        $("#registerItems").append($("<input>").attr("type", "hidden").attr("name", "itemText[]").val($(this).val()));
+                        $("#loginItems").append($("<input>").attr("type", "hidden").attr("name", "itemText[]").val($(this).val()));
+                    }
+                });
+        
+                $("#registerTopicID").val($topicID);
+                $("#registerInviteCode").val($inviteCode);
+                $("#loginTopicID").val($topicID);
+                $("#loginInviteCode").val($inviteCode);
+        
             }
-        });
-        
-        
-        $("#registerTopicID").val($topicID);
-        $("#registerInviteCode").val($inviteCode);
-        $("#loginTopicID").val($topicID);
-        $("#loginInviteCode").val($inviteCode);
+        }
     }
     $("#loginRegister").lightbox_me();
+    
+    
 }
 
 function showAll() {

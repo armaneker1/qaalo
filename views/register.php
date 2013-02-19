@@ -7,6 +7,8 @@
         <?php if ($this->itemText!="") {foreach($this->itemText as $itemStr) { ?>
         <input type="hidden" name="itemText[]" value="<?= $itemStr ?>">
         <?php }}?>
+        <input type="hidden" name="itemID" value="<?= $this->itemID ?>">
+        <input type="hidden" name="voteDir" value="<?= $this->voteDir ?>">
         <table>
             <tbody>
                 <tr>

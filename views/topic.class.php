@@ -113,10 +113,12 @@ class TopicController extends BaseController {
 
             $writersID = array();
             foreach ($this->items as $item) {
-                $votes = Vote::findByExample($db, Vote::create()->setItemID($item->getId())->setUserID($this->_userID));
-                if (count($votes) > 0) {
-                    $vote = $votes[0];
-                    $item->vote = $vote->getRate();
+                if ($this->isLoggedIn()) {
+                    $votes = Vote::findByExample($db, Vote::create()->setItemID($item->getId())->setUserID($this->_userID));
+                    if (count($votes) > 0) {
+                        $vote = $votes[0];
+                        $item->vote = $vote->getRate();
+                    }
                 }
                 $this->totalVotes += $item->getVoteUp() + $item->getVoteDown();
 

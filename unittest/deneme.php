@@ -18,7 +18,7 @@ class QaaloTester extends WebTestCase {
         $this->setField('passwordConfirm', 'hotmailer');
         $this->assertSubmit('Create account');
         $this->click('Create account');
-        $this->assertTitle("Register - Qaalo");
+        $this->assertTitle("Register");
     }
 
     function testRegister() {
@@ -38,7 +38,7 @@ class QaaloTester extends WebTestCase {
         $this->setField('password', 'birikiuc');
         $this->assertSubmit('Login');
         $this->click('Login');
-        $this->assertTitle("Login - Qaalo");
+        $this->assertTitle("Login");
     }
     
     function testLogin() {

@@ -7,7 +7,7 @@
         <?php } ?>
 
         <div class="list" 
-            <meta itemprop="mainContentOfPage" content="true"/>
+             <meta itemprop="mainContentOfPage" content="true"/>
             <h2 itemprop="name"><?= $this->topic->getTitle(); ?></h2>
             <meta itemprop="itemListOrder" content="Descending" />
             <div class="itemBar">
@@ -21,15 +21,11 @@
                                 <div class="circle<?php echo ($a >= 10 ? " low" : ""); ?>"><?= $a + 1 ?></div>
                                 <div class="itemContainer">
                                     <span itemprop="itemListElement"><?php echo Tool::renderItem($item->getText()); ?></span>
-                                    <?php if ($this->isLoggedIn()) { ?>
-                                        <div class = "icons">
-                                            <a id="voteUp<?= $item->getID(); ?>" href="javascript:vote(<?= $item->getID(); ?>,1)" class = "icon voteUp <?= $item->vote == 1 ? "voted" : "" ?>"></a>
-                                            <div id = "votes<?= $item->getID(); ?>" class="voteCounter voteCounter<?= $item->getVoteUp() >= $item->getVoteDown() ? "Up" : "Down" ?>"><?= ($item->getVoteUp() >= $item->getVoteDown() ? "" : "-") . "" . abs($item->getVoteUp() - $item->getVoteDown()) ?></div>
-                                            <a id="voteDown<?= $item->getID(); ?>" href="javascript:vote(<?= $item->getID(); ?>,-1)" class = "icon <?= $item->vote == -1 ? "voted" : "" ?> voteDown"></a>
-                                        </div>
-                                    <?php } else { ?>
-                                        <div id = "votes<?= $item->getID(); ?>" class="voteCounter voteCounter<?= $item->getVoteUp() >= $item->getVoteDown() ? "Up" : "Down" ?>">(<?= ($item->getVoteUp() >= $item->getVoteDown() ? "" : "-") . "" . abs($item->getVoteUp() - $item->getVoteDown()) ?>)</div>
-                                    <?php } ?>
+                                    <div class = "icons">
+                                        <a id="voteUp<?= $item->getID(); ?>" title="click to rate up" href="javascript:<? echo $this->isLoggedIn() ? "vote(".$item->getID().",1)" : "showRegisterForm('vote',". $item->getID() .",1);" ?>;" class = "icon voteUp <?= $item->vote == 1 ? "voted" : "" ?>"></a>
+                                        <div id = "votes<?= $item->getID(); ?>" class="voteCounter voteCounter<?= $item->getVoteUp() >= $item->getVoteDown() ? "Up" : "Down" ?>"><?= ($item->getVoteUp() >= $item->getVoteDown() ? "" : "-") . "" . abs($item->getVoteUp() - $item->getVoteDown()) ?></div>
+                                        <a id="voteDown<?= $item->getID(); ?>" title="click to rate down" href="javascript:<? echo $this->isLoggedIn() ? "vote(".$item->getID().",-1)" : "showRegisterForm('vote',". $item->getID() .",-1);" ?>;" class = "icon <?= $item->vote == -1 ? "voted" : "" ?> voteDown"></a>
+                                    </div>
                                 </div>
                                 <div style="clear:both"></div>
                             </li>
@@ -38,7 +34,7 @@
                         }
                         ?>
                     </ul>
-
+                    <script>$topicID=<?= $this->topic->getID() ?>;</script>
                     <?php if ($this->isWriter || $this->isInvited) { ?>
                         <form action="<?php echo $this->getAction("add"); ?>" method="post">
                             <input type="hidden" name="topicID" value="<?php echo $this->topic->getID() ?>"/>
@@ -53,16 +49,16 @@
                             <div id="addForm" style="display: none;">
                                 <span class="description">Press <b>Enter</b> to add new items</span>
                                 <?php if (!$this->isLoggedIn() && $this->isInvited) { ?>
-                                    <button style="margin-left: 20px;" onclick="showRegisterForm();return false;">Add ➜</button>
+                                    <button style="margin-left: 20px;" onclick="showRegisterForm('addItem');return false;">Add ➜</button>
                                 <?php } else { ?>
                                     <button style="margin-left: 20px;" type="submit">Add ➜</button>
                                 <?php } ?>
                             </div>
                         </form>
                         <script type="text/javascript">
-                            $initialItemIndis=<?= $a; ?>; $itemIndis = <?= $a; ?>;$topicID=<?= $this->topic->getID() ?>;$inviteCode='<?= $this->inviteCode ?>';
+                            $initialItemIndis=<?= $a; ?>; $itemIndis = <?= $a; ?>;$inviteCode='<?= $this->inviteCode ?>';
                             $inviteUrl='http://qaalo.com/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>';
-                            $inviteTitle ='<?= str_replace('\'', "\\'",  $this->topic->getTitle()); ?>';
+                            $inviteTitle ='<?= str_replace('\'', "\\'", $this->topic->getTitle()); ?>';
                         </script>
                     <?php } ?>
                 </div>
@@ -97,7 +93,7 @@
                 <hr/>
                 <div class="tweetInvite">
                     <a href="https://twitter.com/share" data-size="large" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl(); ?>/invitecode/<?= $this->topic->getInviteCode(); ?>" data-lang="en" data-text="Join me with creating <?= htmlspecialchars($this->topic->getTitle()); ?> list" data-count="none" data-via="theqaalo">Invite Followers</a>
-                    or <a class="uibutton confirm" href="#" onclick="sendFacebookFriends();">Send</a>
+                    or <a class="uibutton confirm" href="#" onclick="sendFacebookFriends();">Share</a>
                     <span class="desc">to invite your friends</span>
                 </div>
                 <form action="<?php echo $this->getAction("invite"); ?>" method="post">
@@ -119,7 +115,10 @@
             <?php } ?>
         </ul>
         <hr/>
-
+        
+        
+        
+        
         <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl() ?>" data-text="Check out this list: <?= htmlspecialchars($this->topic->getTitle()); ?>" data-via="theqaalo">Tweet</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
