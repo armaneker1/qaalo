@@ -8,7 +8,7 @@
 
         <div class="list" 
              <meta itemprop="mainContentOfPage" content="true"/>
-            <h2 itemprop="name"><?= $this->topic->getTitle(); ?></h2>
+            <h1 itemprop="name"><?= $this->topic->getTitle(); ?></h1>
             <meta itemprop="itemListOrder" content="Descending" />
             <div class="itemBar">
                 <div class="itemsHeader">
@@ -22,9 +22,9 @@
                                 <div class="itemContainer">
                                     <span itemprop="itemListElement"><?php echo Tool::renderItem($item->getText()); ?></span>
                                     <div class = "icons">
-                                        <a id="voteUp<?= $item->getID(); ?>" title="click to rate up" href="javascript:<? echo $this->isLoggedIn() ? "vote(".$item->getID().",1)" : "showRegisterForm('vote',". $item->getID() .",1);" ?>;" class = "icon voteUp <?= $item->vote == 1 ? "voted" : "" ?>"></a>
+                                        <a id="voteUp<?= $item->getID(); ?>" title="click to rate up" href="javascript:<? echo $this->isLoggedIn() ? "vote(" . $item->getID() . ",1)" : "showRegisterForm('vote'," . $item->getID() . ",1);" ?>;" class = "icon voteUp <?= $item->vote == 1 ? "voted" : "" ?>"></a>
                                         <div id = "votes<?= $item->getID(); ?>" class="voteCounter voteCounter<?= $item->getVoteUp() >= $item->getVoteDown() ? "Up" : "Down" ?>"><?= ($item->getVoteUp() >= $item->getVoteDown() ? "" : "-") . "" . abs($item->getVoteUp() - $item->getVoteDown()) ?></div>
-                                        <a id="voteDown<?= $item->getID(); ?>" title="click to rate down" href="javascript:<? echo $this->isLoggedIn() ? "vote(".$item->getID().",-1)" : "showRegisterForm('vote',". $item->getID() .",-1);" ?>;" class = "icon <?= $item->vote == -1 ? "voted" : "" ?> voteDown"></a>
+                                        <a id="voteDown<?= $item->getID(); ?>" title="click to rate down" href="javascript:<? echo $this->isLoggedIn() ? "vote(" . $item->getID() . ",-1)" : "showRegisterForm('vote'," . $item->getID() . ",-1);" ?>;" class = "icon <?= $item->vote == -1 ? "voted" : "" ?> voteDown"></a>
                                     </div>
                                 </div>
                                 <div style="clear:both"></div>
@@ -115,10 +115,10 @@
             <?php } ?>
         </ul>
         <hr/>
-        
-        
-        
-        
+
+
+
+
         <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://qaalo.com/l/<?= $this->topic->getUrl() ?>" data-text="Check out this list: <?= htmlspecialchars($this->topic->getTitle()); ?>" data-via="theqaalo">Tweet</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 

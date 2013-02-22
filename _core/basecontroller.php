@@ -60,7 +60,11 @@ abstract class BaseController {
         $this->{$this->action}();
 
         if (!$this->_standalone) {
-            require "template/" . $this->template . ".inc.php";
+            if ($this->template!=null) {
+                require "template/" . $this->template . ".inc.php";
+            } else {
+                require "views/" . $this->urlValues["controller"] . ".php";
+            }
         }
     }
 

@@ -108,6 +108,7 @@ class TopicController extends BaseController {
         $db = DB::getConnection();
         $topics = Topic::findByExample($db, Topic::create()->setUrl($this->title));
         if (count($topics) > 0) {
+            $keywords = '';
             $this->topic = $topics[0];
             $this->items = Item::findByExample($db, Item::create()->setTopicID($this->topic->getId()));
 
@@ -136,10 +137,12 @@ class TopicController extends BaseController {
 
 
             $this->categories = Category::findBySql($db, "select * from category where id in (select categoryID from topiccategorylink where topicID=" . $this->topic->getId() . ")");
+            
             foreach ($this->categories as $category) {
                 if (count(UserCategoryLink::findByExample($db, UserCategoryLink::create()->setUserId($this->getUserID())->setCategoryId($category->getId()))) > 0) {
                     $category->isFollowed = true;
                 }
+                $keywords .= $category->getName() . ",";
 
                 if (!isset($_SESSION["categories"]) || !in_array($category->getId(), $_SESSION["categories"])) {
                     $_SESSION["categories"][] = $category->getId();
@@ -199,11 +202,14 @@ class TopicController extends BaseController {
 
             $itemsStr = substr($itemsStr, 0, strlen($itemsStr) - 2) . " ...";
 
+            $this->addMetaTag("keywords",$keywords ."list");
+            
             $this->addMetaTag("og:title", $this->topic->getTitle());
             $this->addMetaTag("og:description", $itemsStr);
             $this->addMetaTag("og:image", "http://qaalo.com/inc/qaaloSquare.png");
             $this->addMetaTag("og:type", "article");
             $this->addMetaTag("og:site_name", "Qaalo");
+            
         } else {
             $this->redirect("404");
         }

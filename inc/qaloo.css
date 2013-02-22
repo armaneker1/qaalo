@@ -267,7 +267,7 @@ button {
 
 .footer li {
     float:left;
-    margin-left:15px;
+    margin-left:8px;
 }
 
 
@@ -367,7 +367,7 @@ textarea.autogrow
     display: none;
 }
 
-.list h2 {
+.list h2,.list h1 {
     margin:0;padding-bottom:5px;
     font-size:32px;
     color:#354b62;
@@ -1407,4 +1407,8 @@ div.create:active {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
+}
+
+.content {
+    margin-top:40px;
 }

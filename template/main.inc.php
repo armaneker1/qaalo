@@ -7,9 +7,9 @@
         <?php if (isset($this->metaDescription)) { ?>
         <meta name="description" content="<?= $this->metaDescription?>">
         <?php } ?>
-        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css?d=021920131115" rel='stylesheet' type="text/css" media="screen">
+        <link href="<?php echo __WEBROOT__ ?>inc/qaloo.css?d=022020132048" rel='stylesheet' type="text/css" media="screen">
         <link href="<?php echo __WEBROOT__ ?>inc/tooltipster.css" rel='stylesheet' type="text/css" media="screen">
-        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery-1.8.3.js" ></script>
+        <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery-1.8.3.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.autocomplete.min.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.ambiance.js" ></script>
         <script type="text/javascript" src="<?php echo __WEBROOT__ ?>inc/jquery.lightbox_me.js" ></script>
@@ -158,7 +158,9 @@
         </div>
         <div class="footer">
             <ul>
-                <li>All lists available under the terms of the Creative Commons Attribution 3.0 Unported License</li>
+                <li><a href="/base.faq">faq</a></li>
+                <li><a href="/base.terms">terms</a></li>
+                <li><a href="/base.privacy">privacy</a></li>
                 <li><a href="/base.directory">directory</a></li>
                 <li>Qaalo Inc © 2013</li>
             </ul>
